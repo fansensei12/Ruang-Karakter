@@ -70,7 +70,7 @@
                 <button onclick="filterMedia('slide')" id="btn-filter-slide" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all">Slide HTML</button>
                 <button onclick="filterMedia('ppt')" id="btn-filter-ppt" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all">PowerPoint</button>
                 <button onclick="filterMedia('canva')" id="btn-filter-canva" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all">Canva Web</button>
-                <button onclick="filterMedia('pdf')" id="btn-filter-pdf" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all">Buku/PDF</button>
+                <button onclick="filterMedia('pdf')" id="btn-filter-pdf" class="bg-slate-900 hover:bg-slate-850 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all">Buku/PDF</button>
             </div>
             <div class="relative w-full md:w-80">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-500">
@@ -287,7 +287,6 @@
                         <a href="${media.url}" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
                     </div>
                 `;
-                grid.appendChild(grid.ownerDocument.importNode(card, true));
                 grid.appendChild(card);
             });
         }
@@ -306,6 +305,7 @@
             renderPortal();
         }
 
+        // LIVE SEARCH
         function searchMedia() {
             const query = document.getElementById('searchBar').value.toLowerCase();
             const grid = document.getElementById('portalGrid');
@@ -408,8 +408,6 @@
                 avatarIcon.className = "fa-solid fa-user-lock text-[11px] text-slate-400";
             }
         }
-
-        function运行List() { renderManagerList(); }
 
         function renderManagerList() {
             const list = document.getElementById('managerList');
