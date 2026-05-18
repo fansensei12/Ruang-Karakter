@@ -6,6 +6,513 @@
     <title>Ruang Karakter by Noor Irfan - Portal Media PPKn</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glow-red:hover { box-shadow: 0 0 20px rgba(239, 68, 68, 0.35); }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #090d16; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
+    </style>
+</head>
+<body class="bg-[#030712] text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- NAVIGATION BAR -->
+    <nav class="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-900 px-4 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Logo / Brand -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 via-purple-900 to-blue-600 flex items-center justify-center shadow-lg shadow-red-600/20">
+                    <span class="font-extrabold text-white tracking-wider text-sm">PPKn</span>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-tight text-white">Ruang Karakter</h1>
+                    <p class="text-[11px] text-slate-400">by Noor Irfan — Media Pembelajaran Satu Pintu</p>
+                </div>
+            </div>
+
+            <!-- Toolbar Kanan -->
+            <div class="flex items-center gap-3">
+                <button onclick="toggleManager()" class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-red-600/10 flex items-center gap-2">
+                    <i id="adminBtnIcon" class="fa-solid fa-lock text-red-300"></i> Kelola Tautan (Admin)
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="relative overflow-hidden py-16 px-4 border-b border-slate-900 text-center">
+        <!-- Background Glows -->
+        <div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-80 h-80 bg-red-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div class="absolute top-1/2 right-1/4 -translate-y-1/2 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto relative z-10">
+            <span class="bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-6">
+                Multi-Media Pembelajaran PPKn
+            </span>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+                Ruang Karakter <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-purple-400 to-blue-500">by Noor Irfan</span>
+            </h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-blue-600 mx-auto rounded-full shadow-lg shadow-red-500/20"></div>
+        </div>
+    </header>
+
+    <!-- MAIN PORTAL AREA -->
+    <main class="max-w-7xl mx-auto px-4 py-12 flex-grow w-full">
+        <!-- Filter Controls & Search -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 bg-slate-950 p-4 rounded-2xl border border-slate-900">
+            <!-- Kategori / Filter -->
+            <div id="filterContainer" class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                <button onclick="filterMedia('all')" id="btn-filter-all" class="bg-gradient-to-r from-red-600 to-blue-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow">Semua</button>
+                <button onclick="filterMedia('mpi')" id="btn-filter-mpi" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all">MPI Web</button>
+                <button onclick="filterMedia('slide')" id="btn-filter-slide" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all">Slide HTML</button>
+                <button onclick="filterMedia('ppt')" id="btn-filter-ppt" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all">PowerPoint</button>
+                <button onclick="filterMedia('canva')" id="btn-filter-canva" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all">Canva Web</button>
+                <button onclick="filterMedia('pdf')" id="btn-filter-pdf" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all">Buku/PDF</button>
+            </div>
+            <!-- Search Bar -->
+            <div class="relative w-full md:w-80">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-500">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </span>
+                <input type="text" id="searchBar" onkeyup="searchMedia()" placeholder="Cari media pembelajaran..." class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 pl-10 pr-4 text-slate-200 placeholder-slate-500 text-xs focus:outline-none focus:border-red-500 transition-all">
+            </div>
+        </div>
+
+        <!-- PORTAL CARDS GRID -->
+        <div id="portalGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Dynamic Cards Load Here -->
+        </div>
+
+        <!-- EMPTY STATE -->
+        <div id="emptyState" class="hidden text-center py-16 bg-slate-950 rounded-2xl border border-slate-900 mt-6">
+            <div class="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center text-slate-600 mx-auto mb-3">
+                <i class="fa-solid fa-folder-open text-xl"></i>
+            </div>
+            <h3 class="text-sm font-bold text-slate-300">Media Tidak Ditemukan</h3>
+            <p class="text-slate-500 text-[11px] mt-1">Coba kata kunci pencarian atau kategori filter lainnya.</p>
+        </div>
+    </main>
+
+    <!-- PANEL ADMIN (DRAWER) -->
+    <div id="managerDrawer" class="fixed inset-y-0 right-0 z-50 w-full sm:w-[460px] bg-slate-950 border-l border-slate-900 shadow-2xl transition-transform duration-300 transform translate-x-full flex flex-col">
+        <!-- Header Drawer Admin -->
+        <div class="p-6 border-b border-slate-900 bg-slate-900/50 flex items-center justify-between">
+            <div>
+                <h3 class="font-bold text-white text-sm">Kelola Tautan Portal</h3>
+                <p class="text-[10px] text-slate-400">Atur menu belajar satu pintu</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <!-- Tombol Logout Terintegrasi -->
+                <button onclick="logoutAdmin()" class="bg-red-950 hover:bg-red-900 border border-red-900/40 text-red-400 hover:text-red-200 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar
+                </button>
+                <button onclick="toggleManager()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Formulir Input & Pengeditan -->
+        <div class="flex-grow overflow-y-auto p-6 space-y-6">
+            <div>
+                <h4 id="formTitle" class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Tambah Media Baru</h4>
+                <input type="hidden" id="editIndex" value="-1">
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Judul Media</label>
+                        <input type="text" id="inputTitle" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Kategori Media</label>
+                        <select id="inputCategory" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-red-500">
+                            <option value="mpi">MPI Web</option>
+                            <option value="slide">Slide HTML</option>
+                            <option value="ppt">PowerPoint</option>
+                            <option value="canva">Canva Web</option>
+                            <option value="pdf">Buku/PDF</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Link URL Tujuan</label>
+                        <input type="text" id="inputUrl" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Link Gambar Sampul</label>
+                        <input type="text" id="inputImage" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Deskripsi Singkat</label>
+                        <textarea id="inputDesc" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-red-500 resize-none"></textarea>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button onclick="saveMediaCard()" class="flex-grow bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-xs transition-all">Simpan Media</button>
+                        <button onclick="resetForm()" class="bg-slate-900 hover:bg-slate-850 text-slate-300 py-2.5 px-3 rounded-xl text-xs border border-slate-800 transition-all">Batal</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-900 pt-4">
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Daftar Menu Saat Ini</h4>
+                <div id="managerList" class="space-y-2"></div>
+            </div>
+
+            <button onclick="exportSourceCode()" class="w-full bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 font-bold py-2.5 rounded-xl text-xs transition-all">
+                Salin Kode Sumber Web Anda
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL MASUK ADMIN -->
+    <div id="adminLoginModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-950 w-full max-w-sm rounded-2xl border border-slate-900 p-6 text-center shadow-2xl">
+            <h3 class="text-base font-bold text-white mb-2">Verifikasi Akses Admin</h3>
+            <p class="text-[11px] text-slate-500 mb-4">Siswa dilarang keras mengubah tautan portal media</p>
+            <input type="password" id="adminPasswordInput" placeholder="Masukkan kata sandi..." class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-4 text-white text-center text-xs mb-4 focus:outline-none focus:border-red-500" onkeydown="if(event.key === 'Enter') submitAdminLogin()">
+            <div id="loginErrorMessage" class="text-red-500 text-xs hidden mb-3">Kata sandi salah!</div>
+            <div class="flex gap-2">
+                <button onclick="closeLoginModal()" class="w-1/2 bg-slate-900 text-slate-400 py-2.5 rounded-xl text-xs">Batal</button>
+                <button onclick="submitAdminLogin()" class="w-1/2 bg-red-600 text-white py-2.5 rounded-xl text-xs font-bold">Masuk</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-900 bg-slate-950 py-8 px-4 text-center text-slate-500 text-xs mt-12">
+        <p>&copy; 2026 Ruang Karakter by Noor Irfan. Portal Pembelajaran Pancasila Adaptif.</p>
+    </footer>
+
+    <!-- SCRIPT LOGIC UTAMA -->
+    <script>
+        // DATA UTAMA ANDA (TERINTEGRASI PERMANEN)
+        const defaultMediaData = [
+            {
+                "title": "MPI Pembukaan UUD NRI Tahun 1945",
+                "category": "mpi",
+                "url": "https://noor-irfan.itch.io/mpippknbab2",
+                "image": "https://i.ibb.co.com/fYgYsZwJ/mpi.png",
+                "desc": "MPI Materi Pembukaan Undang - Undang Negara Republik Indonesia, media berguna untuk membantu siswa belajar secara daring lewat HP, Laptop, Tablet, Komputer dan lainnya.",
+                "forceExternal": true
+            },
+            {
+                "title": "KEDAULATAN NKRI",
+                "category": "canva",
+                "url": "https://www.canva.com/design/DAGVpEyz7yo/kWFErv8H-Ky8k1iuEKhE0A/edit?utm_content=DAGVpEyz7yo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton",
+                "image": "https://i.ibb.co.com/tTTBV4S8/Kedaulatan-NKRI-BAB-3-kelas-9-1.jpg",
+                "desc": "Materi ini menggunakan kurikulum 2013, untuk pembelajaran siswa - siswi kelas 9",
+                "forceExternal": true
+            },
+            {
+                "title": "UUD NRI Tahun 1945 sebagai Dasar Hukum Tertulis",
+                "category": "canva",
+                "url": "https://www.canva.com/design/DAGzxFbdSic/gJtj6Mdwe9m938nVJZB7Jg/edit?utm_content=DAGzxFbdSic&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton",
+                "image": "https://i.ibb.co.com/kV1Cwvpz/UUD-NRI-Tahun-1945-sebagai-Dasar-Hukum-Tertulis-KELAS-7-1.jpg",
+                "desc": "PPT Materi Kelas 7 UUD NRI Tahun 1945 sebagai Dasar Hukum Tertulis",
+                "forceExternal": true
+            },
+            {
+                "title": "Kebhinnekaan Indonesia",
+                "category": "mpi",
+                "url": "https://fansensei12.github.io/Media-Pembelajaran-PKnVIII/story_html5.html",
+                "image": "https://i.ibb.co.com/k6xZpsvh/mpi-1.png",
+                "desc": "ini merupakan media pembelajaran Materi Kelas VII Semester Genap versi 1.0 atau versi generasi pertama, apabila belum merasa lengkap mohon dimaklumi, MPI ini akan terus update ke versi yang paling lengkap",
+                "forceExternal": true
+            },
+            {
+                "title": "TATA NEGARA DAN PEMERINTAHAN INDONESIA",
+                "category": "ppt",
+                "url": "https://docs.google.com/presentation/d/1qZ_atVlbaR3VjwmbcMp0cUjWpyYUdd2o/edit?usp=sharing&ouid=103732362901499177869&rtpof=true&sd=true",
+                "image": "https://i.ibb.co.com/NBkmz9s/ppt-tata-negara.png",
+                "desc": "Materi untuk kelas 8 semester genap",
+                "forceExternal": true
+            },
+            {
+                "title": "KELAHIRAN PANCASILA",
+                "category": "ppt",
+                "url": "https://docs.google.com/presentation/d/1eOmZlM7ePES2kfUYDil9GoUHSR6Qmhf1/edit?usp=sharing&ouid=103732362901499177869&rtpof=true&sd=true",
+                "image": "https://i.ibb.co.com/GfqQs8St/Screenshot-2026-05-17-211125.png",
+                "desc": "PPT Materi Kelas 7 tentang kelahiran pancasila untuk materi di semester ganjil",
+                "forceExternal": true
+            }
+        ];
+
+        const ADMIN_PASSWORD = "adminirfan";
+        let isAdmin = sessionStorage.getItem('ruang_karakter_isAdmin') === 'true';
+
+        // Load data dari LocalStorage atau pakai data bawaan (default)
+        let mediaData = JSON.parse(localStorage.getItem('ruang_karakter_media')) || defaultMediaData;
+        let activeFilter = 'all';
+
+        window.onload = function() {
+            renderPortal();
+            renderManagerList();
+            updateAdminButtonVisuals();
+        }
+
+        function saveDataToStorage() {
+            localStorage.setItem('ruang_karakter_media', JSON.stringify(mediaData));
+        }
+
+        // RENDER PORTAL CARDS
+        function renderPortal() {
+            const grid = document.getElementById('portalGrid');
+            const emptyState = document.getElementById('emptyState');
+            grid.innerHTML = '';
+            
+            let filtered = mediaData;
+            if (activeFilter !== 'all') {
+                filtered = mediaData.filter(item => item.category === activeFilter);
+            }
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            filtered.forEach((media) => {
+                const categoryLabels = {
+                    mpi: { label: 'MPI Web', color: 'bg-blue-600 text-white' },
+                    slide: { label: 'HTML Slide', color: 'bg-purple-600 text-white' },
+                    ppt: { label: 'PowerPoint', color: 'bg-orange-600 text-white' },
+                    canva: { label: 'Canva Web', color: 'bg-cyan-500 text-slate-950' },
+                    pdf: { label: 'Buku/PDF', color: 'bg-red-600 text-white' }
+                };
+                const cfg = categoryLabels[media.category] || categoryLabels['mpi'];
+                const imgUrl = media.image ? media.image : 'https://placehold.co/600x400/1e293b/ef4444?text=PPKn';
+                
+                const card = document.createElement('div');
+                card.className = "bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300";
+                card.innerHTML = `
+                    <div class="h-44 overflow-hidden relative">
+                        <img src="${imgUrl}" onerror="this.src='https://placehold.co/600x400/1e293b/ef4444?text=PPKn'" class="w-full h-full object-cover opacity-75">
+                        <div class="absolute top-3 right-3 ${cfg.color} text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">${cfg.label}</div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">${media.title}</h3>
+                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">${media.desc || ''}</p>
+                        <a href="${media.url}" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // FILTER CHIPS
+        function filterMedia(category) {
+            activeFilter = category;
+            const buttons = ['all', 'mpi', 'slide', 'ppt', 'canva', 'pdf'];
+            buttons.forEach(btn => {
+                const el = document.getElementById(`btn-filter-${btn}`);
+                if (btn === category) {
+                    el.className = "bg-gradient-to-r from-red-600 to-blue-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow";
+                } else {
+                    el.className = "bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all";
+                }
+            });
+            renderPortal();
+        }
+
+        // LIVE SEARCH
+        function searchMedia() {
+            const query = document.getElementById('searchBar').value.toLowerCase();
+            const grid = document.getElementById('portalGrid');
+            const emptyState = document.getElementById('emptyState');
+            grid.innerHTML = '';
+
+            let filtered = mediaData.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(query) || (item.desc && item.desc.toLowerCase().includes(query));
+                const matchesFilter = activeFilter === 'all' || item.category === activeFilter;
+                return matchesSearch && matchesFilter;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            filtered.forEach((media) => {
+                const categoryLabels = {
+                    mpi: { label: 'MPI Web', color: 'bg-blue-600 text-white' },
+                    slide: { label: 'HTML Slide', color: 'bg-purple-600 text-white' },
+                    ppt: { label: 'PowerPoint', color: 'bg-orange-600 text-white' },
+                    canva: { label: 'Canva Web', color: 'bg-cyan-500 text-slate-950' },
+                    pdf: { label: 'Buku/PDF', color: 'bg-red-600 text-white' }
+                };
+                const cfg = categoryLabels[media.category] || categoryLabels['mpi'];
+                const imgUrl = media.image ? media.image : 'https://placehold.co/600x400/1e293b/ef4444?text=PPKn';
+                
+                const card = document.createElement('div');
+                card.className = "bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300";
+                card.innerHTML = `
+                    <div class="h-44 overflow-hidden relative">
+                        <img src="${imgUrl}" onerror="this.src='https://placehold.co/600x400/1e293b/ef4444?text=PPKn'" class="w-full h-full object-cover opacity-75">
+                        <div class="absolute top-3 right-3 ${cfg.color} text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">${cfg.label}</div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">${media.title}</h3>
+                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">${media.desc || ''}</p>
+                        <a href="${media.url}" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // CONTROL PANEL ADMIN & DRAWER
+        function toggleManager() {
+            if (!isAdmin) { openLoginModal(); return; }
+            const drawer = document.getElementById('managerDrawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        function openLoginModal() {
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('loginErrorMessage').classList.add('hidden');
+            document.getElementById('adminLoginModal').classList.remove('hidden');
+            document.getElementById('adminPasswordInput').focus();
+        }
+
+        function closeLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); }
+
+        function submitAdminLogin() {
+            const pass = document.getElementById('adminPasswordInput').value;
+            if (pass === ADMIN_PASSWORD) {
+                isAdmin = true;
+                sessionStorage.setItem('ruang_karakter_isAdmin', 'true');
+                closeLoginModal();
+                updateAdminButtonVisuals();
+                toggleManager();
+            } else {
+                document.getElementById('loginErrorMessage').classList.remove('hidden');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            sessionStorage.removeItem('ruang_karakter_isAdmin');
+            updateAdminButtonVisuals();
+            const drawer = document.getElementById('managerDrawer');
+            drawer.classList.add('translate-x-full');
+            alert('Anda telah keluar dari mode admin.');
+        }
+
+        function updateAdminButtonVisuals() {
+            const btnIcon = document.getElementById('adminBtnIcon');
+            if (isAdmin) {
+                btnIcon.className = "fa-solid fa-lock-open text-green-400";
+            } else {
+                btnIcon.className = "fa-solid fa-lock text-red-300";
+            }
+        }
+
+        // MANAGEMENT LIST RENDERING
+        function renderManagerList() {
+            const list = document.getElementById('managerList');
+            list.innerHTML = '';
+            mediaData.forEach((media, index) => {
+                const item = document.createElement('div');
+                item.className = "bg-slate-900 p-2.5 rounded-xl flex items-center justify-between text-xs gap-2 border border-slate-800/40";
+                item.innerHTML = `
+                    <div class="flex flex-col overflow-hidden">
+                        <span class="truncate max-w-[180px] font-bold text-slate-200">${media.title}</span>
+                        <span class="text-[9px] text-slate-500 uppercase tracking-wider">${media.category}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="editMedia(${index})" class="w-7 h-7 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-pen text-[10px]"></i>
+                        </button>
+                        <button onclick="deleteMedia(${index})" class="w-7 h-7 rounded bg-red-600/10 hover:bg-red-600/20 text-red-500 border border-red-500/20 flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-trash text-[10px]"></i>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function saveMediaCard() {
+            const index = parseInt(document.getElementById('editIndex').value);
+            const title = document.getElementById('inputTitle').value.trim();
+            const category = document.getElementById('inputCategory').value;
+            const url = document.getElementById('inputUrl').value.trim();
+            const image = document.getElementById('inputImage').value.trim();
+            const desc = document.getElementById('inputDesc').value.trim();
+
+            if(!title || !url) { alert('Judul dan URL wajib diisi!'); return; }
+
+            const targetData = { title, category, url, image: image || null, desc: desc || null, forceExternal: true };
+
+            if (index === -1) {
+                mediaData.push(targetData);
+                alert('Media baru berhasil ditambahkan!');
+            } else {
+                mediaData[index] = targetData;
+                alert('Media berhasil diperbarui!');
+            }
+
+            saveDataToStorage();
+            renderPortal();
+            renderManagerList();
+            resetForm();
+        }
+
+        function editMedia(index) {
+            const media = mediaData[index];
+            if (!media) return;
+
+            document.getElementById('editIndex').value = index;
+            document.getElementById('inputTitle').value = media.title;
+            document.getElementById('inputCategory').value = media.category;
+            document.getElementById('inputUrl').value = media.url;
+            document.getElementById('inputImage').value = media.image || '';
+            document.getElementById('inputDesc').value = media.desc || '';
+
+            document.getElementById('formTitle').innerText = `Edit Media #${index + 1}`;
+            document.getElementById('managerDrawer').scrollTop = 0;
+        }
+
+        function resetForm() {
+            document.getElementById('editIndex').value = -1;
+            document.getElementById('inputTitle').value = '';
+            document.getElementById('inputUrl').value = '';
+            document.getElementById('inputImage').value = '';
+            document.getElementById('inputDesc').value = '';
+            document.getElementById('formTitle').innerText = 'Tambah Media Baru';
+        }
+
+        function deleteMedia(index) {
+            if(confirm('Hapus media ini secara permanen dari daftar?')) {
+                mediaData.splice(index, 1);
+                saveDataToStorage();
+                renderPortal();
+                renderManagerList();
+                resetForm();
+            }
+        }
+
+        // EKSPOR KODE SUMBER UTUH BESERTA PANEL ADMIN DAN DATA MEDIA BARU
+        function exportSourceCode() {
+            const dataString = JSON.stringify(mediaData, null, 12);
+            
+            // Menyusun dokumen HTML utuh secara dinamis dengan menginjeksikan data terupdate
+            const exportHTML = `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruang Karakter by Noor Irfan - Portal Media PPKn</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"><\/script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -21,7 +528,7 @@
 
     <!-- NAVIGATION BAR -->
     <nav class="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-900 px-4 py-4">
-        <div class="max-w-7xl mx-auto flex flex-row items-center justify-between gap-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 via-purple-900 to-blue-600 flex items-center justify-center shadow-lg shadow-red-600/20">
                     <span class="font-extrabold text-white tracking-wider text-sm">PPKn</span>
@@ -31,17 +538,9 @@
                     <p class="text-[11px] text-slate-400">by Noor Irfan — Media Pembelajaran Satu Pintu</p>
                 </div>
             </div>
-            <!-- Kelola Admin Model Profil di Navbar Ter-Ekspor -->
-            <div class="flex items-center gap-3">
-                <button onclick="toggleManager()" class="group flex items-center gap-3 bg-slate-900/80 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 px-3.5 py-1.5 rounded-full transition-all duration-300">
-                    <div class="relative w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 border border-slate-750 group-hover:border-red-500/30 transition-all">
-                        <i id="adminAvatarIcon" class="fa-solid fa-user-lock text-[11px] text-slate-400"></i>
-                        <span id="adminStatusDot" class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-slate-950 animate-pulse"></span>
-                    </div>
-                    <div class="hidden sm:flex flex-col items-start text-left leading-none">
-                        <span class="text-[11px] font-bold text-slate-200 group-hover:text-red-400 transition-colors">Noor Irfan</span>
-                        <span id="adminStatusText" class="text-[9px] text-slate-500 mt-0.5">Terkunci (Siswa)</span>
-                    </div>
+            <div class="flex items-center gap-2">
+                <button onclick="toggleManager()" class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-red-600/10 flex items-center gap-2">
+                    <i id="adminBtnIcon" class="fa-solid fa-lock text-red-300"></i> Kelola Tautan (Admin)
                 </button>
             </div>
         </div>
@@ -63,6 +562,7 @@
         </div>
     </header>
 
+    <!-- AREA UTAMA PORTAL -->
     <main class="max-w-7xl mx-auto px-4 py-12 flex-grow w-full">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 bg-slate-950 p-4 rounded-2xl border border-slate-900">
             <div id="filterContainer" class="flex flex-wrap items-center gap-2 w-full md:w-auto">
@@ -178,7 +678,7 @@
     </footer>
 
     <script>
-        const mediaData = ${dataString};
+        const mediaData = \${dataString};
 
         const ADMIN_PASSWORD = "adminirfan";
         let isAdmin = false;
@@ -204,17 +704,17 @@
                 
                 const card = document.createElement('div');
                 card.className = "bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300";
-                card.innerHTML = `
+                card.innerHTML = \`
                     <div class="h-44 overflow-hidden relative">
-                        <img src="${imgUrl}" class="w-full h-full object-cover opacity-75">
-                        <div class="absolute top-3 right-3 ${cfg.color} text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">${cfg.label}</div>
+                        <img src="\${imgUrl}" class="w-full h-full object-cover opacity-75">
+                        <div class="absolute top-3 right-3 \${cfg.color} text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">\${cfg.label}</div>
                     </div>
                     <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">${media.title}</h3>
-                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">${media.desc || ''}</p>
-                        <a href="${media.url}" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
+                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">\${media.title}</h3>
+                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">\${media.desc || ''}</p>
+                        <a href="\${media.url}" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
                     </div>
-                `;
+                \`;
                 grid.appendChild(card);
             });
         }
@@ -255,46 +755,26 @@
             alert('Anda telah keluar dari mode admin.');
         }
 
-        function updateAdminButtonVisuals() {
-            const statusDot = document.getElementById('adminStatusDot');
-            const statusText = document.getElementById('adminStatusText');
-            const avatarIcon = document.getElementById('adminAvatarIcon');
-            
-            if (!statusDot || !statusText || !avatarIcon) return;
-
-            if (isAdmin) {
-                statusDot.className = "absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-slate-950 shadow-[0_0_8px_rgba(34,197,94,0.6)]";
-                statusText.innerText = "Pengelola Aktif";
-                statusText.className = "text-[9px] text-green-400 font-semibold";
-                avatarIcon.className = "fa-solid fa-user-shield text-[11px] text-green-400";
-            } else {
-                statusDot.className = "absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-slate-950 animate-pulse";
-                statusText.innerText = "Terkunci (Siswa)";
-                statusText.className = "text-[9px] text-slate-500 mt-0.5";
-                avatarIcon.className = "fa-solid fa-user-lock text-[11px] text-slate-400";
-            }
-        }
-
         function renderManagerList() {
             const list = document.getElementById('managerList');
             list.innerHTML = '';
             mediaData.forEach((media, index) => {
                 const item = document.createElement('div');
                 item.className = "bg-slate-900 p-2.5 rounded-xl flex items-center justify-between text-xs gap-2 border border-slate-800/40";
-                item.innerHTML = `
+                item.innerHTML = \`
                     <div class="flex flex-col overflow-hidden">
-                        <span class="truncate max-w-[180px] font-bold text-slate-200">${media.title}</span>
-                        <span class="text-[9px] text-slate-500 uppercase tracking-wider">${media.category}</span>
+                        <span class="truncate max-w-[180px] font-bold text-slate-200">\${media.title}</span>
+                        <span class="text-[9px] text-slate-500 uppercase tracking-wider">\${media.category}</span>
                     </div>
                     <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="editMedia(${index})" class="w-7 h-7 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 flex items-center justify-center transition-all">
+                        <button onclick="editMedia(\${index})" class="w-7 h-7 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 flex items-center justify-center transition-all">
                             <i class="fa-solid fa-pen text-[10px]"></i>
                         </button>
-                        <button onclick="deleteMedia(${index})" class="w-7 h-7 rounded bg-red-600/10 hover:bg-red-600/20 text-red-500 border border-red-500/20 flex items-center justify-center transition-all">
+                        <button onclick="deleteMedia(\${index})" class="w-7 h-7 rounded bg-red-600/10 hover:bg-red-600/20 text-red-500 border border-red-500/20 flex items-center justify-center transition-all">
                             <i class="fa-solid fa-trash text-[10px]"></i>
                         </button>
                     </div>
-                `;
+                \`;
                 list.appendChild(item);
             });
         }
@@ -335,7 +815,7 @@
             document.getElementById('inputImage').value = media.image || '';
             document.getElementById('inputDesc').value = media.desc || '';
 
-            document.getElementById('formTitle').innerText = `Edit Media #${index + 1}`;
+            document.getElementById('formTitle').innerText = \`Edit Media #\${index + 1}\`;
             document.getElementById('managerDrawer').scrollTop = 0;
         }
 
@@ -365,6 +845,27 @@
             document.body.appendChild(textarea);
             textarea.select();
             document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+    <\/script>
+</body>
+</html>`;
+
+            // Proses menyalin ke memori clipboard
+            const textarea = document.createElement('textarea');
+            textarea.value = exportHTML;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    alert('Kode sumber lengkap dengan panel admin berhasil disalin! Silakan rekatkan (paste) ke file index.html Anda di GitHub.');
+                } else {
+                    alert('Gagal menyalin secara otomatis, silakan salin teks secara manual.');
+                }
+            } catch (err) {
+                alert('Sistem browser Anda memblokir fungsi salin otomatis.');
+            }
             document.body.removeChild(textarea);
         }
     </script>
