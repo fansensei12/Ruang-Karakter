@@ -1,403 +1,1149 @@
 <!DOCTYPE html>
-<html lang="id"><head>
+<html lang="id">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruang Karakter by Noor Irfan - Portal Media PPKn</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Ruang Karakter — Portal Media PPKn by Noor Irfan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .glow-red:hover { box-shadow: 0 0 20px rgba(239, 68, 68, 0.35); }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #090d16; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
+        :root {
+            --bg: #0c0e14;
+            --surface: #13161f;
+            --surface2: #1a1e2a;
+            --surface3: #222736;
+            --border: #252a38;
+            --border2: #2e3448;
+            --text: #e8eaf0;
+            --text2: #9ba3bb;
+            --text3: #5c6480;
+            --accent: #e84545;
+            --accent2: #ff6b6b;
+            --gold: #f4b942;
+            --blue: #4a9eff;
+            --cyan: #2ec4b6;
+            --purple: #9b59b6;
+            --green: #27ae60;
+            --orange: #e67e22;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        /* ── BACKGROUND TEXTURE ── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                radial-gradient(ellipse 80% 40% at 20% 10%, rgba(232,69,69,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(74,158,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ── NAVBAR ── */
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(12,14,20,0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 64px;
+            display: flex; align-items: center;
+        }
+
+        .nav-inner {
+            max-width: 1280px; width: 100%; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex; align-items: center; gap: 14px;
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--accent), #a01a1a);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 13px;
+            color: white;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 20px rgba(232,69,69,0.3);
+            flex-shrink: 0;
+        }
+
+        .nav-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 17px;
+            color: var(--text);
+            letter-spacing: -0.3px;
+        }
+
+        .nav-subtitle {
+            font-size: 11px;
+            color: var(--text3);
+            font-weight: 400;
+            margin-top: 1px;
+        }
+
+        .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+        .admin-btn {
+            display: flex; align-items: center; gap: 10px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 6px 14px 6px 8px;
+            cursor: pointer; transition: all 0.2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .admin-btn:hover {
+            border-color: var(--border2);
+            background: var(--surface3);
+        }
+
+        .admin-avatar {
+            width: 28px; height: 28px;
+            background: var(--surface3);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px;
+            position: relative;
+            border: 1px solid var(--border2);
+        }
+
+        .admin-dot {
+            position: absolute; bottom: -1px; right: -1px;
+            width: 9px; height: 9px;
+            border-radius: 50%;
+            border: 2px solid var(--bg);
+        }
+
+        .admin-dot.active { background: var(--green); box-shadow: 0 0 8px rgba(39,174,96,0.6); }
+        .admin-dot.inactive { background: var(--accent); animation: pulse 2s infinite; }
+
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+        .admin-info { text-align: left; line-height: 1.2; }
+        .admin-name { font-size: 11px; font-weight: 600; color: var(--text); }
+        .admin-status { font-size: 10px; }
+        .admin-status.active { color: #27ae60; }
+        .admin-status.inactive { color: var(--text3); }
+
+        /* ── HERO ── */
+        .hero {
+            position: relative;
+            padding: 72px 2rem 60px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(232,69,69,0.08);
+            border: 1px solid rgba(232,69,69,0.2);
+            color: var(--accent2);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 40px;
+            margin-bottom: 28px;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 6px; height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.6rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .hero-title .highlight {
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            background-image: linear-gradient(135deg, var(--accent) 0%, #ff9a9a 50%, var(--blue) 100%);
+        }
+
+        .hero-byline {
+            font-size: 15px;
+            color: var(--text2);
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .hero-divider {
+            width: 60px; height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--blue));
+            border-radius: 2px;
+            margin: 0 auto;
+        }
+
+        /* ── STATS BAR ── */
+        .stats-bar {
+            max-width: 1280px; margin: 0 auto;
+            padding: 0 2rem 48px;
+            display: flex; justify-content: center; gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 3px;
+        }
+
+        /* ── TOOLBAR ── */
+        .toolbar-wrap {
+            max-width: 1280px;
+            margin: 0 auto 32px;
+            padding: 0 2rem;
+        }
+
+        .toolbar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-right: 4px;
+        }
+
+        .filter-btn {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text2);
+            cursor: pointer;
+            transition: all 0.18s;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .filter-btn:hover {
+            background: var(--surface2);
+            border-color: var(--border2);
+            color: var(--text);
+        }
+
+        .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 2px 12px rgba(232,69,69,0.3);
+        }
+
+        .filter-btn .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+        }
+
+        .search-wrap {
+            position: relative; flex-shrink: 0;
+        }
+
+        .search-wrap i {
+            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+            color: var(--text3); font-size: 12px; pointer-events: none;
+        }
+
+        .search-input {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 16px 8px 36px;
+            color: var(--text);
+            outline: none;
+            width: 260px;
+            transition: all 0.2s;
+        }
+
+        .search-input::placeholder { color: var(--text3); }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            background: var(--surface3);
+            box-shadow: 0 0 0 3px rgba(232,69,69,0.1);
+        }
+
+        /* ── GRID ── */
+        .grid-wrap {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem 80px;
+        }
+
+        .section-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .media-count {
+            font-size: 12px;
+            color: var(--text3);
+            font-family: 'DM Mono', monospace;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        #portalGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        /* ── CARD ── */
+        .media-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+            cursor: default;
+            position: relative;
+        }
+
+        .media-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border2);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+        }
+
+        .card-thumb {
+            height: 168px;
+            overflow: hidden;
+            position: relative;
+            background: var(--surface2);
+        }
+
+        .card-thumb img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: transform 0.4s, opacity 0.3s;
+        }
+
+        .media-card:hover .card-thumb img {
+            transform: scale(1.06);
+            opacity: 1;
+        }
+
+        .card-thumb-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(12,14,20,0.8) 0%, transparent 60%);
+        }
+
+        .card-badge {
+            position: absolute; top: 12px; left: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .badge-mpi { background: rgba(74,158,255,0.9); color: white; }
+        .badge-slide { background: rgba(155,89,182,0.9); color: white; }
+        .badge-ppt { background: rgba(230,126,34,0.9); color: white; }
+        .badge-canva { background: rgba(46,196,182,0.9); color: #0c0e14; }
+        .badge-pdf { background: rgba(232,69,69,0.9); color: white; }
+
+        .card-body {
+            padding: 18px 20px 20px;
+            display: flex; flex-direction: column; flex: 1;
+        }
+
+        .card-category {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text3);
+            margin-bottom: 8px;
+            font-family: 'DM Mono', monospace;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.4;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: var(--text2);
+            line-height: 1.6;
+            flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+
+        .card-action {
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .open-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 9px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.2s;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .open-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            box-shadow: 0 4px 16px rgba(232,69,69,0.35);
+        }
+
+        .open-btn i { font-size: 10px; }
+
+        /* ── EMPTY STATE ── */
+        #emptyState {
+            display: none;
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+        }
+
+        .empty-icon {
+            width: 56px; height: 56px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 20px;
+            color: var(--text3);
+        }
+
+        #emptyState h3 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        #emptyState p { font-size: 13px; color: var(--text3); }
+
+        /* ── ADMIN DRAWER ── */
+        .drawer-overlay {
+            position: fixed; inset: 0; z-index: 200;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .drawer-overlay.open { opacity: 1; pointer-events: all; }
+
+        #managerDrawer {
+            position: fixed; right: 0; top: 0; bottom: 0; z-index: 201;
+            width: 420px;
+            max-width: 100vw;
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -20px 0 60px rgba(0,0,0,0.5);
+        }
+
+        #managerDrawer.open { transform: translateX(0); }
+
+        .drawer-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface2);
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .drawer-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .drawer-subtitle { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+        .drawer-header-actions { display: flex; gap: 8px; align-items: center; }
+
+        .btn-logout {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 11px; font-weight: 600;
+            padding: 6px 12px;
+            background: rgba(232,69,69,0.1);
+            border: 1px solid rgba(232,69,69,0.25);
+            color: var(--accent2);
+            border-radius: 8px; cursor: pointer;
+            transition: all 0.2s;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .btn-logout:hover { background: rgba(232,69,69,0.2); }
+
+        .btn-close-drawer {
+            width: 32px; height: 32px;
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            border-radius: 8px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; transition: all 0.2s;
+        }
+
+        .btn-close-drawer:hover { background: var(--border2); color: var(--text); }
+
+        .drawer-body {
+            flex: 1; overflow-y: auto;
+            padding: 24px;
+            display: flex; flex-direction: column; gap: 28px;
+        }
+
+        .drawer-section-title {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text3);
+            margin-bottom: 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .drawer-section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* FORM */
+        .form-group { margin-bottom: 14px; }
+
+        .form-label {
+            display: block;
+            font-size: 11px; font-weight: 600;
+            color: var(--text2);
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 12px;
+            color: var(--text);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder { color: var(--text3); }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(232,69,69,0.1);
+            background: var(--surface2);
+        }
+
+        .form-select option { background: var(--surface2); }
+
+        .form-textarea { resize: vertical; min-height: 64px; }
+
+        .form-actions { display: flex; gap: 8px; margin-top: 4px; }
+
+        .btn-primary {
+            font-family: 'DM Sans', sans-serif;
+            flex: 1; font-size: 13px; font-weight: 700;
+            padding: 10px 16px;
+            background: var(--accent);
+            border: none; border-radius: 10px;
+            color: white; cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(232,69,69,0.25);
+        }
+
+        .btn-primary:hover {
+            background: #c73333;
+            box-shadow: 0 4px 20px rgba(232,69,69,0.4);
+        }
+
+        .btn-secondary {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px; font-weight: 500;
+            padding: 10px 14px;
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text2); cursor: pointer; transition: all 0.2s;
+        }
+
+        .btn-secondary:hover { background: var(--border2); color: var(--text); }
+
+        /* QUICK SWAP */
+        .swap-row {
+            display: flex; align-items: flex-end; gap: 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .swap-field { flex: 1; }
+        .swap-field label { font-size: 10px; color: var(--text3); display: block; margin-bottom: 6px; }
+        .swap-field input {
+            font-family: 'DM Mono', monospace;
+            font-size: 14px; font-weight: 600;
+            width: 100%; text-align: center;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px; padding: 8px;
+            color: var(--text); outline: none;
+        }
+
+        .swap-arrow { color: var(--text3); font-size: 12px; margin-bottom: 10px; flex-shrink: 0; }
+
+        .btn-swap {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px; font-weight: 700;
+            padding: 10px 14px;
+            background: var(--blue);
+            border: none; border-radius: 8px;
+            color: white; cursor: pointer; transition: all 0.2s;
+            flex-shrink: 0; margin-bottom: 0;
+        }
+
+        .btn-swap:hover { background: #3a8de0; }
+
+        /* MANAGER LIST */
+        #managerList { display: flex; flex-direction: column; gap: 8px; }
+
+        .manager-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex; align-items: center; gap: 10px;
+            transition: border-color 0.2s;
+        }
+
+        .manager-item:hover { border-color: var(--border2); }
+
+        .item-num {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px; font-weight: 600;
+            color: var(--text3);
+            width: 18px; text-align: center;
+            flex-shrink: 0;
+        }
+
+        .item-arrows { display: flex; flex-direction: column; gap: 0; }
+
+        .arrow-btn {
+            background: none; border: none;
+            color: var(--text3); cursor: pointer;
+            font-size: 11px; line-height: 1;
+            padding: 1px 4px; transition: color 0.15s;
+        }
+
+        .arrow-btn:hover { color: var(--text); }
+
+        .item-info { flex: 1; min-width: 0; }
+
+        .item-title {
+            font-size: 12px; font-weight: 600;
+            color: var(--text);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        .item-cat {
+            font-size: 10px; color: var(--text3);
+            font-family: 'DM Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+        .item-btn {
+            width: 28px; height: 28px;
+            border-radius: 7px; border: 1px solid;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; cursor: pointer; transition: all 0.15s;
+            background: transparent;
+        }
+
+        .item-btn-edit {
+            border-color: rgba(74,158,255,0.3);
+            color: var(--blue);
+        }
+
+        .item-btn-edit:hover { background: rgba(74,158,255,0.15); }
+
+        .item-btn-del {
+            border-color: rgba(232,69,69,0.3);
+            color: var(--accent);
+        }
+
+        .item-btn-del:hover { background: rgba(232,69,69,0.15); }
+
+        .btn-export {
+            font-family: 'DM Sans', sans-serif;
+            width: 100%; font-size: 12px; font-weight: 600;
+            padding: 11px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text2); cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+
+        .btn-export:hover { border-color: var(--gold); color: var(--gold); background: rgba(244,185,66,0.06); }
+
+        /* ── LOGIN MODAL ── */
+        #adminLoginModal {
+            position: fixed; inset: 0; z-index: 300;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center; justify-content: center;
+            padding: 20px;
+        }
+
+        #adminLoginModal.show { display: flex; }
+
+        .modal-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px 28px;
+            width: 100%; max-width: 360px;
+            text-align: center;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+            animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalIn { from { opacity:0; transform: scale(0.92) translateY(10px); } }
+
+        .modal-icon {
+            width: 52px; height: 52px;
+            background: rgba(232,69,69,0.1);
+            border: 1px solid rgba(232,69,69,0.25);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 20px;
+            color: var(--accent);
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px; font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .modal-sub { font-size: 12px; color: var(--text3); margin-bottom: 24px; }
+
+        .modal-input {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            width: 100%; text-align: center;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px; padding: 12px;
+            color: var(--text); outline: none;
+            margin-bottom: 8px; transition: all 0.2s;
+            letter-spacing: 2px;
+        }
+
+        .modal-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(232,69,69,0.1);
+        }
+
+        .modal-error {
+            font-size: 12px; color: var(--accent2);
+            display: none; margin-bottom: 12px;
+        }
+
+        .modal-error.show { display: block; }
+
+        .modal-actions { display: flex; gap: 8px; }
+
+        .btn-modal-cancel {
+            font-family: 'DM Sans', sans-serif;
+            flex: 1; font-size: 13px; font-weight: 500;
+            padding: 11px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text2); cursor: pointer; transition: all 0.2s;
+        }
+
+        .btn-modal-cancel:hover { background: var(--surface3); }
+
+        .btn-modal-login {
+            font-family: 'DM Sans', sans-serif;
+            flex: 1; font-size: 13px; font-weight: 700;
+            padding: 11px;
+            background: var(--accent);
+            border: none; border-radius: 10px;
+            color: white; cursor: pointer; transition: all 0.2s;
+        }
+
+        .btn-modal-login:hover { background: #c73333; }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 28px 2rem;
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: 1280px; margin: 0 auto;
+            font-size: 12px; color: var(--text3);
+        }
+
+        .footer-inner strong { color: var(--text2); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            nav { padding: 0 1rem; }
+            .hero { padding: 48px 1rem 40px; }
+            .stats-bar { padding: 0 1rem 36px; gap: 24px; }
+            .toolbar-wrap { padding: 0 1rem; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .search-input { width: 100%; }
+            .grid-wrap { padding: 0 1rem 60px; }
+            #portalGrid { grid-template-columns: 1fr; gap: 16px; }
+            .admin-info { display: none; }
+            #managerDrawer { width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .filter-label { display: none; }
+        }
     </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.inset-y-0{top:0px;bottom:0px}.-bottom-0\.5{bottom:-0.125rem}.-right-0\.5{right:-0.125rem}.left-0{left:0px}.left-1\/4{left:25%}.right-0{right:0px}.right-1\/4{right:25%}.top-0{top:0px}.top-1\/2{top:50%}.right-3{right:0.75rem}.top-3{top:0.75rem}.z-10{z-index:10}.z-40{z-index:40}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-12{margin-top:3rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.line-clamp-1{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1}.line-clamp-3{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-1{height:0.25rem}.h-10{height:2.5rem}.h-12{height:3rem}.h-2\.5{height:0.625rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-80{height:20rem}.h-44{height:11rem}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-1\/2{width:50%}.w-10{width:2.5rem}.w-12{width:3rem}.w-2\.5{width:0.625rem}.w-24{width:6rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-80{width:20rem}.w-full{width:100%}.w-4{width:1rem}.max-w-4xl{max-width:56rem}.max-w-7xl{max-width:80rem}.max-w-sm{max-width:24rem}.max-w-\[180px\]{max-width:180px}.shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-x-full{--tw-translate-x:100%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.resize-none{resize:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-row{flex-direction:row}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-1\.5{gap:0.375rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.overflow-x-hidden{overflow-x:hidden}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded{border-radius:0.25rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-l{border-left-width:1px}.border-t{border-top-width:1px}.border-red-500\/20{border-color:rgb(239 68 68 / 0.2)}.border-red-900\/40{border-color:rgb(127 29 29 / 0.4)}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-slate-800\/60{border-color:rgb(30 41 59 / 0.6)}.border-slate-900{--tw-border-opacity:1;border-color:rgb(15 23 42 / var(--tw-border-opacity, 1))}.border-slate-950{--tw-border-opacity:1;border-color:rgb(2 6 23 / var(--tw-border-opacity, 1))}.border-blue-500\/20{border-color:rgb(59 130 246 / 0.2)}.border-slate-800\/40{border-color:rgb(30 41 59 / 0.4)}.bg-\[\#030712\]{--tw-bg-opacity:1;background-color:rgb(3 7 18 / var(--tw-bg-opacity, 1))}.bg-black\/90{background-color:rgb(0 0 0 / 0.9)}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-blue-600\/10{background-color:rgb(37 99 235 / 0.1)}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-red-500\/10{background-color:rgb(239 68 68 / 0.1)}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-red-600\/10{background-color:rgb(220 38 38 / 0.1)}.bg-red-950{--tw-bg-opacity:1;background-color:rgb(69 10 10 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/50{background-color:rgb(15 23 42 / 0.5)}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-slate-950{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-slate-950\/80{background-color:rgb(2 6 23 / 0.8)}.bg-cyan-500{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.bg-orange-600{--tw-bg-opacity:1;background-color:rgb(234 88 12 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.bg-gradient-to-tr{background-image:linear-gradient(to top right, var(--tw-gradient-stops))}.from-red-500{--tw-gradient-from:#ef4444 var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 68 68 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-red-600{--tw-gradient-from:#dc2626 var(--tw-gradient-from-position);--tw-gradient-to:rgb(220 38 38 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-purple-400{--tw-gradient-to:rgb(192 132 252 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #c084fc var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-purple-900{--tw-gradient-to:rgb(88 28 135 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #581c87 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-blue-500{--tw-gradient-to:#3b82f6 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.object-cover{object-fit:cover}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-2\.5{padding:0.625rem}.p-5{padding:1.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.pl-10{padding-left:2.5rem}.pl-3\.5{padding-left:0.875rem}.pr-4{padding-right:1rem}.pt-4{padding-top:1rem}.pb-0\.5{padding-bottom:0.125rem}.pt-0\.5{padding-top:0.125rem}.text-left{text-align:left}.text-center{text-align:center}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[9px\]{font-size:9px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-none{line-height:1}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-blue-400{--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}.text-slate-950{--tw-text-opacity:1;color:rgb(2 6 23 / var(--tw-text-opacity, 1))}.text-green-400{--tw-text-opacity:1;color:rgb(74 222 128 / var(--tw-text-opacity, 1))}.placeholder-slate-500::placeholder{--tw-placeholder-opacity:1;color:rgb(100 116 139 / var(--tw-placeholder-opacity, 1))}.opacity-75{opacity:0.75}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[0_0_8px_rgba\(34\2c 197\2c 94\2c 0\.6\)\]{--tw-shadow:0 0 8px rgba(34,197,94,0.6);--tw-shadow-colored:0 0 8px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-red-500\/20{--tw-shadow-color:rgb(239 68 68 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-red-600\/20{--tw-shadow-color:rgb(220 38 38 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.blur-\[100px\]{--tw-blur:blur(100px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:border-slate-700:hover{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.hover\:border-slate-800:hover{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.hover\:bg-blue-500:hover{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.hover\:bg-red-900:hover{--tw-bg-opacity:1;background-color:rgb(127 29 29 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-800:hover{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-600\/20:hover{background-color:rgb(37 99 235 / 0.2)}.hover\:bg-red-600\/20:hover{background-color:rgb(220 38 38 / 0.2)}.hover\:text-red-200:hover{--tw-text-opacity:1;color:rgb(254 202 202 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:text-slate-200:hover{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.hover\:opacity-90:hover{opacity:0.9}.focus\:border-red-500:focus{--tw-border-opacity:1;border-color:rgb(239 68 68 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.group:hover .group-hover\:border-red-500\/30{border-color:rgb(239 68 68 / 0.3)}.group:hover .group-hover\:text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:flex{display:flex}.sm\:w-\[460px\]{width:460px}}@media (min-width: 768px){.md\:w-80{width:20rem}.md\:w-auto{width:auto}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:text-5xl{font-size:3rem;line-height:1}}@media (min-width: 1024px){.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:text-6xl{font-size:3.75rem;line-height:1}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.inset-y-0{top:0px;bottom:0px}.-bottom-0\.5{bottom:-0.125rem}.-right-0\.5{right:-0.125rem}.left-0{left:0px}.left-1\/4{left:25%}.right-0{right:0px}.right-1\/4{right:25%}.right-3{right:0.75rem}.top-0{top:0px}.top-1\/2{top:50%}.top-3{top:0.75rem}.z-10{z-index:10}.z-40{z-index:40}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mt-1{margin-top:0.25rem}.mt-6{margin-top:1.5rem}.mt-12{margin-top:3rem}.mt-4{margin-top:1rem}.mt-0\.5{margin-top:0.125rem}.line-clamp-1{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1}.line-clamp-3{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-1{height:0.25rem}.h-10{height:2.5rem}.h-12{height:3rem}.h-2\.5{height:0.625rem}.h-44{height:11rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-80{height:20rem}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-12{width:3rem}.w-2\.5{width:0.625rem}.w-24{width:6rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-80{width:20rem}.w-full{width:100%}.w-1\/2{width:50%}.w-4{width:1rem}.max-w-4xl{max-width:56rem}.max-w-7xl{max-width:80rem}.max-w-\[180px\]{max-width:180px}.max-w-sm{max-width:24rem}.shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-x-full{--tw-translate-x:100%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.resize-none{resize:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-row{flex-direction:row}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-1\.5{gap:0.375rem}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.overflow-x-hidden{overflow-x:hidden}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.rounded{border-radius:0.25rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-l{border-left-width:1px}.border-t{border-top-width:1px}.border-red-500\/20{border-color:rgb(239 68 68 / 0.2)}.border-red-900\/40{border-color:rgb(127 29 29 / 0.4)}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-slate-900{--tw-border-opacity:1;border-color:rgb(15 23 42 / var(--tw-border-opacity, 1))}.border-slate-950{--tw-border-opacity:1;border-color:rgb(2 6 23 / var(--tw-border-opacity, 1))}.border-blue-500\/20{border-color:rgb(59 130 246 / 0.2)}.border-slate-800\/40{border-color:rgb(30 41 59 / 0.4)}.border-slate-800\/60{border-color:rgb(30 41 59 / 0.6)}.bg-\[\#030712\]{--tw-bg-opacity:1;background-color:rgb(3 7 18 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-blue-600\/10{background-color:rgb(37 99 235 / 0.1)}.bg-cyan-500{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-orange-600{--tw-bg-opacity:1;background-color:rgb(234 88 12 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-red-500\/10{background-color:rgb(239 68 68 / 0.1)}.bg-red-600\/10{background-color:rgb(220 38 38 / 0.1)}.bg-red-950{--tw-bg-opacity:1;background-color:rgb(69 10 10 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/50{background-color:rgb(15 23 42 / 0.5)}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-slate-950{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-slate-950\/80{background-color:rgb(2 6 23 / 0.8)}.bg-black\/90{background-color:rgb(0 0 0 / 0.9)}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.bg-gradient-to-tr{background-image:linear-gradient(to top right, var(--tw-gradient-stops))}.from-red-500{--tw-gradient-from:#ef4444 var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 68 68 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-red-600{--tw-gradient-from:#dc2626 var(--tw-gradient-from-position);--tw-gradient-to:rgb(220 38 38 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-purple-400{--tw-gradient-to:rgb(192 132 252 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #c084fc var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-purple-900{--tw-gradient-to:rgb(88 28 135 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #581c87 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-blue-500{--tw-gradient-to:#3b82f6 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.object-cover{object-fit:cover}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-10{padding-left:2.5rem}.pl-3\.5{padding-left:0.875rem}.pr-4{padding-right:1rem}.pb-0\.5{padding-bottom:0.125rem}.pt-0\.5{padding-top:0.125rem}.pt-4{padding-top:1rem}.text-left{text-align:left}.text-center{text-align:center}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[9px\]{font-size:9px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-base{font-size:1rem;line-height:1.5rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-none{line-height:1}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-green-400{--tw-text-opacity:1;color:rgb(74 222 128 / var(--tw-text-opacity, 1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-950{--tw-text-opacity:1;color:rgb(2 6 23 / var(--tw-text-opacity, 1))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-blue-400{--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.placeholder-slate-500::placeholder{--tw-placeholder-opacity:1;color:rgb(100 116 139 / var(--tw-placeholder-opacity, 1))}.opacity-75{opacity:0.75}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[0_0_8px_rgba\(34\2c 197\2c 94\2c 0\.6\)\]{--tw-shadow:0 0 8px rgba(34,197,94,0.6);--tw-shadow-colored:0 0 8px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-red-500\/20{--tw-shadow-color:rgb(239 68 68 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-red-600\/20{--tw-shadow-color:rgb(220 38 38 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.blur-\[100px\]{--tw-blur:blur(100px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:border-slate-700:hover{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.hover\:border-slate-800:hover{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.hover\:bg-red-900:hover{--tw-bg-opacity:1;background-color:rgb(127 29 29 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-800:hover{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-500:hover{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-600\/20:hover{background-color:rgb(37 99 235 / 0.2)}.hover\:bg-red-600\/20:hover{background-color:rgb(220 38 38 / 0.2)}.hover\:text-red-200:hover{--tw-text-opacity:1;color:rgb(254 202 202 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:text-slate-200:hover{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.hover\:opacity-90:hover{opacity:0.9}.focus\:border-red-500:focus{--tw-border-opacity:1;border-color:rgb(239 68 68 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.group:hover .group-hover\:border-red-500\/30{border-color:rgb(239 68 68 / 0.3)}.group:hover .group-hover\:text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:flex{display:flex}.sm\:w-\[460px\]{width:460px}}@media (min-width: 768px){.md\:w-80{width:20rem}.md\:w-auto{width:auto}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:text-5xl{font-size:3rem;line-height:1}}@media (min-width: 1024px){.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:text-6xl{font-size:3.75rem;line-height:1}}</style></head>
-<body class="bg-[#030712] text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden">
+</head>
+<body>
 
-    <nav class="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-900 px-4 py-4">
-        <div class="max-w-7xl mx-auto flex flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 via-purple-900 to-blue-600 flex items-center justify-center shadow-lg shadow-red-600/20">
-                    <span class="font-extrabold text-white tracking-wider text-sm">PPKn</span>
-                </div>
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-inner">
+            <a class="nav-brand">
+                <div class="nav-logo">PPKn</div>
                 <div>
-                    <h1 class="font-bold text-lg leading-tight tracking-tight text-white">Ruang Karakter</h1>
-                    <p class="text-[11px] text-slate-400">by Noor Irfan — Media Pembelajaran Satu Pintu</p>
+                    <div class="nav-title">Ruang Karakter</div>
+                    <div class="nav-subtitle">Portal Media Pembelajaran Satu Pintu</div>
                 </div>
-            </div>
-
-            <div class="flex items-center gap-3">
-                <button onclick="toggleManager()" class="group flex items-center gap-3 bg-slate-900/80 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 px-3.5 py-1.5 rounded-full transition-all duration-300" fdprocessedid="vsklph">
-                    <div class="relative w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 border border-slate-750 group-hover:border-red-500/30 transition-all">
-                        <i id="adminAvatarIcon" class="fa-solid fa-user-shield text-[11px] text-green-400"></i>
-                        <span id="adminStatusDot" class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-slate-950 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+            </a>
+            <div class="nav-actions">
+                <button class="admin-btn" onclick="toggleManager()">
+                    <div class="admin-avatar">
+                        <i id="adminAvatarIcon" class="fa-solid fa-user-shield" style="font-size:11px; color:#27ae60;"></i>
+                        <span id="adminStatusDot" class="admin-dot active"></span>
                     </div>
-                    <div class="hidden sm:flex flex-col items-start text-left leading-none">
-                        <span class="text-[11px] font-bold text-slate-200 group-hover:text-red-400 transition-colors">Noor Irfan</span>
-                        <span id="adminStatusText" class="text-[9px] text-green-400 font-semibold">Pengelola Aktif</span>
+                    <div class="admin-info">
+                        <div class="admin-name">Noor Irfan</div>
+                        <div id="adminStatusText" class="admin-status active">Pengelola Aktif</div>
                     </div>
                 </button>
             </div>
         </div>
     </nav>
 
-    <header class="relative overflow-hidden py-16 px-4 border-b border-slate-900 text-center">
-        <div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-80 h-80 bg-red-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div class="absolute top-1/2 right-1/4 -translate-y-1/2 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-
-        <div class="max-w-4xl mx-auto relative z-10">
-            <span class="bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-6">
-                Multi-Media Pembelajaran PPKn
-            </span>
-            <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
-                Ruang Karakter <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-purple-400 to-blue-500">by Noor Irfan</span>
-            </h2>
-            <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-blue-600 mx-auto rounded-full shadow-lg shadow-red-500/20"></div>
-        </div>
+    <!-- HERO -->
+    <header class="hero">
+        <div class="hero-eyebrow">Multi-Media Pembelajaran PPKn</div>
+        <h1 class="hero-title">
+            Ruang <span class="highlight">Karakter</span>
+        </h1>
+        <p class="hero-byline">by Noor Irfan — Semua media pembelajaran tersedia di satu tempat</p>
+        <div class="hero-divider"></div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-12 flex-grow w-full">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 bg-slate-950 p-4 rounded-2xl border border-slate-900">
-            <div id="filterContainer" class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-                <button onclick="filterMedia('all')" id="btn-filter-all" class="bg-gradient-to-r from-red-600 to-blue-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow" fdprocessedid="0640ig">Semua</button>
-                <button onclick="filterMedia('mpi')" id="btn-filter-mpi" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all" fdprocessedid="obud9">MPI Web</button>
-                <button onclick="filterMedia('slide')" id="btn-filter-slide" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all" fdprocessedid="6m2omp">Slide HTML</button>
-                <button onclick="filterMedia('ppt')" id="btn-filter-ppt" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all" fdprocessedid="mjikfm">PowerPoint</button>
-                <button onclick="filterMedia('canva')" id="btn-filter-canva" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all" fdprocessedid="o4jfzr">Canva Web</button>
-                <button onclick="filterMedia('pdf')" id="btn-filter-pdf" class="bg-slate-900 hover:bg-slate-850 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all" fdprocessedid="j4bubw">Buku/PDF</button>
+    <!-- STATS -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-num" id="statTotal">0</div>
+            <div class="stat-label">Total Media</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="statMPI">0</div>
+            <div class="stat-label">MPI Web</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="statPPT">0</div>
+            <div class="stat-label">PowerPoint</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="statCanva">0</div>
+            <div class="stat-label">Canva Web</div>
+        </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar-wrap">
+        <div class="toolbar">
+            <div class="filter-group">
+                <span class="filter-label">Filter</span>
+                <button onclick="filterMedia('all')" id="btn-filter-all" class="filter-btn active">
+                    <span class="dot" style="background:var(--text2)"></span> Semua
+                </button>
+                <button onclick="filterMedia('mpi')" id="btn-filter-mpi" class="filter-btn">
+                    <span class="dot" style="background:var(--blue)"></span> MPI Web
+                </button>
+                <button onclick="filterMedia('slide')" id="btn-filter-slide" class="filter-btn">
+                    <span class="dot" style="background:var(--purple)"></span> Slide HTML
+                </button>
+                <button onclick="filterMedia('ppt')" id="btn-filter-ppt" class="filter-btn">
+                    <span class="dot" style="background:var(--orange)"></span> PowerPoint
+                </button>
+                <button onclick="filterMedia('canva')" id="btn-filter-canva" class="filter-btn">
+                    <span class="dot" style="background:var(--cyan)"></span> Canva Web
+                </button>
+                <button onclick="filterMedia('pdf')" id="btn-filter-pdf" class="filter-btn">
+                    <span class="dot" style="background:var(--accent)"></span> Buku/PDF
+                </button>
             </div>
-            <div class="relative w-full md:w-80">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-500">
-                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                </span>
-                <input type="text" id="searchBar" onkeyup="searchMedia()" placeholder="Cari media pembelajaran..." class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 pl-10 pr-4 text-slate-200 placeholder-slate-500 text-xs focus:outline-none focus:border-red-500 transition-all" fdprocessedid="qru2n">
+            <div class="search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input class="search-input" type="text" id="searchBar" onkeyup="searchMedia()" placeholder="Cari media pembelajaran...">
             </div>
         </div>
+    </div>
 
-        <div id="portalGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"><div class="bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300">
-                    <div class="h-44 overflow-hidden relative">
-                        <img src="https://i.ibb.co.com/fYgYsZwJ/mpi.png" onerror="this.src='https://placehold.co/600x400/1e293b/ef4444?text=PPKn'" class="w-full h-full object-cover opacity-75">
-                        <div class="absolute top-3 right-3 bg-blue-600 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">MPI Web</div>
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">MPI Pembukaan UUD NRI Tahun 1945</h3>
-                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">MPI Materi Pembukaan Undang - Undang Negara Republik Indonesia, media berguna untuk membantu siswa belajar secara daring lewat HP, Laptop, Tablet, Komputer dan lainnya.</p>
-                        <a href="https://noor-irfan.itch.io/mpippknbab2" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
-                    </div>
-                </div><div class="bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300">
-                    <div class="h-44 overflow-hidden relative">
-                        <img src="https://i.ibb.co.com/tTTBV4S8/Kedaulatan-NKRI-BAB-3-kelas-9-1.jpg" onerror="this.src='https://placehold.co/600x400/1e293b/ef4444?text=PPKn'" class="w-full h-full object-cover opacity-75">
-                        <div class="absolute top-3 right-3 bg-cyan-500 text-slate-950 text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">Canva Web</div>
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">KEDAULATAN NKRI</h3>
-                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">Materi ini menggunakan kurikulum 2013, untuk pembelajaran siswa - siswi kelas 9</p>
-                        <a href="https://www.canva.com/design/DAGVpEyz7yo/kWFErv8H-Ky8k1iuEKhE0A/edit?utm_content=DAGVpEyz7yo&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
-                    </div>
-                </div><div class="bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300">
-                    <div class="h-44 overflow-hidden relative">
-                        <img src="https://i.ibb.co.com/kV1Cwvpz/UUD-NRI-Tahun-1945-sebagai-Dasar-Hukum-Tertulis-KELAS-7-1.jpg" onerror="this.src='https://placehold.co/600x400/1e293b/ef4444?text=PPKn'" class="w-full h-full object-cover opacity-75">
-                        <div class="absolute top-3 right-3 bg-cyan-500 text-slate-950 text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">Canva Web</div>
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">UUD NRI Tahun 1945 sebagai Dasar Hukum Tertulis</h3>
-                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">PPT Materi Kelas 7 UUD NRI Tahun 1945 sebagai Dasar Hukum Tertulis</p>
-                        <a href="https://www.canva.com/design/DAGzxFbdSic/gJtj6Mdwe9m938nVJZB7Jg/edit?utm_content=DAGzxFbdSic&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
-                    </div>
-                </div><div class="bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300">
-                    <div class="h-44 overflow-hidden relative">
-                        <img src="https://i.ibb.co.com/k6xZpsvh/mpi-1.png" onerror="this.src='https://placehold.co/600x400/1e293b/ef4444?text=PPKn'" class="w-full h-full object-cover opacity-75">
-                        <div class="absolute top-3 right-3 bg-blue-600 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">MPI Web</div>
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">Kebhinnekaan Indonesia</h3>
-                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">ini merupakan media pembelajaran Materi Kelas VII Semester Genap versi 1.0 atau versi generasi pertama, apabila belum merasa lengkap mohon dimaklumi, MPI ini akan terus update ke versi yang paling lengkap</p>
-                        <a href="https://fansensei12.github.io/Media-Pembelajaran-PKnVIII/story_html5.html" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
-                    </div>
-                </div><div class="bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300">
-                    <div class="h-44 overflow-hidden relative">
-                        <img src="https://i.ibb.co.com/NBkmz9s/ppt-tata-negara.png" onerror="this.src='https://placehold.co/600x400/1e293b/ef4444?text=PPKn'" class="w-full h-full object-cover opacity-75">
-                        <div class="absolute top-3 right-3 bg-orange-600 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">PowerPoint</div>
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">TATA NEGARA DAN PEMERINTAHAN INDONESIA</h3>
-                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">Materi untuk kelas 8 semester genap</p>
-                        <a href="https://docs.google.com/presentation/d/1qZ_atVlbaR3VjwmbcMp0cUjWpyYUdd2o/edit?usp=sharing&amp;ouid=103732362901499177869&amp;rtpof=true&amp;sd=true" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
-                    </div>
-                </div><div class="bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300">
-                    <div class="h-44 overflow-hidden relative">
-                        <img src="https://i.ibb.co.com/GfqQs8St/Screenshot-2026-05-17-211125.png" onerror="this.src='https://placehold.co/600x400/1e293b/ef4444?text=PPKn'" class="w-full h-full object-cover opacity-75">
-                        <div class="absolute top-3 right-3 bg-orange-600 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">PowerPoint</div>
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">KELAHIRAN PANCASILA</h3>
-                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">PPT Materi Kelas 7 tentang kelahiran pancasila untuk materi di semester ganjil</p>
-                        <a href="https://docs.google.com/presentation/d/1eOmZlM7ePES2kfUYDil9GoUHSR6Qmhf1/edit?usp=sharing&amp;ouid=103732362901499177869&amp;rtpof=true&amp;sd=true" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
-                    </div>
-                </div><div class="bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300">
-                    <div class="h-44 overflow-hidden relative">
-                        <img src="https://i.ibb.co.com/5zgfBLp/Screenshot-2026-05-23-133321.png" onerror="this.src='https://placehold.co/600x400/1e293b/ef4444?text=PPKn'" class="w-full h-full object-cover opacity-75">
-                        <div class="absolute top-3 right-3 bg-orange-600 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">PowerPoint</div>
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">Indonesia Sebagai Negara Kesatuan</h3>
-                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">materi untuk kelas 8 semester ganjil</p>
-                        <a href="https://docs.google.com/presentation/d/1DB2Ga7OVQDk2DhzR1LD4bBqHDeb9EHHe/edit?usp=sharing&amp;ouid=103732362901499177869&amp;rtpof=true&amp;sd=true" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
-                    </div>
-                </div></div>
-
-        <div id="emptyState" class="hidden text-center py-16 bg-slate-950 rounded-2xl border border-slate-900 mt-6">
-            <div class="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center text-slate-600 mx-auto mb-3">
-                <i class="fa-solid fa-folder-open text-xl"></i>
-            </div>
-            <h3 class="text-sm font-bold text-slate-300">Media Tidak Ditemukan</h3>
-            <p class="text-slate-500 text-[11px] mt-1">Coba kata kunci pencarian atau kategori filter lainnya.</p>
+    <!-- GRID -->
+    <div class="grid-wrap">
+        <div class="section-header">
+            <h2 class="section-title">Koleksi Media</h2>
+            <span class="media-count" id="mediaCountLabel">0 media</span>
         </div>
-    </main>
 
-    <div id="managerDrawer" class="fixed inset-y-0 right-0 z-50 w-full sm:w-[460px] bg-slate-950 border-l border-slate-900 shadow-2xl transition-transform duration-300 transform flex flex-col translate-x-full">
-        <div class="p-6 border-b border-slate-900 bg-slate-900/50 flex items-center justify-between">
+        <div id="portalGrid"></div>
+
+        <div id="emptyState">
+            <div class="empty-icon"><i class="fa-solid fa-folder-open"></i></div>
+            <h3>Media Tidak Ditemukan</h3>
+            <p>Coba kata kunci pencarian atau kategori filter lainnya.</p>
+        </div>
+    </div>
+
+    <!-- DRAWER OVERLAY -->
+    <div id="drawerOverlay" class="drawer-overlay" onclick="closeDrawer()"></div>
+
+    <!-- ADMIN DRAWER -->
+    <div id="managerDrawer">
+        <div class="drawer-header">
             <div>
-                <h3 class="font-bold text-white text-sm">Kelola Tautan Portal</h3>
-                <p class="text-[10px] text-slate-400">Atur menu belajar satu pintu</p>
+                <div class="drawer-title">Panel Admin</div>
+                <div class="drawer-subtitle">Kelola media pembelajaran portal</div>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="logoutAdmin()" class="bg-red-950 hover:bg-red-900 border border-red-900/40 text-red-400 hover:text-red-200 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1" fdprocessedid="rra0wx">
+            <div class="drawer-header-actions">
+                <button onclick="logoutAdmin()" class="btn-logout">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar
                 </button>
-                <button onclick="toggleManager()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-all" fdprocessedid="2qbq2h">
+                <button onclick="closeDrawer()" class="btn-close-drawer">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
         </div>
 
-        <div class="flex-grow overflow-y-auto p-6 space-y-6">
+        <div class="drawer-body">
+
+            <!-- ADD FORM -->
             <div>
-                <h4 id="formTitle" class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Tambah Media Baru</h4>
+                <div class="drawer-section-title" id="formTitle">Tambah Media Baru</div>
                 <input type="hidden" id="editIndex" value="-1">
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Judul Media</label>
-                        <input type="text" id="inputTitle" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-red-500" fdprocessedid="vxyja6">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Kategori Media</label>
-                        <select id="inputCategory" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-red-500" fdprocessedid="c3oulg">
-                            <option value="mpi">MPI Web</option>
-                            <option value="slide">Slide HTML</option>
-                            <option value="ppt">PowerPoint</option>
-                            <option value="canva">Canva Web</option>
-                            <option value="pdf">Buku/PDF</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Link URL Tujuan</label>
-                        <input type="text" id="inputUrl" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-red-500" fdprocessedid="lzgug9">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Link Gambar Sampul</label>
-                        <input type="text" id="inputImage" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-red-500" fdprocessedid="tixy2v">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Deskripsi Singkat</label>
-                        <textarea id="inputDesc" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-red-500 resize-none"></textarea>
-                    </div>
-                    
-                    <div class="flex gap-2">
-                        <button onclick="saveMediaCard()" class="flex-grow bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-xs transition-all" fdprocessedid="q2po6">Simpan Media</button>
-                        <button onclick="resetForm()" class="bg-slate-900 hover:bg-slate-850 text-slate-300 py-2.5 px-3 rounded-xl text-xs border border-slate-800 transition-all" fdprocessedid="1dnf1o">Batal</button>
-                    </div>
+
+                <div class="form-group">
+                    <label class="form-label">Judul Media</label>
+                    <input type="text" id="inputTitle" class="form-input" placeholder="Contoh: Kebhinnekaan Indonesia">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kategori</label>
+                    <select id="inputCategory" class="form-select">
+                        <option value="mpi">MPI Web</option>
+                        <option value="slide">Slide HTML</option>
+                        <option value="ppt">PowerPoint</option>
+                        <option value="canva">Canva Web</option>
+                        <option value="pdf">Buku/PDF</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Link URL Tujuan</label>
+                    <input type="text" id="inputUrl" class="form-input" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Link Gambar Sampul (opsional)</label>
+                    <input type="text" id="inputImage" class="form-input" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Deskripsi Singkat</label>
+                    <textarea id="inputDesc" class="form-textarea" placeholder="Deskripsi singkat media ini..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button onclick="saveMediaCard()" class="btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan
+                    </button>
+                    <button onclick="resetForm()" class="btn-secondary">Batal</button>
                 </div>
             </div>
 
-            <div class="border-t border-slate-900 pt-4">
-                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Fitur Pengurutan Cepat</h4>
-                <div class="bg-slate-900 p-3 rounded-xl border border-slate-800/60 flex items-center gap-2">
-                    <div class="w-1/2">
-                        <label class="block text-[10px] text-slate-500 mb-1">Pindahkan No</label>
-                        <input type="number" id="swapFrom" placeholder="Contoh: 6" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-1 px-2 text-white text-center text-xs focus:outline-none" fdprocessedid="lzpuph">
+            <!-- QUICK SWAP -->
+            <div>
+                <div class="drawer-section-title">Pengurutan Cepat</div>
+                <div class="swap-row">
+                    <div class="swap-field">
+                        <label>Pindahkan No</label>
+                        <input type="number" id="swapFrom" placeholder="6">
                     </div>
-                    <div class="text-slate-600 mt-4 text-xs"><i class="fa-solid fa-right-left"></i></div>
-                    <div class="w-1/2">
-                        <label class="block text-[10px] text-slate-500 mb-1">Ke Posisi No</label>
-                        <input type="number" id="swapTo" placeholder="Contoh: 1" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-1 px-2 text-white text-center text-xs focus:outline-none" fdprocessedid="kwfhh">
+                    <div class="swap-arrow"><i class="fa-solid fa-right-left"></i></div>
+                    <div class="swap-field">
+                        <label>Ke Posisi No</label>
+                        <input type="number" id="swapTo" placeholder="1">
                     </div>
-                    <button onclick="quickSwapMedia()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-2 rounded-lg text-[11px] mt-4 shadow-md transition-all" fdprocessedid="4dhygc">Tukar</button>
+                    <button onclick="quickSwapMedia()" class="btn-swap">Tukar</button>
                 </div>
             </div>
 
-            <div class="border-t border-slate-900 pt-4">
-                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Daftar Menu Saat Ini</h4>
-                <div id="managerList" class="space-y-2"><div class="bg-slate-900 p-2.5 rounded-xl flex items-center justify-between text-xs gap-2 border border-slate-800/40">
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <span class="text-[10px] text-slate-500 font-bold w-4 text-center">1</span>
-                        <div class="flex flex-col leading-none">
-                            <button onclick="moveMediaUp(0)" class="text-slate-500 hover:text-slate-200 text-[10px] pb-0.5" fdprocessedid="mkmx9k"><i class="fa-solid fa-caret-up"></i></button>
-                            <button onclick="moveMediaDown(0)" class="text-slate-500 hover:text-slate-200 text-[10px] pt-0.5" fdprocessedid="qz1gnc"><i class="fa-solid fa-caret-down"></i></button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col overflow-hidden flex-grow px-1">
-                        <span class="truncate max-w-[180px] font-bold text-slate-200">MPI Pembukaan UUD NRI Tahun 1945</span>
-                        <span class="text-[9px] text-slate-500 uppercase tracking-wider">mpi</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="editMedia(0)" class="w-7 h-7 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 flex items-center justify-center transition-all" fdprocessedid="yxr9v">
-                            <i class="fa-solid fa-pen text-[10px]"></i>
-                        </button>
-                        <button onclick="deleteMedia(0)" class="w-7 h-7 rounded bg-red-600/10 hover:bg-red-600/20 text-red-500 border border-red-500/20 flex items-center justify-center transition-all" fdprocessedid="2r8ujm">
-                            <i class="fa-solid fa-trash text-[10px]"></i>
-                        </button>
-                    </div>
-                </div><div class="bg-slate-900 p-2.5 rounded-xl flex items-center justify-between text-xs gap-2 border border-slate-800/40">
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <span class="text-[10px] text-slate-500 font-bold w-4 text-center">2</span>
-                        <div class="flex flex-col leading-none">
-                            <button onclick="moveMediaUp(1)" class="text-slate-500 hover:text-slate-200 text-[10px] pb-0.5" fdprocessedid="japqqj"><i class="fa-solid fa-caret-up"></i></button>
-                            <button onclick="moveMediaDown(1)" class="text-slate-500 hover:text-slate-200 text-[10px] pt-0.5" fdprocessedid="dl0z9l"><i class="fa-solid fa-caret-down"></i></button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col overflow-hidden flex-grow px-1">
-                        <span class="truncate max-w-[180px] font-bold text-slate-200">KEDAULATAN NKRI</span>
-                        <span class="text-[9px] text-slate-500 uppercase tracking-wider">canva</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="editMedia(1)" class="w-7 h-7 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 flex items-center justify-center transition-all" fdprocessedid="rvlpeu">
-                            <i class="fa-solid fa-pen text-[10px]"></i>
-                        </button>
-                        <button onclick="deleteMedia(1)" class="w-7 h-7 rounded bg-red-600/10 hover:bg-red-600/20 text-red-500 border border-red-500/20 flex items-center justify-center transition-all" fdprocessedid="hjgf4a">
-                            <i class="fa-solid fa-trash text-[10px]"></i>
-                        </button>
-                    </div>
-                </div><div class="bg-slate-900 p-2.5 rounded-xl flex items-center justify-between text-xs gap-2 border border-slate-800/40">
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <span class="text-[10px] text-slate-500 font-bold w-4 text-center">3</span>
-                        <div class="flex flex-col leading-none">
-                            <button onclick="moveMediaUp(2)" class="text-slate-500 hover:text-slate-200 text-[10px] pb-0.5" fdprocessedid="9p7uaq"><i class="fa-solid fa-caret-up"></i></button>
-                            <button onclick="moveMediaDown(2)" class="text-slate-500 hover:text-slate-200 text-[10px] pt-0.5" fdprocessedid="4sj4w"><i class="fa-solid fa-caret-down"></i></button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col overflow-hidden flex-grow px-1">
-                        <span class="truncate max-w-[180px] font-bold text-slate-200">UUD NRI Tahun 1945 sebagai Dasar Hukum Tertulis</span>
-                        <span class="text-[9px] text-slate-500 uppercase tracking-wider">canva</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="editMedia(2)" class="w-7 h-7 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 flex items-center justify-center transition-all" fdprocessedid="p11a6f">
-                            <i class="fa-solid fa-pen text-[10px]"></i>
-                        </button>
-                        <button onclick="deleteMedia(2)" class="w-7 h-7 rounded bg-red-600/10 hover:bg-red-600/20 text-red-500 border border-red-500/20 flex items-center justify-center transition-all" fdprocessedid="dz0odc">
-                            <i class="fa-solid fa-trash text-[10px]"></i>
-                        </button>
-                    </div>
-                </div><div class="bg-slate-900 p-2.5 rounded-xl flex items-center justify-between text-xs gap-2 border border-slate-800/40">
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <span class="text-[10px] text-slate-500 font-bold w-4 text-center">4</span>
-                        <div class="flex flex-col leading-none">
-                            <button onclick="moveMediaUp(3)" class="text-slate-500 hover:text-slate-200 text-[10px] pb-0.5" fdprocessedid="8yule"><i class="fa-solid fa-caret-up"></i></button>
-                            <button onclick="moveMediaDown(3)" class="text-slate-500 hover:text-slate-200 text-[10px] pt-0.5" fdprocessedid="anurmf"><i class="fa-solid fa-caret-down"></i></button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col overflow-hidden flex-grow px-1">
-                        <span class="truncate max-w-[180px] font-bold text-slate-200">Kebhinnekaan Indonesia</span>
-                        <span class="text-[9px] text-slate-500 uppercase tracking-wider">mpi</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="editMedia(3)" class="w-7 h-7 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 flex items-center justify-center transition-all" fdprocessedid="fju8o">
-                            <i class="fa-solid fa-pen text-[10px]"></i>
-                        </button>
-                        <button onclick="deleteMedia(3)" class="w-7 h-7 rounded bg-red-600/10 hover:bg-red-600/20 text-red-500 border border-red-500/20 flex items-center justify-center transition-all" fdprocessedid="02ohe">
-                            <i class="fa-solid fa-trash text-[10px]"></i>
-                        </button>
-                    </div>
-                </div><div class="bg-slate-900 p-2.5 rounded-xl flex items-center justify-between text-xs gap-2 border border-slate-800/40">
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <span class="text-[10px] text-slate-500 font-bold w-4 text-center">5</span>
-                        <div class="flex flex-col leading-none">
-                            <button onclick="moveMediaUp(4)" class="text-slate-500 hover:text-slate-200 text-[10px] pb-0.5" fdprocessedid="7nzf2d"><i class="fa-solid fa-caret-up"></i></button>
-                            <button onclick="moveMediaDown(4)" class="text-slate-500 hover:text-slate-200 text-[10px] pt-0.5" fdprocessedid="pwk6yh"><i class="fa-solid fa-caret-down"></i></button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col overflow-hidden flex-grow px-1">
-                        <span class="truncate max-w-[180px] font-bold text-slate-200">TATA NEGARA DAN PEMERINTAHAN INDONESIA</span>
-                        <span class="text-[9px] text-slate-500 uppercase tracking-wider">ppt</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="editMedia(4)" class="w-7 h-7 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 flex items-center justify-center transition-all" fdprocessedid="b0jare">
-                            <i class="fa-solid fa-pen text-[10px]"></i>
-                        </button>
-                        <button onclick="deleteMedia(4)" class="w-7 h-7 rounded bg-red-600/10 hover:bg-red-600/20 text-red-500 border border-red-500/20 flex items-center justify-center transition-all" fdprocessedid="ga957l">
-                            <i class="fa-solid fa-trash text-[10px]"></i>
-                        </button>
-                    </div>
-                </div><div class="bg-slate-900 p-2.5 rounded-xl flex items-center justify-between text-xs gap-2 border border-slate-800/40">
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <span class="text-[10px] text-slate-500 font-bold w-4 text-center">6</span>
-                        <div class="flex flex-col leading-none">
-                            <button onclick="moveMediaUp(5)" class="text-slate-500 hover:text-slate-200 text-[10px] pb-0.5" fdprocessedid="kungm"><i class="fa-solid fa-caret-up"></i></button>
-                            <button onclick="moveMediaDown(5)" class="text-slate-500 hover:text-slate-200 text-[10px] pt-0.5" fdprocessedid="r2ne4"><i class="fa-solid fa-caret-down"></i></button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col overflow-hidden flex-grow px-1">
-                        <span class="truncate max-w-[180px] font-bold text-slate-200">KELAHIRAN PANCASILA</span>
-                        <span class="text-[9px] text-slate-500 uppercase tracking-wider">ppt</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="editMedia(5)" class="w-7 h-7 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 flex items-center justify-center transition-all" fdprocessedid="s2nw0c">
-                            <i class="fa-solid fa-pen text-[10px]"></i>
-                        </button>
-                        <button onclick="deleteMedia(5)" class="w-7 h-7 rounded bg-red-600/10 hover:bg-red-600/20 text-red-500 border border-red-500/20 flex items-center justify-center transition-all" fdprocessedid="ke2crt">
-                            <i class="fa-solid fa-trash text-[10px]"></i>
-                        </button>
-                    </div>
-                </div><div class="bg-slate-900 p-2.5 rounded-xl flex items-center justify-between text-xs gap-2 border border-slate-800/40">
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <span class="text-[10px] text-slate-500 font-bold w-4 text-center">7</span>
-                        <div class="flex flex-col leading-none">
-                            <button onclick="moveMediaUp(6)" class="text-slate-500 hover:text-slate-200 text-[10px] pb-0.5" fdprocessedid="cd5o59"><i class="fa-solid fa-caret-up"></i></button>
-                            <button onclick="moveMediaDown(6)" class="text-slate-500 hover:text-slate-200 text-[10px] pt-0.5" fdprocessedid="mh84e8"><i class="fa-solid fa-caret-down"></i></button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col overflow-hidden flex-grow px-1">
-                        <span class="truncate max-w-[180px] font-bold text-slate-200">Indonesia Sebagai Negara Kesatuan</span>
-                        <span class="text-[9px] text-slate-500 uppercase tracking-wider">ppt</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="editMedia(6)" class="w-7 h-7 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 flex items-center justify-center transition-all" fdprocessedid="x1n4g">
-                            <i class="fa-solid fa-pen text-[10px]"></i>
-                        </button>
-                        <button onclick="deleteMedia(6)" class="w-7 h-7 rounded bg-red-600/10 hover:bg-red-600/20 text-red-500 border border-red-500/20 flex items-center justify-center transition-all" fdprocessedid="xt8ni">
-                            <i class="fa-solid fa-trash text-[10px]"></i>
-                        </button>
-                    </div>
-                </div></div>
+            <!-- LIST -->
+            <div>
+                <div class="drawer-section-title">Daftar Media</div>
+                <div id="managerList"></div>
             </div>
 
-            <button onclick="exportSourceCode()" class="w-full bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 font-bold py-2.5 rounded-xl text-xs transition-all" fdprocessedid="m9f7g5">
-                Salin Kode Sumber Web Anda
+            <!-- EXPORT -->
+            <button onclick="exportSourceCode()" class="btn-export">
+                <i class="fa-solid fa-code"></i> Salin Kode Sumber Web
             </button>
+
         </div>
     </div>
 
-    <div id="adminLoginModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-950 w-full max-w-sm rounded-2xl border border-slate-900 p-6 text-center shadow-2xl">
-            <h3 class="text-base font-bold text-white mb-2">Verifikasi Akses Admin</h3>
-            <p class="text-[11px] text-slate-500 mb-4">Siswa dilarang keras mengubah tautan portal media</p>
-            <input type="password" id="adminPasswordInput" placeholder="Masukkan kata sandi..." class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-4 text-white text-center text-xs mb-4 focus:outline-none focus:border-red-500" onkeydown="if(event.key === 'Enter') submitAdminLogin()">
-            <div id="loginErrorMessage" class="text-red-500 text-xs hidden mb-3">Kata sandi salah!</div>
-            <div class="flex gap-2">
-                <button onclick="closeLoginModal()" class="w-1/2 bg-slate-900 text-slate-400 py-2.5 rounded-xl text-xs">Batal</button>
-                <button onclick="submitAdminLogin()" class="w-1/2 bg-red-600 text-white py-2.5 rounded-xl text-xs font-bold">Masuk</button>
+    <!-- LOGIN MODAL -->
+    <div id="adminLoginModal">
+        <div class="modal-box">
+            <div class="modal-icon"><i class="fa-solid fa-lock"></i></div>
+            <h3 class="modal-title">Verifikasi Admin</h3>
+            <p class="modal-sub">Masukkan kata sandi untuk mengakses panel pengelola</p>
+            <input type="password" id="adminPasswordInput" class="modal-input"
+                placeholder="••••••••"
+                onkeydown="if(event.key==='Enter') submitAdminLogin()">
+            <div id="loginErrorMessage" class="modal-error">
+                <i class="fa-solid fa-circle-exclamation"></i> Kata sandi salah!
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeLoginModal()" class="btn-modal-cancel">Batal</button>
+                <button onclick="submitAdminLogin()" class="btn-modal-login">Masuk</button>
             </div>
         </div>
     </div>
 
-    <footer class="border-t border-slate-900 bg-slate-950 py-8 px-4 text-center text-slate-500 text-xs mt-12">
-        <p>© 2026 Ruang Karakter by Noor Irfan. Portal Pembelajaran Pancasila Adaptif.</p>
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            © 2026 <strong>Ruang Karakter</strong> by <strong>Noor Irfan</strong> — Portal Pembelajaran Pancasila Adaptif
+        </div>
     </footer>
 
     <script>
@@ -405,11 +1151,27 @@
         // DATA UTAMA ANDA (TERINTEGRASI PERMANEN)
         const defaultMediaData = [
           {
-                    "title": "MPI Pembukaan UUD NRI Tahun 1945",
-                    "category": "mpi",
-                    "url": "https://noor-irfan.itch.io/mpippknbab2",
-                    "image": "https://i.ibb.co.com/fYgYsZwJ/mpi.png",
-                    "desc": "MPI Materi Pembukaan Undang - Undang Negara Republik Indonesia, media berguna untuk membantu siswa belajar secara daring lewat HP, Laptop, Tablet, Komputer dan lainnya.",
+                    "title": "TUGAS PJJ KELAS 7  PENDIDIKAN PANCASILA",
+                    "category": "slide",
+                    "url": "https://fansensei12.github.io/TUGAS-ONLINE-PKn-By-PAK-IRFAN/",
+                    "image": "https://i.ibb.co.com/Kxk2T02P/tugas-online.png",
+                    "desc": "TUGAS ONLINE PJJ PENDIDIKAN PANCASILA UNTUK KELAS 7 DAN 8",
+                    "forceExternal": true
+          },
+          {
+                    "title": "KELAHIRAN PANCASILA",
+                    "category": "ppt",
+                    "url": "https://docs.google.com/presentation/d/1eOmZlM7ePES2kfUYDil9GoUHSR6Qmhf1/edit?usp=sharing&ouid=103732362901499177869&rtpof=true&sd=true",
+                    "image": "https://i.ibb.co.com/GfqQs8St/Screenshot-2026-05-17-211125.png",
+                    "desc": "PPT Materi Kelas 7 tentang kelahiran pancasila untuk materi di semester ganjil",
+                    "forceExternal": true
+          },
+          {
+                    "title": "TATA NEGARA DAN PEMERINTAHAN INDONESIA",
+                    "category": "ppt",
+                    "url": "https://docs.google.com/presentation/d/1qZ_atVlbaR3VjwmbcMp0cUjWpyYUdd2o/edit?usp=sharing&ouid=103732362901499177869&rtpof=true&sd=true",
+                    "image": "https://i.ibb.co.com/NBkmz9s/ppt-tata-negara.png",
+                    "desc": "Materi untuk kelas 8 semester genap",
                     "forceExternal": true
           },
           {
@@ -433,170 +1195,141 @@
                     "category": "mpi",
                     "url": "https://fansensei12.github.io/Media-Pembelajaran-PKnVIII/story_html5.html",
                     "image": "https://i.ibb.co.com/k6xZpsvh/mpi-1.png",
-                    "desc": "ini merupakan media pembelajaran Materi Kelas VII Semester Genap versi 1.0 atau versi generasi pertama, apabila belum merasa lengkap mohon dimaklumi, MPI ini akan terus update ke versi yang paling lengkap",
+                    "desc": "Media pembelajaran Materi Kelas VII Semester Genap versi 1.0. MPI ini akan terus diperbarui ke versi yang paling lengkap.",
                     "forceExternal": true
           },
           {
-                    "title": "TATA NEGARA DAN PEMERINTAHAN INDONESIA",
-                    "category": "ppt",
-                    "url": "https://docs.google.com/presentation/d/1qZ_atVlbaR3VjwmbcMp0cUjWpyYUdd2o/edit?usp=sharing&ouid=103732362901499177869&rtpof=true&sd=true",
-                    "image": "https://i.ibb.co.com/NBkmz9s/ppt-tata-negara.png",
-                    "desc": "Materi untuk kelas 8 semester genap",
-                    "forceExternal": true
-          },
-          {
-                    "title": "KELAHIRAN PANCASILA",
-                    "category": "ppt",
-                    "url": "https://docs.google.com/presentation/d/1eOmZlM7ePES2kfUYDil9GoUHSR6Qmhf1/edit?usp=sharing&ouid=103732362901499177869&rtpof=true&sd=true",
-                    "image": "https://i.ibb.co.com/GfqQs8St/Screenshot-2026-05-17-211125.png",
-                    "desc": "PPT Materi Kelas 7 tentang kelahiran pancasila untuk materi di semester ganjil",
-                    "forceExternal": true
-          },
-          {
-                    "title": "Indonesia Sebagai Negara Kesatuan",
-                    "category": "ppt",
-                    "url": "https://docs.google.com/presentation/d/1DB2Ga7OVQDk2DhzR1LD4bBqHDeb9EHHe/edit?usp=sharing&ouid=103732362901499177869&rtpof=true&sd=true",
-                    "image": "https://i.ibb.co.com/5zgfBLp/Screenshot-2026-05-23-133321.png",
-                    "desc": "materi untuk kelas 8 semester ganjil",
+                    "title": "MPI Pembukaan UUD NRI Tahun 1945",
+                    "category": "mpi",
+                    "url": "https://noor-irfan.itch.io/mpippknbab2",
+                    "image": "https://i.ibb.co.com/fYgYsZwJ/mpi.png",
+                    "desc": "MPI Materi Pembukaan Undang-Undang Negara Republik Indonesia, berguna untuk belajar secara daring lewat HP, Laptop, Tablet, maupun Komputer.",
                     "forceExternal": true
           }
-];
+        ];
         // ===END_DATA===
 
         const ADMIN_PASSWORD = "adminirfan";
         let isAdmin = sessionStorage.getItem('ruang_karakter_isAdmin') === 'true';
-
         let mediaData = JSON.parse(localStorage.getItem('ruang_karakter_media')) || defaultMediaData;
         let activeFilter = 'all';
 
-        window.onload = function() {
+        const catConfig = {
+            mpi:   { label: 'MPI Web',     cls: 'badge-mpi' },
+            slide: { label: 'HTML Slide',  cls: 'badge-slide' },
+            ppt:   { label: 'PowerPoint',  cls: 'badge-ppt' },
+            canva: { label: 'Canva Web',   cls: 'badge-canva' },
+            pdf:   { label: 'Buku / PDF',  cls: 'badge-pdf' },
+        };
+
+        window.onload = function () {
             renderPortal();
             renderManagerList();
+            updateStats();
             updateAdminButtonVisuals();
-        }
+        };
 
         function saveDataToStorage() {
             localStorage.setItem('ruang_karakter_media', JSON.stringify(mediaData));
         }
 
-        function renderPortal() {
-            const grid = document.getElementById('portalGrid');
-            const emptyState = document.getElementById('emptyState');
-            grid.innerHTML = '';
-            
-            let filtered = mediaData;
-            if (activeFilter !== 'all') {
-                filtered = mediaData.filter(item => item.category === activeFilter);
-            }
+        function updateStats() {
+            document.getElementById('statTotal').textContent = mediaData.length;
+            document.getElementById('statMPI').textContent   = mediaData.filter(m => m.category === 'mpi').length;
+            document.getElementById('statPPT').textContent   = mediaData.filter(m => m.category === 'ppt').length;
+            document.getElementById('statCanva').textContent = mediaData.filter(m => m.category === 'canva').length;
+        }
 
-            if (filtered.length === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-            }
+        function buildCard(media) {
+            const cfg = catConfig[media.category] || catConfig['mpi'];
+            const img = media.image || 'https://placehold.co/600x400/1a1e2a/e84545?text=PPKn';
+            const card = document.createElement('div');
+            card.className = 'media-card';
+            card.innerHTML = `
+                <div class="card-thumb">
+                    <img src="${img}" onerror="this.src='https://placehold.co/600x400/1a1e2a/e84545?text=PPKn'" loading="lazy">
+                    <div class="card-thumb-overlay"></div>
+                    <div class="card-badge ${cfg.cls}">${cfg.label}</div>
+                </div>
+                <div class="card-body">
+                    <div class="card-category">${cfg.label}</div>
+                    <h3 class="card-title">${media.title}</h3>
+                    <p class="card-desc">${media.desc || ''}</p>
+                    <div class="card-action">
+                        <a href="${media.url}" target="_blank" class="open-btn">
+                            Buka Media <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
 
-            filtered.forEach((media) => {
-                const categoryLabels = {
-                    mpi: { label: 'MPI Web', color: 'bg-blue-600 text-white' },
-                    slide: { label: 'HTML Slide', color: 'bg-purple-600 text-white' },
-                    ppt: { label: 'PowerPoint', color: 'bg-orange-600 text-white' },
-                    canva: { label: 'Canva Web', color: 'bg-cyan-500 text-slate-950' },
-                    pdf: { label: 'Buku/PDF', color: 'bg-red-600 text-white' }
-                };
-                const cfg = categoryLabels[media.category] || categoryLabels['mpi'];
-                const imgUrl = media.image ? media.image : 'https://placehold.co/600x400/1e293b/ef4444?text=PPKn';
-                
-                const card = document.createElement('div');
-                card.className = "bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300";
-                card.innerHTML = `
-                    <div class="h-44 overflow-hidden relative">
-                        <img src="${imgUrl}" onerror="this.src='https://placehold.co/600x400/1e293b/ef4444?text=PPKn'" class="w-full h-full object-cover opacity-75">
-                        <div class="absolute top-3 right-3 ${cfg.color} text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">${cfg.label}</div>
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">${media.title}</h3>
-                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">${media.desc || ''}</p>
-                        <a href="${media.url}" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
-                    </div>
-                `;
-                grid.appendChild(card);
+        function getFiltered() {
+            const q = (document.getElementById('searchBar')?.value || '').toLowerCase();
+            return mediaData.filter(m => {
+                const matchCat  = activeFilter === 'all' || m.category === activeFilter;
+                const matchSearch = !q || m.title.toLowerCase().includes(q) || (m.desc || '').toLowerCase().includes(q);
+                return matchCat && matchSearch;
             });
         }
 
-        function filterMedia(category) {
-            activeFilter = category;
-            const buttons = ['all', 'mpi', 'slide', 'ppt', 'canva', 'pdf'];
-            buttons.forEach(btn => {
-                const el = document.getElementById(`btn-filter-${btn}`);
-                if (btn === category) {
-                    el.className = "bg-gradient-to-r from-red-600 to-blue-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow";
-                } else {
-                    el.className = "bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-800 transition-all";
-                }
+        function renderPortal() {
+            const grid = document.getElementById('portalGrid');
+            const empty = document.getElementById('emptyState');
+            grid.innerHTML = '';
+            const filtered = getFiltered();
+            const label = document.getElementById('mediaCountLabel');
+
+            if (filtered.length === 0) {
+                empty.style.display = 'block';
+                if (label) label.textContent = '0 media';
+            } else {
+                empty.style.display = 'none';
+                filtered.forEach(m => grid.appendChild(buildCard(m)));
+                if (label) label.textContent = `${filtered.length} media`;
+            }
+        }
+
+        function filterMedia(cat) {
+            activeFilter = cat;
+            ['all','mpi','slide','ppt','canva','pdf'].forEach(k => {
+                const btn = document.getElementById('btn-filter-' + k);
+                btn.classList.toggle('active', k === cat);
             });
             renderPortal();
         }
 
-        function searchMedia() {
-            const query = document.getElementById('searchBar').value.toLowerCase();
-            const grid = document.getElementById('portalGrid');
-            const emptyState = document.getElementById('emptyState');
-            grid.innerHTML = '';
+        function searchMedia() { renderPortal(); }
 
-            let filtered = mediaData.filter(item => {
-                const matchesSearch = item.title.toLowerCase().includes(query) || (item.desc && item.desc.toLowerCase().includes(query));
-                const matchesFilter = activeFilter === 'all' || item.category === activeFilter;
-                return matchesSearch && matchesFilter;
-            });
-
-            if (filtered.length === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            filtered.forEach((media) => {
-                const categoryLabels = {
-                    mpi: { label: 'MPI Web', color: 'bg-blue-600 text-white' },
-                    slide: { label: 'HTML Slide', color: 'bg-purple-600 text-white' },
-                    ppt: { label: 'PowerPoint', color: 'bg-orange-600 text-white' },
-                    canva: { label: 'Canva Web', color: 'bg-cyan-500 text-slate-950' },
-                    pdf: { label: 'Buku/PDF', color: 'bg-red-600 text-white' }
-                };
-                const cfg = categoryLabels[media.category] || categoryLabels['mpi'];
-                const imgUrl = media.image ? media.image : 'https://placehold.co/600x400/1e293b/ef4444?text=PPKn';
-                
-                const card = document.createElement('div');
-                card.className = "bg-slate-950 border border-slate-900 rounded-2xl overflow-hidden flex flex-col h-full hover:border-slate-800 glow-red transition-all duration-300";
-                card.innerHTML = `
-                    <div class="h-44 overflow-hidden relative">
-                        <img src="${imgUrl}" onerror="this.src='https://placehold.co/600x400/1e293b/ef4444?text=PPKn'" class="w-full h-full object-cover opacity-75">
-                        <div class="absolute top-3 right-3 ${cfg.color} text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">${cfg.label}</div>
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white text-sm mb-2 line-clamp-1">${media.title}</h3>
-                        <p class="text-slate-400 text-xs mb-6 flex-grow line-clamp-3">${media.desc || ''}</p>
-                        <a href="${media.url}" target="_blank" class="w-full text-center bg-gradient-to-r from-red-600 to-blue-600 text-white text-[11px] font-bold py-2.5 rounded-xl block transition-all hover:opacity-90">Buka Media</a>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
+        /* ── DRAWER ── */
         function toggleManager() {
             if (!isAdmin) { openLoginModal(); return; }
             const drawer = document.getElementById('managerDrawer');
-            drawer.classList.toggle('translate-x-full');
+            const overlay = document.getElementById('drawerOverlay');
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) { closeDrawer(); } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+            }
         }
 
+        function closeDrawer() {
+            document.getElementById('managerDrawer').classList.remove('open');
+            document.getElementById('drawerOverlay').classList.remove('open');
+        }
+
+        /* ── LOGIN ── */
         function openLoginModal() {
             document.getElementById('adminPasswordInput').value = '';
-            document.getElementById('loginErrorMessage').classList.add('hidden');
-            document.getElementById('adminLoginModal').classList.remove('hidden');
-            document.getElementById('adminPasswordInput').focus();
+            document.getElementById('loginErrorMessage').classList.remove('show');
+            document.getElementById('adminLoginModal').classList.add('show');
+            setTimeout(() => document.getElementById('adminPasswordInput').focus(), 100);
         }
 
-        function closeLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); }
+        function closeLoginModal() {
+            document.getElementById('adminLoginModal').classList.remove('show');
+        }
 
         function submitAdminLogin() {
             const pass = document.getElementById('adminPasswordInput').value;
@@ -607,7 +1340,9 @@
                 updateAdminButtonVisuals();
                 toggleManager();
             } else {
-                document.getElementById('loginErrorMessage').classList.remove('hidden');
+                document.getElementById('loginErrorMessage').classList.add('show');
+                document.getElementById('adminPasswordInput').value = '';
+                document.getElementById('adminPasswordInput').focus();
             }
         }
 
@@ -615,204 +1350,131 @@
             isAdmin = false;
             sessionStorage.removeItem('ruang_karakter_isAdmin');
             updateAdminButtonVisuals();
-            const drawer = document.getElementById('managerDrawer');
-            drawer.classList.add('translate-x-full');
-            alert('Anda telah keluar dari mode admin.');
+            closeDrawer();
         }
 
         function updateAdminButtonVisuals() {
-            const statusDot = document.getElementById('adminStatusDot');
-            const statusText = document.getElementById('adminStatusText');
-            const avatarIcon = document.getElementById('adminAvatarIcon');
-            
-            if (!statusDot || !statusText || !avatarIcon) return;
-
+            const dot  = document.getElementById('adminStatusDot');
+            const txt  = document.getElementById('adminStatusText');
+            const icon = document.getElementById('adminAvatarIcon');
+            if (!dot) return;
             if (isAdmin) {
-                statusDot.className = "absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-slate-950 shadow-[0_0_8px_rgba(34,197,94,0.6)]";
-                statusText.innerText = "Pengelola Aktif";
-                statusText.className = "text-[9px] text-green-400 font-semibold";
-                avatarIcon.className = "fa-solid fa-user-shield text-[11px] text-green-400";
+                dot.className = 'admin-dot active';
+                txt.textContent = 'Pengelola Aktif'; txt.className = 'admin-status active';
+                icon.className = 'fa-solid fa-user-shield'; icon.style.color = '#27ae60';
             } else {
-                statusDot.className = "absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-slate-950 animate-pulse";
-                statusText.innerText = "Terkunci (Siswa)";
-                statusText.className = "text-[9px] text-slate-500 mt-0.5";
-                avatarIcon.className = "fa-solid fa-user-lock text-[11px] text-slate-400";
+                dot.className = 'admin-dot inactive';
+                txt.textContent = 'Terkunci (Siswa)'; txt.className = 'admin-status inactive';
+                icon.className = 'fa-solid fa-user-lock'; icon.style.color = 'var(--text3)';
             }
         }
 
-        // RE-RENDER LIST DI PANEL ADMIN DENGAN NAVIGATION ARROW UP & DOWN
+        /* ── MANAGER LIST ── */
         function renderManagerList() {
             const list = document.getElementById('managerList');
             list.innerHTML = '';
-            mediaData.forEach((media, index) => {
+            mediaData.forEach((media, i) => {
                 const item = document.createElement('div');
-                item.className = "bg-slate-900 p-2.5 rounded-xl flex items-center justify-between text-xs gap-2 border border-slate-800/40";
+                item.className = 'manager-item';
                 item.innerHTML = `
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <span class="text-[10px] text-slate-500 font-bold w-4 text-center">${index + 1}</span>
-                        <div class="flex flex-col leading-none">
-                            <button onclick="moveMediaUp(${index})" class="text-slate-500 hover:text-slate-200 text-[10px] pb-0.5"><i class="fa-solid fa-caret-up"></i></button>
-                            <button onclick="moveMediaDown(${index})" class="text-slate-500 hover:text-slate-200 text-[10px] pt-0.5"><i class="fa-solid fa-caret-down"></i></button>
-                        </div>
+                    <span class="item-num">${i + 1}</span>
+                    <div class="item-arrows">
+                        <button class="arrow-btn" onclick="moveMediaUp(${i})"><i class="fa-solid fa-caret-up"></i></button>
+                        <button class="arrow-btn" onclick="moveMediaDown(${i})"><i class="fa-solid fa-caret-down"></i></button>
                     </div>
-                    <div class="flex flex-col overflow-hidden flex-grow px-1">
-                        <span class="truncate max-w-[180px] font-bold text-slate-200">${media.title}</span>
-                        <span class="text-[9px] text-slate-500 uppercase tracking-wider">${media.category}</span>
+                    <div class="item-info">
+                        <div class="item-title">${media.title}</div>
+                        <div class="item-cat">${media.category}</div>
                     </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="editMedia(${index})" class="w-7 h-7 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 flex items-center justify-center transition-all">
-                            <i class="fa-solid fa-pen text-[10px]"></i>
-                        </button>
-                        <button onclick="deleteMedia(${index})" class="w-7 h-7 rounded bg-red-600/10 hover:bg-red-600/20 text-red-500 border border-red-500/20 flex items-center justify-center transition-all">
-                            <i class="fa-solid fa-trash text-[10px]"></i>
-                        </button>
+                    <div class="item-actions">
+                        <button class="item-btn item-btn-edit" onclick="editMedia(${i})"><i class="fa-solid fa-pen"></i></button>
+                        <button class="item-btn item-btn-del" onclick="deleteMedia(${i})"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
                 list.appendChild(item);
             });
         }
 
-        // FUNGSI GESER KE ATAS (MANUAL)
-        function moveMediaUp(index) {
-            if (index === 0) return; // Sudah paling atas
-            const temp = mediaData[index];
-            mediaData[index] = mediaData[index - 1];
-            mediaData[index - 1] = temp;
-            saveDataToStorage();
-            renderPortal();
-            renderManagerList();
+        function moveMediaUp(i) {
+            if (i === 0) return;
+            [mediaData[i], mediaData[i - 1]] = [mediaData[i - 1], mediaData[i]];
+            saveDataToStorage(); renderPortal(); renderManagerList(); updateStats();
         }
 
-        // FUNGSI GESER KE BAWAH (MANUAL)
-        function moveMediaDown(index) {
-            if (index === mediaData.length - 1) return; // Sudah paling bawah
-            const temp = mediaData[index];
-            mediaData[index] = mediaData[index + 1];
-            mediaData[index + 1] = temp;
-            saveDataToStorage();
-            renderPortal();
-            renderManagerList();
+        function moveMediaDown(i) {
+            if (i === mediaData.length - 1) return;
+            [mediaData[i], mediaData[i + 1]] = [mediaData[i + 1], mediaData[i]];
+            saveDataToStorage(); renderPortal(); renderManagerList(); updateStats();
         }
 
-        // FUNGSI TUKAR POSISI SECARA INSTAN (PINTAR)
         function quickSwapMedia() {
-            const fromNum = parseInt(document.getElementById('swapFrom').value) - 1;
-            const toNum = parseInt(document.getElementById('swapTo').value) - 1;
-
-            if (isNaN(fromNum) || isNaN(toNum) || fromNum < 0 || toNum < 0 || fromNum >= mediaData.length || toNum >= mediaData.length) {
-                alert('Silakan masukkan nomor urut yang valid sesuai daftar di bawah!');
-                return;
+            const a = parseInt(document.getElementById('swapFrom').value) - 1;
+            const b = parseInt(document.getElementById('swapTo').value) - 1;
+            if (isNaN(a)||isNaN(b)||a<0||b<0||a>=mediaData.length||b>=mediaData.length) {
+                alert('Masukkan nomor urut yang valid!'); return;
             }
-
-            // Jalankan penukaran array data
-            const temp = mediaData[fromNum];
-            mediaData[fromNum] = mediaData[toNum];
-            mediaData[toNum] = temp;
-
-            saveDataToStorage();
-            renderPortal();
-            renderManagerList();
-
-            // Kosongkan kolom input kembali
+            [mediaData[a], mediaData[b]] = [mediaData[b], mediaData[a]];
+            saveDataToStorage(); renderPortal(); renderManagerList(); updateStats();
             document.getElementById('swapFrom').value = '';
             document.getElementById('swapTo').value = '';
-            alert('Posisi media berhasil ditukar!');
         }
 
         function saveMediaCard() {
-            const index = parseInt(document.getElementById('editIndex').value);
+            const idx   = parseInt(document.getElementById('editIndex').value);
             const title = document.getElementById('inputTitle').value.trim();
-            const category = document.getElementById('inputCategory').value;
-            const url = document.getElementById('inputUrl').value.trim();
+            const cat   = document.getElementById('inputCategory').value;
+            const url   = document.getElementById('inputUrl').value.trim();
             const image = document.getElementById('inputImage').value.trim();
-            const desc = document.getElementById('inputDesc').value.trim();
-
-            if(!title || !url) { alert('Judul dan URL wajib diisi!'); return; }
-
-            const targetData = { title, category, url, image: image || null, desc: desc || null, forceExternal: true };
-
-            if (index === -1) {
-                mediaData.push(targetData);
-                alert('Media baru berhasil ditambahkan!');
-            } else {
-                mediaData[index] = targetData;
-                alert('Media berhasil diperbarui!');
-            }
-
-            saveDataToStorage();
-            renderPortal();
-            renderManagerList();
-            resetForm();
+            const desc  = document.getElementById('inputDesc').value.trim();
+            if (!title || !url) { alert('Judul dan URL wajib diisi!'); return; }
+            const entry = { title, category: cat, url, image: image || null, desc: desc || null, forceExternal: true };
+            if (idx === -1) { mediaData.push(entry); } else { mediaData[idx] = entry; }
+            saveDataToStorage(); renderPortal(); renderManagerList(); updateStats(); resetForm();
         }
 
-        function editMedia(index) {
-            const media = mediaData[index];
-            if (!media) return;
-
-            document.getElementById('editIndex').value = index;
-            document.getElementById('inputTitle').value = media.title;
-            document.getElementById('inputCategory').value = media.category;
-            document.getElementById('inputUrl').value = media.url;
-            document.getElementById('inputImage').value = media.image || '';
-            document.getElementById('inputDesc').value = media.desc || '';
-
-            document.getElementById('formTitle').innerText = `Edit Media #${index + 1}`;
-            document.getElementById('managerDrawer').scrollTop = 0;
+        function editMedia(i) {
+            const m = mediaData[i]; if (!m) return;
+            document.getElementById('editIndex').value = i;
+            document.getElementById('inputTitle').value = m.title;
+            document.getElementById('inputCategory').value = m.category;
+            document.getElementById('inputUrl').value = m.url;
+            document.getElementById('inputImage').value = m.image || '';
+            document.getElementById('inputDesc').value = m.desc || '';
+            document.getElementById('formTitle').textContent = `Edit Media #${i + 1}`;
+            document.getElementById('managerDrawer').querySelector('.drawer-body').scrollTop = 0;
         }
 
         function resetForm() {
             document.getElementById('editIndex').value = -1;
-            document.getElementById('inputTitle').value = '';
-            document.getElementById('inputUrl').value = '';
-            document.getElementById('inputImage').value = '';
-            document.getElementById('inputDesc').value = '';
-            document.getElementById('formTitle').innerText = 'Tambah Media Baru';
+            ['inputTitle','inputUrl','inputImage','inputDesc'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('formTitle').textContent = 'Tambah Media Baru';
         }
 
-        function deleteMedia(index) {
-            if(confirm('Hapus media ini secara permanen dari daftar?')) {
-                mediaData.splice(index, 1);
-                saveDataToStorage();
-                renderPortal();
-                renderManagerList();
-                resetForm();
+        function deleteMedia(i) {
+            if (confirm('Hapus media ini dari daftar?')) {
+                mediaData.splice(i, 1);
+                saveDataToStorage(); renderPortal(); renderManagerList(); updateStats(); resetForm();
             }
         }
 
         function exportSourceCode() {
-            const drawer = document.getElementById('managerDrawer');
-            const wasOpen = !drawer.classList.contains('translate-x-full');
-            if (wasOpen) drawer.classList.add('translate-x-full');
-
+            const wasOpen = document.getElementById('managerDrawer').classList.contains('open');
+            if (wasOpen) closeDrawer();
             let html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-
-            if (wasOpen) drawer.classList.remove('translate-x-full');
-
-            const dataString = JSON.stringify(mediaData, null, 12);
-
+            if (wasOpen) document.getElementById('managerDrawer').classList.add('open');
+            const dataStr = JSON.stringify(mediaData, null, 10);
             const regex = /(\/\/ ===START_DATA===)[\s\S]*?(\/\/ ===END_DATA===)/;
-            const updatedHTML = html.replace(regex, function(match, startTag, endTag) {
-                return startTag + "\n        // DATA UTAMA ANDA (TERINTEGRASI PERMANEN)\n        const defaultMediaData = " + dataString + ";\n        " + endTag;
-            });
-
-            const textarea = document.createElement('textarea');
-            textarea.value = updatedHTML;
-            document.body.appendChild(textarea);
-            textarea.select();
+            const updated = html.replace(regex, (_, s, e) =>
+                s + "\n        // DATA UTAMA ANDA (TERINTEGRASI PERMANEN)\n        const defaultMediaData = " + dataStr + ";\n        " + e
+            );
+            const ta = document.createElement('textarea');
+            ta.value = updated; document.body.appendChild(ta); ta.select();
             try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    alert('Berhasil disalin! Susunan posisi materi terbaru Anda telah tersimpan di dalam kode. Silakan tempel (paste) untuk memperbarui file index.html di GitHub.');
-                } else {
-                    alert('Gagal menyalin otomatis. Silakan salin teks secara manual.');
-                }
-            } catch (err) {
-                alert('Sistem browser Anda memblokir fungsi salin otomatis.');
-            }
-            document.body.removeChild(textarea);
+                const ok = document.execCommand('copy');
+                alert(ok ? 'Berhasil disalin! Tempel (paste) untuk memperbarui file index.html di GitHub.' : 'Gagal menyalin otomatis.');
+            } catch(e) { alert('Browser memblokir fungsi salin otomatis.'); }
+            document.body.removeChild(ta);
         }
     </script>
-
-
-
-<span id="PING_IFRAME_FORM_DETECTION" style="display: none;"></span></body></html>
+</body>
+</html>
