@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ruang Karakter • Ruang Karya Murid</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    @keyframes floatGentle {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(1deg); }
+    }
+    @keyframes floatBadge1 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
+    @keyframes floatBadge2 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(6px); } }
+    @keyframes modalSpring {
+      0% { opacity: 0; transform: scale(0.94) translateY(14px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-float-card { animation: floatGentle 7s ease-in-out infinite; }
+    .animate-badge-1 { animation: floatBadge1 5s ease-in-out infinite; }
+    .animate-badge-2 { animation: floatBadge2 6s ease-in-out infinite; }
+    .animate-modal-spring { animation: modalSpring 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .glass-nav { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  </style>
+</head>
+<body class="bg-[#fafcff] text-slate-800 min-h-screen flex flex-col antialiased selection:bg-teal-500 selection:text-white relative overflow-x-hidden">
+
+  <!-- Aksen Cahaya Latar -->
+  <div class="fixed top-8 left-6 w-80 h-80 bg-teal-100/40 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+  <div class="fixed top-36 right-6 w-96 h-96 bg-amber-100/40 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+
+  <!-- Header Navigasi -->
+  <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/70 shadow-xs">
+    <div class="max-w-6xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-teal-600 to-cyan-500 text-white flex items-center justify-center font-bold text-sm sm:text-lg shadow-sm shrink-0">
+          <i class="fa-solid fa-shapes"></i>
+        </div>
+        <div>
+          <h1 class="text-sm sm:text-lg font-black bg-gradient-to-r from-teal-700 via-teal-600 to-amber-600 bg-clip-text text-transparent leading-none">Ruang Karakter</h1>
+          <p class="text-[9px] sm:text-[11px] text-slate-500 font-semibold tracking-wide mt-0.5">Edisi Ruang Karya Murid</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <!-- Tab Navigasi -->
+        <div class="flex items-center bg-slate-100 p-0.5 sm:p-1 rounded-xl sm:rounded-2xl border border-slate-200/80">
+          <button id="tabBtnKarya" onclick="switchView('karya')" class="px-2.5 sm:px-4 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold transition-all bg-white text-teal-700 shadow-xs flex items-center gap-1 sm:gap-1.5">
+            <i class="fa-solid fa-palette text-teal-600"></i>
+            <span>Karya</span>
+          </button>
+          <button id="tabBtnAsesmen" onclick="switchView('asesmen')" class="px-2.5 sm:px-4 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1 sm:gap-1.5">
+            <i class="fa-solid fa-clipboard-question"></i>
+            <span>Asesmen</span>
+          </button>
+        </div>
+        
+        <!-- Tombol Upload Header (Aktif & Terlihat di HP dan Laptop) -->
+        <button onclick="openModalUpload(true)" class="bg-teal-600 hover:bg-teal-700 text-white px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <span class="hidden sm:inline">Upload Karya</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= VIEW 1: RUANG KARYA ================= -->
+  <div id="viewKarya" class="flex-1 w-full pb-16 sm:pb-0">
+    
+    <!-- Hero Section -->
+    <section class="max-w-6xl mx-auto px-4 pt-6 sm:pt-12 pb-8 sm:pb-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+        
+        <div class="lg:col-span-7 text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200/80 text-teal-800 text-[10px] sm:text-[11px] font-bold mb-3">
+            <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+            <span>Ruang Karakter • Edisi Ruang Karya Murid</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+            Panggung Kreativitas & <br class="hidden sm:inline">
+            <span class="bg-gradient-to-r from-teal-600 via-teal-500 to-amber-500 bg-clip-text text-transparent">Apresiasi Karya Nyata</span>
+          </h2>
+
+          <p class="text-xs sm:text-sm text-slate-600 mt-2 sm:mt-3 leading-relaxed max-w-xl">
+            Menumbuhkan jiwa pelajar yang <b>mandiri</b>, <b>kreatif</b>, <b>bernalar kritis</b>, dan <b>bergotong royong</b> melalui pameran karya orisinal siswa.
+          </p>
+
+          <!-- Tombol Aksi di Layar HP & Laptop -->
+          <div class="mt-4 sm:mt-5 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+            <button onclick="openModalUpload(true)" class="px-4 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-md shadow-teal-600/20 active:scale-95 transition-all">
+              <i class="fa-solid fa-cloud-arrow-up text-white"></i>
+              <span>Upload Hasil Karya Sekarang</span>
+            </button>
+            <a href="#galeriSection" class="px-4 py-3 rounded-xl bg-[#0f172a] hover:bg-slate-800 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all">
+              <i class="fa-solid fa-shapes text-amber-400"></i>
+              <span>Lihat Semua Karya</span>
+            </a>
+          </div>
+
+          <!-- Statistik -->
+          <div class="mt-5 sm:mt-6 grid grid-cols-3 gap-2 sm:gap-2.5 max-w-md">
+            <div class="bg-white p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-slate-200/90 shadow-2xs text-center">
+              <span id="statKarya" class="text-base sm:text-xl font-black text-slate-900 block leading-tight">0</span>
+              <span class="text-[9px] sm:text-[10px] text-slate-500 font-semibold">Karya Terpajang</span>
+            </div>
+            <div class="bg-white p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-slate-200/90 shadow-2xs text-center">
+              <span class="text-base sm:text-xl font-black text-amber-500 block leading-tight">4</span>
+              <span class="text-[9px] sm:text-[10px] text-slate-500 font-semibold">Kategori Kreasi</span>
+            </div>
+            <div class="bg-white p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-slate-200/90 shadow-2xs text-center">
+              <span class="text-base sm:text-xl font-black text-teal-600 block leading-tight">100%</span>
+              <span class="text-[9px] sm:text-[10px] text-slate-500 font-semibold">Karya Asli Murid</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Showcase Visual Card -->
+        <div class="lg:col-span-5 relative flex justify-center mt-3 lg:mt-0">
+          <div class="absolute -top-3 -left-2 z-20 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-200 shadow-md flex items-center gap-2 animate-badge-1">
+            <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-xs font-bold">
+              <i class="fa-solid fa-award"></i>
+            </div>
+            <div>
+              <p class="text-[10px] sm:text-[11px] font-black text-slate-900 leading-none">Profil Pelajar</p>
+              <p class="text-[8px] sm:text-[9px] text-slate-500 font-semibold">Berdaya & Kreatif</p>
+            </div>
+          </div>
+
+          <div class="w-full max-w-md bg-white rounded-3xl p-3 sm:p-4 border border-slate-200 shadow-xl relative z-10 animate-float-card">
+            <div class="w-full h-44 sm:h-56 rounded-2xl bg-gradient-to-tr from-teal-500 via-emerald-400 to-amber-300 relative overflow-hidden flex items-center justify-center">
+              <span class="absolute top-2 left-2 bg-white/95 text-[9px] sm:text-[10px] font-extrabold text-amber-700 px-2 py-0.5 rounded-lg shadow-xs flex items-center gap-1">
+                <i class="fa-solid fa-star text-amber-500"></i> Pilihan Pekan Ini
+              </span>
+              <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white text-2xl sm:text-3xl shadow-sm">
+                <i class="fa-regular fa-lightbulb"></i>
+              </div>
+              <span class="absolute bottom-2 right-2 bg-slate-900/60 text-[9px] sm:text-[10px] font-bold text-white px-2 py-0.5 rounded">
+                Fase D / Kelas IX
+              </span>
+            </div>
+            <div class="pt-3">
+              <div class="flex items-center justify-between">
+                <h4 class="font-extrabold text-slate-900 text-xs sm:text-sm leading-snug">Inovasi Filter Air Ramah Lingkungan</h4>
+                <span class="text-[11px] sm:text-xs font-bold text-rose-500"><i class="fa-solid fa-heart"></i> 142</span>
+              </div>
+              <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1 line-clamp-2">Eksplorasi sains berkelanjutan berbasis bahan daur ulang dari siswa Kelas 9.</p>
+              <div class="mt-2 pt-2 border-t border-slate-100 flex items-center gap-1.5 text-xs text-slate-600 font-bold">
+                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[9px]">N</span>
+                <span class="text-[11px]">Nadhira & Tim</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="absolute -bottom-3 -right-2 z-20 bg-white/95 backdrop-blur-md px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl border border-slate-200 shadow-md flex items-center gap-2 animate-badge-2">
+            <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center text-xs font-bold">
+              <i class="fa-solid fa-lightbulb"></i>
+            </div>
+            <div>
+              <p class="text-[10px] sm:text-[11px] font-black text-slate-900 leading-none">Bernalar Kritis</p>
+              <p class="text-[8px] sm:text-[9px] text-teal-600 font-semibold">Solusi Nyata</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Galeri Karya -->
+    <section id="galeriSection" class="max-w-6xl mx-auto px-4 pt-4 sm:pt-8 pb-14">
+      <div class="text-center max-w-xl mx-auto mb-6">
+        <div class="inline-flex items-center px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-[10px] font-black tracking-widest uppercase mb-1.5">
+          Eksplorasi Galeri
+        </div>
+        <h3 class="text-xl sm:text-2xl font-black text-slate-900">Ruang Karya Siswa Siswi</h3>
+        
+        <div class="mt-4 flex flex-col sm:flex-row items-center justify-center gap-2">
+          <div class="relative w-full sm:w-64">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+            <input type="text" id="inputCari" oninput="filterGallery()" placeholder="Cari karya / siswa..." class="w-full pl-8 pr-3 py-2 text-xs border rounded-xl outline-none bg-white focus:ring-2 focus:ring-teal-500 border-slate-200">
+          </div>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <select id="filterKategori" onchange="filterGallery()" class="w-full sm:w-auto px-3 py-2 text-xs border rounded-xl outline-none bg-white font-semibold text-slate-700 border-slate-200">
+              <option value="">Semua Kategori</option>
+              <option value="Poster & Infografis">Poster & Infografis</option>
+              <option value="Artikel & Puisi">Artikel & Puisi</option>
+              <option value="Digital & Animasi">Digital & Animasi</option>
+              <option value="Kerajinan Tangan">Kerajinan Tangan</option>
+            </select>
+            <!-- Tombol Upload Cepat di Toolbar -->
+            <button onclick="openModalUpload(true)" class="whitespace-nowrap px-3 py-2 rounded-xl bg-teal-50 text-teal-700 border border-teal-200 font-bold text-xs flex items-center gap-1 active:scale-95">
+              <i class="fa-solid fa-plus text-[10px]"></i> Upload
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="loadingKarya" class="text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-7 w-7 border-4 border-teal-600 border-t-transparent"></div>
+        <p class="text-xs text-slate-500 mt-2 font-medium">Memuat karya dari Spreadsheet...</p>
+      </div>
+
+      <div id="emptyKarya" class="text-center py-12 hidden">
+        <i class="fa-regular fa-folder-open text-3xl text-slate-300 mb-2"></i>
+        <p class="text-xs text-slate-500">Belum ada karya yang ditemukan.</p>
+      </div>
+
+      <div id="gridKarya" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"></div>
+    </section>
+
+    <!-- Mengapa Ruang Karya Berharga -->
+    <section id="tentangSection" class="max-w-6xl mx-auto w-full px-4 pt-4 pb-14">
+      <div class="text-center max-w-xl mx-auto mb-6 sm:mb-8">
+        <div class="inline-flex items-center px-3.5 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-[11px] font-bold tracking-wider uppercase mb-2">
+          Nilai & Dimensi Karakter
+        </div>
+        <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">Mengapa Ruang Karya Berharga?</h3>
+        <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
+          Kami percaya setiap murid memiliki keunikan. Ruang Karya bukan sekadar etalase visual, melainkan medium penguatan karakter profil pelajar.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-2xs">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-lg mb-3 sm:mb-4">
+            <i class="fa-solid fa-seedling"></i>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900 mb-1.5">Mandiri & Berdaya</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">Mendorong inisiatif siswa dalam merancang, mengeksekusi ide, dan bertanggung jawab atas hasil karya mereka sendiri.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-2xs">
+          <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center text-lg mb-3 sm:mb-4">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900 mb-1.5">Bernalar Kritis & Kreatif</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">Melahirkan solusi unik dari tantangan sekitar serta menyajikan cerita melalui medium estetis yang menginspirasi.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-2xs">
+          <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-500 flex items-center justify-center text-lg mb-3 sm:mb-4">
+            <i class="fa-solid fa-people-group"></i>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900 mb-1.5">Gotong Royong & Apresiasi</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">Membangun ekosistem belajar yang suportif di mana murid saling menghargai kreasi sesama dan berkolaborasi.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ================= VIEW 2: ASESMEN SOAL ================= -->
+  <div id="viewAsesmen" class="flex-1 max-w-3xl mx-auto w-full px-4 py-6 sm:py-8 hidden pb-16 sm:pb-8">
+    <div class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      
+      <div class="border-b border-slate-100 pb-4 mb-5">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold mb-1.5">
+          <i class="fa-solid fa-feather-pointed"></i> Lembar Asesmen Siswa
+        </span>
+        <h2 class="text-lg sm:text-xl font-black text-slate-900">Uji Pemahaman Karakter</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Soal dan nilai tersambung langsung dengan Google Spreadsheet.</p>
+      </div>
+
+      <!-- TAHAP 1: INPUT DATA DIRI SISWA -->
+      <div id="stepIdentitas" class="space-y-4">
+        <div class="p-3.5 sm:p-4 bg-emerald-50/60 rounded-2xl border border-emerald-100">
+          <h4 class="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-info text-emerald-600"></i> Petunjuk Awal
+          </h4>
+          <p class="text-[11px] text-emerald-700 mt-1 leading-relaxed">
+            Silakan masukkan data diri Anda terlebih dahulu. Soal asesmen akan otomatis terbuka setelah Anda menekan tombol di bawah.
+          </p>
+        </div>
+
+        <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">NIS / NISN</label>
+            <input type="text" id="asNis" required placeholder="Contoh: 12345" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-white outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Nama Lengkap</label>
+            <input type="text" id="asNama" required placeholder="Masukkan nama lengkap siswa" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-white outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Kelas</label>
+            <input type="text" id="asKelas" required placeholder="Contoh: 9A" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-white outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+        </div>
+
+        <button type="button" onclick="mulaiKerjakanSoal()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-xs sm:text-sm active:scale-98">
+          <span>Mulai Mengerjakan Soal</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </button>
+      </div>
+
+      <!-- TAHAP 2: DAFTAR SOAL -->
+      <form id="formSoal" onsubmit="handleKirimJawaban(event)" class="space-y-4 sm:space-y-5 hidden animate-modal-spring">
+        <div class="bg-slate-50 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-[10px]">
+              <i class="fa-solid fa-user-check"></i>
+            </span>
+            <div>
+              <p id="labelRingkasNama" class="font-bold text-slate-800 leading-none text-xs">-</p>
+              <p id="labelRingkasInfo" class="text-[10px] text-slate-500 mt-0.5">-</p>
+            </div>
+          </div>
+          <button type="button" onclick="gantiIdentitas()" class="text-[11px] text-emerald-700 font-semibold hover:underline">
+            Ubah Data
+          </button>
+        </div>
+
+        <div id="loadingSoal" class="text-center py-8">
+          <div class="w-7 h-7 rounded-full border-4 border-emerald-200 border-t-emerald-600 animate-spin mx-auto"></div>
+          <p class="text-xs text-slate-500 mt-2 font-medium">Memuat pertanyaan...</p>
+        </div>
+        <div id="containerSoalList" class="space-y-3"></div>
+
+        <button type="submit" id="btnSubmitSoal" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 sm:py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-xs sm:text-sm">
+          <span>Kirim Jawaban & Periksa Nilai</span>
+          <i class="fa-solid fa-paper-plane text-xs"></i>
+        </button>
+      </form>
+
+      <!-- Panel Nilai -->
+      <div id="boxSkor" class="hidden mt-6 p-5 sm:p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center animate-modal-spring">
+        <i class="fa-solid fa-trophy text-3xl text-emerald-600 mb-1.5"></i>
+        <h3 class="text-sm font-extrabold text-slate-900">Asesmen Selesai!</h3>
+        <p class="text-xs text-slate-600">Nilai sudah otomatis tercatat di Google Spreadsheet.</p>
+        <div class="my-3 inline-block bg-white px-6 py-2.5 rounded-xl shadow-xs border border-emerald-100">
+          <span class="text-[10px] font-bold text-slate-400 block tracking-widest uppercase">Skor Perolehan</span>
+          <span id="angkaNilai" class="text-3xl font-black text-emerald-600">0</span>
+        </div>
+        <p id="labelStatistik" class="text-xs font-bold text-slate-700"></p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FLOATING ACTION BUTTON (FAB) KHUSUS LAYAR HP -->
+  <button onclick="openModalUpload(true)" class="sm:hidden fixed bottom-5 right-5 z-40 bg-teal-600 hover:bg-teal-700 text-white px-4 py-3 rounded-full shadow-xl flex items-center gap-2 active:scale-95 transition-all border-2 border-white">
+    <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
+    <span class="text-xs font-bold">Kirim Karya</span>
+  </button>
+
+  <!-- Footer -->
+  <footer class="bg-[#0f172a] text-slate-300 pt-8 sm:pt-10 pb-6 border-t border-slate-800 mt-auto">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 sm:pb-8 border-b border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-teal-500 text-white flex items-center justify-center font-bold text-base shadow-sm">
+            <i class="fa-solid fa-pen-nib"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-extrabold text-white leading-tight">Ruang Karakter</h4>
+            <p class="text-[10px] sm:text-[11px] text-slate-400">Ruang Karya & Pembiasaan Karakter Positif Siswa</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-5 text-xs font-semibold">
+          <a href="javascript:void(0)" onclick="switchView('karya')" class="hover:text-teal-400">Galeri</a>
+          <a href="javascript:void(0)" onclick="switchView('asesmen')" class="hover:text-teal-400">Asesmen</a>
+          <a href="javascript:void(0)" onclick="openModalUpload(true)" class="hover:text-teal-400">Kirim Karya</a>
+        </div>
+      </div>
+      <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] sm:text-[11px] text-slate-400">
+        <p>&copy; 2026 Ruang Karakter. Seluruh karya murid dilindungi dan diapresiasi.</p>
+        <div class="flex items-center gap-1.5 font-medium">
+          <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+          <span>Platform Karya Pelajar Mandiri & Kreatif</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODAL UPLOAD RESPONSIVE ================= -->
+  <div id="modalUpload" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative my-auto animate-modal-spring border border-slate-100 max-h-[92vh] overflow-y-auto">
+      <button onclick="openModalUpload(false)" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 absolute top-4 right-4 flex items-center justify-center">
+        <i class="fa-solid fa-xmark text-xs"></i>
+      </button>
+
+      <div class="flex items-center gap-2.5 mb-3.5">
+        <div class="w-9 h-9 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-base shrink-0">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+        </div>
+        <div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 leading-tight">Unggah Hasil Karya</h3>
+          <p class="text-[10px] sm:text-[11px] text-slate-500">Pamerkan karyamu di panggung Ruang Karakter</p>
+        </div>
+      </div>
+
+      <form id="formUpload" onsubmit="handleKirimKarya(event)" class="space-y-2.5 sm:space-y-3 text-xs">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">NIS / NISN</label>
+            <input type="text" id="upNis" placeholder="Contoh: 12345" class="w-full p-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-teal-500">
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Kelas</label>
+            <input type="text" id="upKelas" required placeholder="Contoh: 9A" class="w-full p-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-teal-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Nama Lengkap Murid</label>
+          <input type="text" id="upNama" required placeholder="Nama siswa" class="w-full p-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-teal-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Kategori</label>
+            <select id="upKategori" class="w-full p-2 border border-slate-200 rounded-xl outline-none bg-white focus:ring-2 focus:ring-teal-500">
+              <option value="Poster & Infografis">Poster & Infografis</option>
+              <option value="Artikel & Puisi">Artikel & Puisi</option>
+              <option value="Digital & Animasi">Digital & Animasi</option>
+              <option value="Kerajinan Tangan">Kerajinan Tangan</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Nilai Karakter</label>
+            <input type="text" id="upKarakter" required placeholder="Misal: Bernalar Kritis" class="w-full p-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-teal-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Judul Karya</label>
+          <input type="text" id="upJudul" required placeholder="Judul karya..." class="w-full p-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-teal-500">
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Cerita / Deskripsi</label>
+          <textarea id="upDeskripsi" rows="2" required placeholder="Pesan atau cerita di balik karya..." class="w-full p-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Foto Karya</label>
+          <input type="file" id="upFile" accept="image/*" onchange="previewImage(event)" class="w-full text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-teal-50 file:text-teal-700 cursor-pointer">
+          
+          <div id="previewContainer" class="mt-2 hidden relative rounded-xl overflow-hidden border border-slate-200 h-28 bg-slate-100">
+            <img id="imgPreview" src="" alt="Pratinjau Foto" class="w-full h-full object-cover">
+            <button type="button" onclick="cancelPreview()" class="absolute top-1.5 right-1.5 bg-slate-900/70 text-white rounded p-1 text-[9px]">
+              Batal
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="btnUploadSubmit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 rounded-xl shadow-md mt-1 flex items-center justify-center gap-1.5 active:scale-98 transition-all">
+          <span>Kirim Karya</span>
+          <i class="fa-solid fa-arrow-up-from-bracket text-xs"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbyw_jp4pGGThzta5bAT2UsmMKa_eqVb_2obICXcYqMn-dXzzekGKKm7SA3TuzbroaAv/exec";
+
+    let listKarya = [];
+    let listSoal = [];
+
+    function switchView(view) {
+      const vKarya = document.getElementById('viewKarya');
+      const vAsesmen = document.getElementById('viewAsesmen');
+      const bKarya = document.getElementById('tabBtnKarya');
+      const bAsesmen = document.getElementById('tabBtnAsesmen');
+
+      if (view === 'karya') {
+        vKarya.classList.remove('hidden');
+        vAsesmen.classList.add('hidden');
+        bKarya.className = "px-2.5 sm:px-4 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold transition-all bg-white text-teal-700 shadow-xs flex items-center gap-1 sm:gap-1.5";
+        bAsesmen.className = "px-2.5 sm:px-4 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1 sm:gap-1.5";
+      } else {
+        vKarya.classList.add('hidden');
+        vAsesmen.classList.remove('hidden');
+        bAsesmen.className = "px-2.5 sm:px-4 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold transition-all bg-white text-teal-700 shadow-xs flex items-center gap-1 sm:gap-1.5";
+        bKarya.className = "px-2.5 sm:px-4 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1 sm:gap-1.5";
+      }
+    }
+
+    function openModalUpload(show) {
+      document.getElementById('modalUpload').classList.toggle('hidden', !show);
+    }
+
+    function previewImage(event) {
+      const input = event.target;
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          document.getElementById('imgPreview').src = e.target.result;
+          document.getElementById('previewContainer').classList.remove('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function cancelPreview() {
+      document.getElementById('upFile').value = '';
+      document.getElementById('imgPreview').src = '';
+      document.getElementById('previewContainer').classList.add('hidden');
+    }
+
+    // ================= ASESMEN BERTAHAP =================
+    function mulaiKerjakanSoal() {
+      const nis = document.getElementById('asNis').value.trim();
+      const nama = document.getElementById('asNama').value.trim();
+      const kelas = document.getElementById('asKelas').value.trim();
+
+      if (!nis || !nama || !kelas) {
+        alert("Harap lengkapi NIS/NISN, Nama Lengkap, dan Kelas terlebih dahulu!");
+        return;
+      }
+
+      document.getElementById('labelRingkasNama').innerText = nama;
+      document.getElementById('labelRingkasInfo').innerText = `NIS: ${nis} • Kelas: ${kelas}`;
+
+      document.getElementById('stepIdentitas').classList.add('hidden');
+      document.getElementById('formSoal').classList.remove('hidden');
+
+      if (listSoal.length === 0) {
+        muatDataSoal();
+      }
+    }
+
+    function gantiIdentitas() {
+      document.getElementById('stepIdentitas').classList.remove('hidden');
+      document.getElementById('formSoal').classList.add('hidden');
+    }
+
+    // ================= FETCH KARYA =================
+    async function muatDataKarya() {
+      document.getElementById('loadingKarya').classList.remove('hidden');
+      try {
+        const res = await fetch(`${API_URL}?action=getKarya`);
+        const json = await res.json();
+        listKarya = json.data || [];
+        document.getElementById('statKarya').innerText = listKarya.length;
+        renderKarya(listKarya);
+      } catch (err) {
+        console.warn("Gagal mengambil data karya:", err);
+        renderKarya([]);
+      } finally {
+        document.getElementById('loadingKarya').classList.add('hidden');
+      }
+    }
+
+    function renderKarya(items) {
+      const grid = document.getElementById('gridKarya');
+      const empty = document.getElementById('emptyKarya');
+      grid.innerHTML = "";
+
+      if (!items || items.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      items.forEach(k => {
+        const cover = k.urlGambar || "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80";
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl overflow-hidden hover:shadow-md transition-all flex flex-col border border-slate-200/90";
+        card.innerHTML = `
+          <div class="h-40 sm:h-44 bg-slate-100 overflow-hidden relative">
+            <img src="${cover}" alt="${k.judul}" class="w-full h-full object-cover">
+            <span class="absolute top-2.5 left-2.5 bg-white/95 text-[10px] font-bold px-2 py-0.5 rounded-lg text-slate-800 shadow-xs">
+              ${k.kategori}
+            </span>
+          </div>
+          <div class="p-3.5 sm:p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-1.5 mb-1.5">
+                <span class="text-[9px] font-extrabold bg-teal-50 text-teal-700 px-2 py-0.5 rounded border border-teal-100">
+                  <i class="fa-solid fa-heart mr-1 text-rose-500"></i>${k.karakter}
+                </span>
+                <span class="text-[9px] font-bold text-slate-400">• Kelas ${k.kelas}</span>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-xs sm:text-sm leading-snug">${k.judul}</h4>
+              <p class="text-xs text-slate-600 mt-1 line-clamp-2">${k.deskripsi}</p>
+            </div>
+            <div class="mt-2.5 pt-2 border-t border-slate-100 text-[10px] sm:text-[11px] text-slate-500 font-semibold flex items-center justify-between">
+              <span class="flex items-center gap-1 text-slate-700">
+                <div class="w-5 h-5 rounded-full bg-teal-600 text-white flex items-center justify-center text-[9px]">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+                ${k.nama}
+              </span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterGallery() {
+      const q = document.getElementById('inputCari').value.toLowerCase();
+      const kat = document.getElementById('filterKategori').value;
+      const res = listKarya.filter(k => {
+        const matchText = (k.judul + " " + k.nama + " " + k.karakter).toLowerCase().includes(q);
+        const matchKat = kat === "" || k.kategori === kat;
+        return matchText && matchKat;
+      });
+      renderKarya(res);
+    }
+
+    async function handleKirimKarya(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnUploadSubmit');
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i> Menyimpan...`;
+
+      const fInput = document.getElementById('upFile');
+      let base64 = "", fileName = "", fileType = "";
+
+      if (fInput.files.length > 0) {
+        const file = fInput.files[0];
+        fileName = file.name;
+        fileType = file.type;
+        base64 = await fileToBase64(file);
+      }
+
+      const payload = {
+        type: "karya",
+        nis: document.getElementById('upNis').value,
+        kelas: document.getElementById('upKelas').value,
+        nama: document.getElementById('upNama').value,
+        kategori: document.getElementById('upKategori').value,
+        karakter: document.getElementById('upKarakter').value,
+        judul: document.getElementById('upJudul').value,
+        deskripsi: document.getElementById('upDeskripsi').value,
+        fileBase64: base64,
+        fileName: fileName,
+        fileType: fileType
+      };
+
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        alert("Karyamu berhasil diunggah ke spreadsheet!");
+        document.getElementById('formUpload').reset();
+        cancelPreview();
+        openModalUpload(false);
+        setTimeout(muatDataKarya, 2000);
+      } catch (err) {
+        alert("Gagal mengunggah: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Kirim Karya</span> <i class="fa-solid fa-arrow-up-from-bracket text-xs"></i>`;
+      }
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = err => reject(err);
+      });
+    }
+
+    // ================= FETCH SOAL ASESMEN =================
+    async function muatDataSoal() {
+      document.getElementById('loadingSoal').classList.remove('hidden');
+      try {
+        const res = await fetch(`${API_URL}?action=getSoal`);
+        const json = await res.json();
+        listSoal = json.data || [];
+        renderSoal(listSoal);
+      } catch (err) {
+        console.warn("Gagal mengambil butir soal:", err);
+      } finally {
+        document.getElementById('loadingSoal').classList.add('hidden');
+      }
+    }
+
+    function renderSoal(soals) {
+      const box = document.getElementById('containerSoalList');
+      box.innerHTML = "";
+      if (soals.length === 0) {
+        box.innerHTML = "<p class='text-xs text-slate-500'>Belum ada soal pada sheet Bank_Soal.</p>";
+        return;
+      }
+
+      soals.forEach((s, idx) => {
+        const item = document.createElement('div');
+        item.className = "p-3 sm:p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs";
+        item.innerHTML = `
+          <div class="flex items-start gap-2 mb-2">
+            <span class="w-5 h-5 rounded bg-emerald-50 text-emerald-700 font-extrabold text-[10px] sm:text-[11px] flex items-center justify-center shrink-0 border border-emerald-100">
+              ${idx + 1}
+            </span>
+            <p class="font-bold text-xs sm:text-sm text-slate-900 leading-snug">${s.pertanyaan}</p>
+          </div>
+          <div class="space-y-1.5 text-xs pl-6 sm:pl-7">
+            ${formatOpsi(s.id, 'A', s.opsiA)}
+            ${formatOpsi(s.id, 'B', s.opsiB)}
+            ${formatOpsi(s.id, 'C', s.opsiC)}
+            ${formatOpsi(s.id, 'D', s.opsiD)}
+          </div>
+        `;
+        box.appendChild(item);
+      });
+    }
+
+    function formatOpsi(idSoal, huruf, teks) {
+      if (!teks) return '';
+      return `
+        <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 bg-white hover:bg-emerald-50/60 cursor-pointer transition-all">
+          <input type="radio" name="soal_${idSoal}" value="${huruf}" required class="w-3.5 h-3.5 text-emerald-600 focus:ring-emerald-400">
+          <span class="font-black text-slate-800">${huruf}.</span>
+          <span class="text-slate-600 font-medium">${teks}</span>
+        </label>
+      `;
+    }
+
+    async function handleKirimJawaban(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmitSoal');
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i> Memeriksa Jawaban...`;
+
+      const jawabanSiswa = listSoal.map(s => {
+        const checked = document.querySelector(`input[name="soal_${s.id}"]:checked`);
+        return { idSoal: s.id, jawaban: checked ? checked.value : "" };
+      });
+
+      const payload = {
+        type: "asesmen",
+        nis: document.getElementById('asNis').value,
+        nama: document.getElementById('asNama').value,
+        kelas: document.getElementById('asKelas').value,
+        jawabanSiswa: jawabanSiswa
+      };
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(payload)
+        });
+        const resJson = await res.json();
+
+        if (resJson.status === "success") {
+          document.getElementById('boxSkor').classList.remove('hidden');
+          document.getElementById('angkaNilai').innerText = resJson.nilai;
+          document.getElementById('labelStatistik').innerText = `Menjawab Benar: ${resJson.benar} dari ${resJson.total} Soal`;
+          document.getElementById('boxSkor').scrollIntoView({ behavior: 'smooth' });
+        } else {
+          alert("Gagal: " + resJson.message);
+        }
+      } catch (err) {
+        alert("Jawaban telah berhasil dikirim ke Google Spreadsheet.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Kirim Jawaban & Periksa Nilai</span> <i class="fa-solid fa-paper-plane text-xs"></i>`;
+      }
+    }
+
+    muatDataKarya();
+  </script>
+</body>
+</html>
