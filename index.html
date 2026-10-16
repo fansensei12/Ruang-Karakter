@@ -138,6 +138,34 @@ img,svg{max-width:100%}
  .cta2 .btn,.cta .btn{flex:1 1 auto;text-align:center}
 }
 @media (prefers-reduced-motion:reduce){.side,.scrim{transition:none}}
+/* ===== Kotak Saran ===== */
+.saran{padding:96px 0;background:linear-gradient(var(--grid) 1px,transparent 1px) 0 0/64px 64px,linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/64px 64px,radial-gradient(520px 360px at 100% 0,var(--glow1),transparent 70%)}
+.saran .head{text-align:center;margin-bottom:32px}
+.saran h2{font-size:clamp(1.9rem,3.6vw,2.8rem);line-height:1.15;letter-spacing:-.02em;margin:0 0 12px;font-weight:800}
+.saran .sub{color:var(--muted);max-width:36em;margin:0 auto}
+.fcard{max-width:640px;margin:0 auto;background:var(--bg);border:1px solid var(--line);border-radius:24px;padding:32px;box-shadow:0 20px 50px rgba(15,23,42,.08)}
+.fcard .fl,.fcard legend{display:block;font-weight:700;font-size:.9rem;margin:0 0 6px;padding:0}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fcard input[type=text],.fcard select,.fcard textarea{width:100%;font:inherit;font-size:.95rem;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--chip);color:var(--ink)}
+.fcard textarea{resize:vertical;min-height:120px;line-height:1.6}
+.fcard fieldset{border:0;padding:0;margin:18px 0;min-width:0}
+.topik{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.topik label{display:flex;align-items:center;gap:8px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--chip);cursor:pointer;font-weight:600;font-size:.88rem}
+.topik input{accent-color:var(--accent)}
+.topik label:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.rate{background:var(--chip);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center;margin:18px 0}
+.stars{display:flex;justify-content:center;gap:6px}
+.stars button{background:none;border:0;padding:2px 4px;font-size:2rem;line-height:1;cursor:pointer;color:color-mix(in srgb,var(--ink) 22%,transparent)}
+.stars button.on{color:#f5b700}
+.rl{font-weight:700;font-size:.85rem;color:var(--accent);margin-top:4px}
+.fcard .btn{width:100%;border:0;cursor:pointer;font:inherit;font-weight:700;text-align:center}
+.fcard .btn:disabled{opacity:.7;cursor:wait}
+.err{color:var(--accent);font-weight:600;font-size:.9rem;margin:10px 0 0;min-height:1.2em}
+.ok{display:none;text-align:center;padding:16px 0}
+.ok .h{font-size:2.6rem;line-height:1.2}
+.ok h3{margin:8px 0 6px;font-size:1.4rem}
+.ok p{color:var(--muted);margin:0 0 18px}
+@media (max-width:640px){.f2,.topik{grid-template-columns:minmax(0,1fr)}.fcard{padding:22px 18px}.saran{padding:64px 0}}
 </style>
 </head>
 <body>
@@ -148,7 +176,7 @@ img,svg{max-width:100%}
 <div class="scrim" id="scrim"></div>
 <aside class="side" id="side" aria-label="Menu samping">
 <div class="top"><a class="brand" href="#beranda"><span class="logo" aria-hidden="true">NI</span><span>Noor Irfan.</span></a><button class="menu-btn" id="closeBtn" type="button" aria-label="Tutup menu">✕</button></div>
-<nav aria-label="Navigasi utama"><a class="on" href="#beranda">Beranda</a><a href="#pengalaman">Pengalaman</a><a href="#nilai">Nilai</a><a href="#kontak">Kontak</a></nav>
+<nav aria-label="Navigasi utama"><a class="on" href="#beranda">Beranda</a><a href="#pengalaman">Pengalaman</a><a href="#nilai">Nilai</a><a href="#kontak">Kontak</a><a href="#saran">Saran</a></nav>
 <div class="ext"><a class="xbtn" href="https://fansensei12.github.io/LMSpendidikanpancasila/" target="_blank" rel="noopener">LMS <span aria-hidden="true">→</span></a><a class="xbtn alt" href="karya-murid.html">Karya Murid <span aria-hidden="true">→</span></a><a class="xbtn" href="sumber-ajar.html">Sumber Belajar <span aria-hidden="true">→</span></a><a class="xbtn alt" href="https://fansensei12.github.io/irfan2pdf/" target="_blank" rel="noopener">Irfan2PDF <span aria-hidden="true">↗</span></a></div>
 <p class="note">Guru Pendidikan Pancasila<br>SMPN 7 Banjarmasin</p>
 </aside>
@@ -214,10 +242,30 @@ img,svg{max-width:100%}
 <li><small>Kota</small>Banjarmasin, Kalimantan Selatan</li>
 </ul>
 </div></section>
+<section class="saran" id="saran"><div class="wrap">
+<div class="head"><span class="pill">SUARA &amp; EVALUASI</span>
+<h2>Bantu kami jadikan Ruang Karakter lebih baik</h2>
+<p class="sub">Pendapat dan masukan Anda sangat berharga bagi kenyamanan pembelajaran, asesmen, dan pameran karya siswa.</p></div>
+<div class="fcard">
+<form id="formSaran">
+<div class="f2">
+<div><label class="fl" for="srNama">Nama lengkap (opsional)</label><input type="text" id="srNama" placeholder="Contoh: Ahmad / Anonim" autocomplete="name"></div>
+<div><label class="fl" for="srPeran">Peran Anda</label><select id="srPeran"><option value="Siswa">Siswa</option><option value="Guru / Pendidik">Guru / Pendidik</option><option value="Orang Tua / Wali">Orang Tua / Wali</option><option value="Masyarakat / Pengunjung">Masyarakat / Pengunjung</option></select></div>
+</div>
+<fieldset><legend>Topik yang ingin disorot</legend><div class="topik"><label><input type="radio" name="katSaran" value="Tampilan &amp; Desain" checked><span>🎨 Desain &amp; Tampilan</span></label><label><input type="radio" name="katSaran" value="Fitur Upload Karya"><span>📤 Upload Karya</span></label><label><input type="radio" name="katSaran" value="Sistem Soal Asesmen"><span>📝 Soal &amp; Asesmen</span></label><label><input type="radio" name="katSaran" value="Kendala Teknis / HP"><span>📱 Kendala di HP</span></label></div></fieldset>
+<div class="rate"><div class="fl">Penilaian keseluruhan web</div><div class="stars" id="stars"><button type="button" aria-label="Beri 1 bintang">★</button><button type="button" aria-label="Beri 2 bintang">★</button><button type="button" aria-label="Beri 3 bintang">★</button><button type="button" aria-label="Beri 4 bintang">★</button><button type="button" aria-label="Beri 5 bintang">★</button></div><div class="rl" id="rl"></div></div>
+<label class="fl" for="srPesan">Masukan, kritik, atau saran tambahan</label>
+<textarea id="srPesan" rows="4" required placeholder="Tuliskan masukan membangun atau ide yang Anda harapkan..."></textarea>
+<p class="err" id="srErr" role="alert"></p>
+<button class="btn p" type="submit" id="btnKirim">Kirim Masukan</button>
+</form>
+<div class="ok" id="srOk"><div class="h" aria-hidden="true">💛</div><h3>Terima kasih atas masukanmu!</h3><p>Sarannya sudah terkirim dan akan menjadi bahan evaluasi perbaikan kami.</p><button class="btn p" type="button" id="btnLagi" style="width:auto;padding:12px 24px">Kirim Masukan Lain</button></div>
+</div>
+</div></section>
 </main>
 <footer>© 2026 Noor Irfan · Guru Pendidikan Pancasila, SMPN 7 Banjarmasin</footer>
 <script>
-var L=document.querySelectorAll("nav a"),ids=["beranda","pengalaman","nilai","kontak"];
+var L=document.querySelectorAll("nav a"),ids=["beranda","pengalaman","nilai","kontak","saran"];
 function spy(){var y=window.scrollY+140,cur=0;ids.forEach(function(id,i){var e=document.getElementById(id);if(e&&e.offsetTop<=y)cur=i});L.forEach(function(a,i){a.className=i==cur?"on":""})}
 var f=document.getElementById("foto"),hero=document.getElementById("beranda"),cur=0,tgt=0,run=false,rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
 function tick(){cur+=(tgt-cur)*0.12;var mx=innerWidth<900?0.15:0.3;f.style.setProperty("--s",(1+mx*cur).toFixed(4));if(Math.abs(tgt-cur)>0.001)requestAnimationFrame(tick);else run=false}
@@ -230,6 +278,22 @@ mb.onclick=function(){tg(!side.classList.contains("open"),true)};
 cb.onclick=function(){tg(false,true)};scrim.onclick=function(){tg(false,true)};
 side.querySelectorAll("nav a").forEach(function(a){a.onclick=function(e){var t=document.querySelector(a.getAttribute("href"));tg(false,false);if(t){e.preventDefault();setTimeout(function(){t.scrollIntoView({behavior:rm?"auto":"smooth",block:"start"})},80)}}});
 addEventListener("keydown",function(e){if(e.key==="Escape"&&side.classList.contains("open"))tg(false,true)});
+
+/* ===== Kotak Saran (terhubung Google Apps Script / Spreadsheet) ===== */
+var API_URL="https://script.google.com/macros/s/AKfycbwvDyhT9NzcZ8FhssJ17w2HcKAHW2esGOtnX7DXeIM4Jn3XCgOxosNWnUMm9GVEDpJi/exec";
+var rating=5,RL=["1 dari 5 (Perlu banyak perbaikan)","2 dari 5 (Kurang memuaskan)","3 dari 5 (Cukup baik)","4 dari 5 (Bagus dan bermanfaat)","5 dari 5 (Sangat luar biasa)"];
+var sb=document.querySelectorAll("#stars button");
+function setRating(n){rating=n;sb.forEach(function(x,i){x.className=i<n?"on":"";x.setAttribute("aria-pressed",i<n)});document.getElementById("rl").textContent=RL[n-1]}
+sb.forEach(function(x,i){x.onclick=function(){setRating(i+1)}});setRating(5);
+var fS=document.getElementById("formSaran"),okS=document.getElementById("srOk"),btnK=document.getElementById("btnKirim"),errS=document.getElementById("srErr");
+fS.onsubmit=function(e){e.preventDefault();errS.textContent="";btnK.disabled=true;btnK.textContent="Mengirim saran...";
+var kat=document.querySelector('input[name="katSaran"]:checked');
+var payload={type:"saran",nama:document.getElementById("srNama").value.trim()||"Anonim",peran:document.getElementById("srPeran").value,kategori:kat?kat.value:"Umum",rating:rating,pesan:document.getElementById("srPesan").value.trim()};
+fetch(API_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+.then(function(){fS.style.display="none";okS.style.display="block"})
+.catch(function(){errS.textContent="Gagal mengirim. Periksa koneksi internet lalu coba lagi."})
+.then(function(){btnK.disabled=false;btnK.textContent="Kirim Masukan"})};
+document.getElementById("btnLagi").onclick=function(){fS.reset();setRating(5);okS.style.display="none";fS.style.display="block"};
 </script>
 </body>
 </html>
