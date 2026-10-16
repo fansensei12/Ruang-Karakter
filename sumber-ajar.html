@@ -15,19 +15,23 @@
       theme: {
         extend: {
           colors: {
-            crimson: {
-              400: '#ff4d6d',
-              500: '#ff1744',
-              600: '#d00036',
-              900: '#4a0010'
-            },
-            darkbg: '#07070d',
-            darkpanel: '#0f0f1a',
-            darkborder: '#231520'
+            maroon: {
+              50: '#fff1f2',
+              100: '#ffe4e6',
+              200: '#fecdd3',
+              300: '#fda4af',
+              400: '#fb7185',
+              500: '#e11d48',
+              600: '#be123c',
+              700: '#9f1239',
+              800: '#881337', // Merah Tua Utama
+              900: '#4c0519', // Merah Tua Pekat
+              950: '#2b000d'
+            }
           },
           boxShadow: {
-            neon: '0 0 15px rgba(255, 23, 68, 0.45)',
-            neonlg: '0 0 30px rgba(255, 23, 68, 0.65)'
+            maroonNeon: '0 0 14px rgba(159, 18, 57, 0.75)',
+            maroonGlow: '0 0 22px rgba(136, 19, 55, 0.9)'
           }
         }
       }
@@ -35,22 +39,67 @@
   </script>
 
   <style>
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.35; transform: scale(1); }
-      50% { opacity: 0.7; transform: scale(1.04); }
+    /* Latar Belakang Kotak-Kotak Transparan Bergerak */
+    .animated-grid-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-size: 38px 38px;
+      background-image: 
+        linear-gradient(to right, rgba(136, 19, 55, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(136, 19, 55, 0.08) 1px, transparent 1px);
+      animation: gridMove 25s linear infinite;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0.3) 100%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0.3) 100%);
     }
-    .neon-glow-bg {
-      animation: pulseGlow 6s ease-in-out infinite;
+
+    @keyframes gridMove {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 76px 76px;
+      }
     }
-    .glass-card {
-      background: rgba(15, 15, 26, 0.75);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 23, 68, 0.22);
+
+    /* Pendar Ambient */
+    @keyframes orbFloat {
+      0%, 100% { transform: translateY(0px) scale(1); opacity: 0.45; }
+      50% { transform: translateY(-30px) scale(1.1); opacity: 0.75; }
     }
-    .glass-card:hover {
-      border-color: rgba(255, 23, 68, 0.65);
-      box-shadow: 0 0 20px rgba(255, 23, 68, 0.25);
+    .ambient-glow {
+      animation: orbFloat 8s ease-in-out infinite;
     }
+
+    /* Tombol Aksen Neon Merah Tua */
+    .btn-neon-maroon {
+      background: linear-gradient(135deg, #881337 0%, #4c0519 100%);
+      border: 1px solid #be123c;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(190, 18, 60, 0.5);
+      transition: all 0.25s ease-in-out;
+    }
+    .btn-neon-maroon:hover {
+      background: linear-gradient(135deg, #9f1239 0%, #881337 100%);
+      border-color: #fda4af;
+      box-shadow: 0 0 20px rgba(225, 29, 72, 0.8);
+      transform: translateY(-1px);
+    }
+
+    /* Efek Kartu Putih Bersih Transparan */
+    .clean-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid #ffe4e6;
+      box-shadow: 0 4px 18px rgba(76, 5, 25, 0.05);
+      transition: all 0.3s ease;
+    }
+    .clean-card:hover {
+      border-color: #fda4af;
+      box-shadow: 0 10px 28px rgba(136, 19, 55, 0.14);
+    }
+
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -60,81 +109,82 @@
     }
   </style>
 </head>
-<body class="bg-darkbg text-slate-100 min-h-screen relative overflow-x-hidden font-sans">
+<body class="bg-[#faf5f6] text-slate-800 min-h-screen flex flex-col font-sans antialiased relative selection:bg-maroon-800 selection:text-white">
 
-  <!-- Ambient Neon Background -->
-  <div class="fixed inset-0 pointer-events-none z-0">
-    <div class="absolute -top-40 left-1/4 w-96 h-96 bg-crimson-500/20 rounded-full blur-[140px] neon-glow-bg"></div>
-    <div class="absolute bottom-10 right-10 w-80 h-80 bg-crimson-600/15 rounded-full blur-[120px] neon-glow-bg"></div>
-  </div>
+  <!-- Lapisan Kotak Animasi Gerak & Ambient Orb -->
+  <div class="animated-grid-bg"></div>
+  <div class="fixed -top-24 -left-24 w-96 h-96 bg-maroon-300/30 rounded-full blur-[130px] pointer-events-none ambient-glow z-0"></div>
+  <div class="fixed -bottom-24 -right-24 w-96 h-96 bg-maroon-400/25 rounded-full blur-[140px] pointer-events-none ambient-glow z-0" style="animation-delay: -4s;"></div>
 
+  <!-- Wrapper Konten Utama -->
   <div class="relative z-10 flex flex-col min-h-screen">
-    <!-- Navbar Header dengan Navigasi Kembali ke index.html -->
-    <header class="border-b border-crimson-500/20 bg-darkbg/90 backdrop-blur-md sticky top-0 z-40">
+
+    <!-- Header / Navbar -->
+    <header class="border-b-2 border-maroon-800 bg-white/90 backdrop-blur-md sticky top-0 z-40 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         <div class="flex items-center space-x-3 sm:space-x-4">
-          <!-- Tombol Navigasi Relatif -->
-          <a href="./index.html" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-darkpanel border border-slate-700 hover:border-crimson-500/50 text-slate-300 hover:text-white text-xs font-medium transition" title="Kembali ke Portal Beranda">
-            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <!-- Tombol Navigasi Relatif ke Portal Utama -->
+          <a href="./index.html" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/90 border border-maroon-200 hover:border-maroon-600 text-maroon-900 text-xs font-semibold shadow-sm transition" title="Kembali ke Portal Beranda">
+            <i data-lucide="arrow-left" class="w-4 h-4 text-maroon-700"></i>
             <span class="hidden sm:inline">Kembali ke Portal</span>
           </a>
 
-          <div class="h-6 w-[1px] bg-slate-800"></div>
+          <div class="h-6 w-[1px] bg-maroon-200"></div>
 
           <div class="flex items-center space-x-2.5">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-crimson-600 to-crimson-400 flex items-center justify-center shadow-neon">
+            <div class="w-10 h-10 rounded-xl btn-neon-maroon flex items-center justify-center">
               <i data-lucide="layers" class="w-5 h-5 text-white"></i>
             </div>
             <div>
-              <h1 class="text-lg sm:text-xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-red-200 to-crimson-400">
-                SUMBER <span class="text-crimson-400">AJAR</span>
+              <h1 class="text-lg sm:text-xl font-extrabold tracking-wide text-maroon-900">
+                SUMBER <span class="text-maroon-600">AJAR</span>
               </h1>
-              <p class="text-[11px] text-slate-400 hidden sm:block">Pustaka Modul, PPT, Canva, & MPI Terpadu</p>
+              <p class="text-[11px] text-slate-500 font-medium hidden sm:block">Pustaka Modul, PPT, Canva, & Media Digital</p>
             </div>
           </div>
         </div>
 
-        <!-- Tombol Aksi Admin & Refresh -->
+        <!-- Tombol Aksi Panel & Refresh -->
         <div class="flex items-center space-x-2.5">
-          <button onclick="fetchMaterials()" class="p-2.5 rounded-xl border border-slate-700 bg-darkpanel hover:border-crimson-500/50 text-slate-300 hover:text-white transition" title="Segarkan Data">
+          <button onclick="fetchMaterials()" class="p-2.5 rounded-xl border border-maroon-200 bg-white/90 hover:border-maroon-600 text-maroon-800 transition shadow-sm" title="Segarkan Data">
             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
           </button>
           
-          <button id="adminBtn" onclick="openAdminModal()" class="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-crimson-500/15 border border-crimson-500/40 hover:bg-crimson-500 hover:text-white text-crimson-400 font-medium text-xs sm:text-sm transition shadow-neon">
-            <i data-lucide="shield-check" class="w-4 h-4"></i>
+          <button id="adminBtn" onclick="openAdminModal()" class="btn-neon-maroon flex items-center space-x-2 px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm">
+            <i data-lucide="shield-check" class="w-4 h-4 text-rose-200"></i>
             <span id="adminBtnLabel">Panel Guru / Admin</span>
           </button>
         </div>
       </div>
     </header>
 
-    <!-- Filter & Live Search Section -->
+    <!-- Filter & Pencarian -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 w-full">
-      <div class="glass-card rounded-2xl p-5 sm:p-6 mb-6">
+      <div class="clean-card rounded-2xl p-5 sm:p-6 mb-6">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-crimson-900/60 text-crimson-400 border border-crimson-500/40 mb-2">
-              <i data-lucide="folder-git-2" class="w-3 h-3 mr-1"></i> Multi-Page Repositori
-            </div>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Bank Materi & Media Interaktif</h2>
-            <p class="text-xs sm:text-sm text-slate-400 mt-1">Akses perangkat pembelajaran digital, media presentasi, hingga modul ajar Kurikulum Merdeka.</p>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-maroon-50 text-maroon-800 border border-maroon-200 mb-2">
+              <i data-lucide="grid" class="w-3.5 h-3.5 mr-1 text-maroon-600"></i> Grid Repositori Interaktif
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-maroon-950">Pustaka Pembelajaran</h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">Koleksi bahan tayang, modul ajar, template Canva, dan media interaktif.</p>
           </div>
-          <div class="flex items-center gap-2 text-xs text-slate-400 bg-darkbg/60 px-3 py-2 rounded-xl border border-slate-800">
-            <i data-lucide="database" class="w-4 h-4 text-crimson-400"></i>
-            <span>Tersinkron ke Google Sheets & Drive</span>
+          <div class="flex items-center gap-2 text-xs text-maroon-900 bg-maroon-50/90 px-3 py-2 rounded-xl border border-maroon-100 font-medium shadow-sm">
+            <i data-lucide="cloud" class="w-4 h-4 text-maroon-700"></i>
+            <span>Sinkronisasi Google Cloud</span>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 mt-6 pt-5 border-t border-slate-800/80">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 mt-6 pt-5 border-t border-maroon-100">
           <div class="relative md:col-span-6">
-            <i data-lucide="search" class="absolute left-3.5 top-3 w-4 h-4 text-slate-400"></i>
-            <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Cari materi, judul buku, kata kunci..." 
-              class="w-full pl-10 pr-4 py-2.5 bg-darkbg border border-slate-700 rounded-xl focus:outline-none focus:border-crimson-500 text-xs sm:text-sm text-white placeholder-slate-500">
+            <i data-lucide="search" class="absolute left-3.5 top-3 w-4 h-4 text-maroon-400"></i>
+            <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Cari judul materi, topik, atau kata kunci..." 
+              class="w-full pl-10 pr-4 py-2.5 bg-white/80 border border-maroon-200 rounded-xl focus:outline-none focus:border-maroon-600 focus:ring-1 focus:ring-maroon-600 text-xs sm:text-sm text-slate-800 placeholder-slate-400">
           </div>
           
           <div class="md:col-span-3">
-            <select id="filterGrade" onchange="applyFilters()" class="w-full bg-darkbg border border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-300 focus:outline-none focus:border-crimson-500">
+            <select id="filterGrade" onchange="applyFilters()" class="w-full bg-white/80 border border-maroon-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-700 focus:outline-none focus:border-maroon-600 font-medium">
               <option value="ALL">Semua Jenjang / Fase</option>
               <option value="Fase D (SMP)">Fase D (SMP)</option>
               <option value="Fase E (SMA)">Fase E (SMA)</option>
@@ -145,7 +195,7 @@
           </div>
 
           <div class="md:col-span-3">
-            <select id="filterFormat" onchange="applyFilters()" class="w-full bg-darkbg border border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-300 focus:outline-none focus:border-crimson-500">
+            <select id="filterFormat" onchange="applyFilters()" class="w-full bg-white/80 border border-maroon-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-700 focus:outline-none focus:border-maroon-600 font-medium">
               <option value="ALL">Semua Format</option>
               <option value="PDF">PDF / Dokumen</option>
               <option value="PowerPoint">PowerPoint (.pptx)</option>
@@ -156,50 +206,49 @@
           </div>
         </div>
 
-        <!-- Filter Tab Kategori -->
         <div class="flex items-center gap-2 overflow-x-auto pt-4 mt-3 no-scrollbar text-xs">
-          <button onclick="setCategory('ALL')" class="cat-pill active px-3.5 py-1.5 rounded-lg font-medium border border-crimson-500 bg-crimson-500 text-white transition whitespace-nowrap">Semua</button>
-          <button onclick="setCategory('Modul Ajar')" class="cat-pill px-3.5 py-1.5 rounded-lg font-medium border border-slate-800 bg-darkpanel hover:border-crimson-500/40 text-slate-300 transition whitespace-nowrap">Modul Ajar</button>
-          <button onclick="setCategory('PowerPoint')" class="cat-pill px-3.5 py-1.5 rounded-lg font-medium border border-slate-800 bg-darkpanel hover:border-crimson-500/40 text-slate-300 transition whitespace-nowrap">PowerPoint</button>
-          <button onclick="setCategory('Canva')" class="cat-pill px-3.5 py-1.5 rounded-lg font-medium border border-slate-800 bg-darkpanel hover:border-crimson-500/40 text-slate-300 transition whitespace-nowrap">Canva</button>
-          <button onclick="setCategory('MPI')" class="cat-pill px-3.5 py-1.5 rounded-lg font-medium border border-slate-800 bg-darkpanel hover:border-crimson-500/40 text-slate-300 transition whitespace-nowrap">MPI Interaktif</button>
-          <button onclick="setCategory('Artikel')" class="cat-pill px-3.5 py-1.5 rounded-lg font-medium border border-slate-800 bg-darkpanel hover:border-crimson-500/40 text-slate-300 transition whitespace-nowrap">Artikel</button>
+          <button onclick="setCategory('ALL')" class="cat-pill active btn-neon-maroon px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap">Semua</button>
+          <button onclick="setCategory('Modul Ajar')" class="cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap">Modul Ajar</button>
+          <button onclick="setCategory('PowerPoint')" class="cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap">PowerPoint</button>
+          <button onclick="setCategory('Canva')" class="cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap">Canva</button>
+          <button onclick="setCategory('MPI')" class="cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap">MPI Interaktif</button>
+          <button onclick="setCategory('Artikel')" class="cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap">Artikel</button>
         </div>
       </div>
     </section>
 
-    <!-- Main Content List -->
+    <!-- Kartu Bahan Ajar -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 flex-1 w-full">
       <div id="loadingIndicator" class="text-center py-20">
-        <div class="inline-block w-9 h-9 border-2 border-crimson-500 border-t-transparent rounded-full animate-spin"></div>
-        <p class="mt-3 text-xs text-slate-400">Menyinkronkan data materi dari cloud database...</p>
+        <div class="inline-block w-8 h-8 border-2 border-maroon-800 border-t-transparent rounded-full animate-spin"></div>
+        <p class="mt-3 text-xs text-slate-500 font-medium">Memuat data bahan ajar...</p>
       </div>
 
-      <div id="cardGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 hidden">
-        <!-- Render kartu via JavaScript -->
+      <div id="cardGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden">
+        <!-- Render data oleh JavaScript -->
       </div>
 
       <div id="emptyState" class="text-center py-16 hidden">
-        <i data-lucide="book-open" class="w-12 h-12 text-slate-600 mx-auto mb-3"></i>
-        <h3 class="text-base font-semibold text-slate-300">Belum Ada Materi</h3>
-        <p class="text-xs text-slate-500 mt-1">Coba gunakan filter lain atau gunakan panel admin untuk menambahkan materi baru.</p>
+        <i data-lucide="book-open" class="w-12 h-12 text-slate-300 mx-auto mb-3"></i>
+        <h3 class="text-base font-bold text-maroon-950">Materi Tidak Ditemukan</h3>
+        <p class="text-xs text-slate-500 mt-1">Ubah kata kunci pencarian atau ganti filter kategori.</p>
       </div>
     </main>
   </div>
 
   <!-- MODAL LOGIN ADMIN -->
-  <div id="loginModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="glass-card max-w-sm w-full p-6 rounded-2xl border border-crimson-500/40 shadow-neon">
+  <div id="loginModal" class="fixed inset-0 z-50 bg-maroon-950/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white max-w-sm w-full p-6 rounded-2xl border border-maroon-200 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="lock" class="w-4 h-4 text-crimson-400"></i> Autentikasi Admin
+        <h3 class="text-base font-bold text-maroon-950 flex items-center gap-2">
+          <i data-lucide="lock" class="w-4 h-4 text-maroon-700"></i> Autentikasi Admin
         </h3>
-        <button onclick="closeModal('loginModal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <button onclick="closeModal('loginModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-      <p class="text-xs text-slate-400 mb-4">Masukkan sandi guru/admin untuk mengakses formulir unggah bahan ajar.</p>
+      <p class="text-xs text-slate-600 mb-4">Masukkan sandi guru/admin untuk mengakses formulir unggah.</p>
       <div class="space-y-3">
-        <input type="password" id="adminPassword" placeholder="Kata sandi..." class="w-full px-3.5 py-2 bg-darkbg border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:border-crimson-500">
-        <button onclick="submitAdminLogin()" class="w-full py-2.5 bg-crimson-500 hover:bg-crimson-600 font-semibold text-white rounded-xl text-xs sm:text-sm transition shadow-neon">
+        <input type="password" id="adminPassword" placeholder="Kata sandi..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-maroon-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-maroon-600">
+        <button onclick="submitAdminLogin()" class="w-full py-2.5 rounded-xl btn-neon-maroon font-bold text-xs sm:text-sm">
           Buka Panel Admin
         </button>
       </div>
@@ -207,29 +256,37 @@
   </div>
 
   <!-- MODAL FORM INPUT ADMIN -->
-  <div id="adminPanelModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="glass-card max-w-2xl w-full p-6 sm:p-7 rounded-2xl border border-crimson-500/50 shadow-neonlg my-8">
-      <div class="flex justify-between items-center pb-4 border-b border-slate-800 mb-5">
+  <div id="adminPanelModal" class="fixed inset-0 z-50 bg-maroon-950/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white max-w-2xl w-full p-6 sm:p-7 rounded-2xl border border-maroon-200 shadow-2xl my-8">
+      
+      <!-- Header Modal dengan Tombol Kunci / Logout -->
+      <div class="flex justify-between items-center pb-4 border-b border-maroon-100 mb-5">
         <div>
-          <h3 class="text-lg font-bold text-white flex items-center gap-2">
-            <i data-lucide="upload-cloud" class="w-5 h-5 text-crimson-400"></i> Tambah Bahan Ajar Baru
+          <h3 class="text-lg font-extrabold text-maroon-950 flex items-center gap-2">
+            <i data-lucide="upload-cloud" class="w-5 h-5 text-maroon-700"></i> Tambah Bahan Ajar Baru
           </h3>
-          <p class="text-xs text-slate-400 mt-0.5">Cover otomatis masuk ke folder Google Drive & data masuk ke Sheet Sumber_Materi</p>
+          <p class="text-xs text-slate-500 mt-0.5">Cover otomatis tersimpan di Google Drive & data masuk ke Google Sheets</p>
         </div>
-        <button onclick="closeModal('adminPanelModal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="logoutAdmin()" class="px-3 py-1.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-maroon-800 text-xs font-semibold flex items-center gap-1.5 transition" title="Kunci Kembali / Logout">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>Kunci</span>
+          </button>
+          <button onclick="closeModal('adminPanelModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
       </div>
 
       <form id="materialForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
         <div>
-          <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">Judul Materi / Modul / Buku</label>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Judul Materi / Modul / Buku</label>
           <input type="text" id="inputTitle" required placeholder="Contoh: Modul Ajar Pancasila - Norma dan UUD NRI 1945" 
-            class="w-full px-3.5 py-2.5 bg-darkbg border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:border-crimson-500">
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-maroon-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-maroon-600">
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">Kategori</label>
-            <select id="inputCategory" class="w-full px-3 py-2 bg-darkbg border border-slate-700 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-crimson-500">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Kategori</label>
+            <select id="inputCategory" class="w-full px-3 py-2 bg-slate-50 border border-maroon-200 rounded-xl text-slate-700 text-xs sm:text-sm focus:outline-none focus:border-maroon-600 font-medium">
               <option value="Modul Ajar">Modul Ajar</option>
               <option value="PowerPoint">PowerPoint</option>
               <option value="Canva">Canva</option>
@@ -239,8 +296,8 @@
           </div>
 
           <div>
-            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">Jenjang / Fase</label>
-            <select id="inputGrade" class="w-full px-3 py-2 bg-darkbg border border-slate-700 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-crimson-500">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Jenjang / Fase</label>
+            <select id="inputGrade" class="w-full px-3 py-2 bg-slate-50 border border-maroon-200 rounded-xl text-slate-700 text-xs sm:text-sm focus:outline-none focus:border-maroon-600 font-medium">
               <option value="Fase D (SMP)">Fase D (SMP)</option>
               <option value="Fase E (SMA)">Fase E (SMA)</option>
               <option value="Fase F (SMA)">Fase F (SMA)</option>
@@ -250,8 +307,8 @@
           </div>
 
           <div>
-            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">Format Tautan</label>
-            <select id="inputFormat" class="w-full px-3 py-2 bg-darkbg border border-slate-700 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-crimson-500">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Format Tautan</label>
+            <select id="inputFormat" class="w-full px-3 py-2 bg-slate-50 border border-maroon-200 rounded-xl text-slate-700 text-xs sm:text-sm focus:outline-none focus:border-maroon-600 font-medium">
               <option value="PDF">PDF</option>
               <option value="PowerPoint">PPTX</option>
               <option value="Canva">Canva</option>
@@ -262,35 +319,35 @@
         </div>
 
         <div>
-          <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">Link Bahan Ajar Asli (Drive / Canva / Link Web)</label>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Link Bahan Ajar (Google Drive / Canva / Web)</label>
           <input type="url" id="inputResourceUrl" required placeholder="https://drive.google.com/... atau https://canva.com/..." 
-            class="w-full px-3.5 py-2.5 bg-darkbg border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:border-crimson-500">
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-maroon-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-maroon-600">
         </div>
 
         <!-- Unggah Sampul Buku -->
-        <div class="border border-dashed border-crimson-500/40 rounded-xl p-3.5 bg-crimson-950/20">
-          <label class="block text-xs font-semibold text-crimson-300 mb-1 flex items-center gap-1.5">
-            <i data-lucide="image" class="w-4 h-4 text-crimson-400"></i> Gambar Sampul Buku (Auto Masuk Google Drive)
+        <div class="border border-dashed border-maroon-300 rounded-xl p-3.5 bg-maroon-50/50">
+          <label class="block text-xs font-bold text-maroon-900 mb-1 flex items-center gap-1.5">
+            <i data-lucide="image" class="w-4 h-4 text-maroon-700"></i> Gambar Sampul Buku (Auto Masuk Google Drive)
           </label>
-          <p class="text-[11px] text-slate-400 mb-2.5">Pilih file foto (JPG/PNG). Berkas akan otomatis dikirim ke folder Google Drive Anda.</p>
+          <p class="text-[11px] text-slate-500 mb-2.5">Pilih file foto cover (JPG/PNG). Berkas akan otomatis disimpan ke folder Google Drive Anda.</p>
           <input type="file" id="inputCoverFile" accept="image/*" onchange="handleImageSelection(event)" 
-            class="block w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-crimson-500 file:text-white hover:file:bg-crimson-600 cursor-pointer">
+            class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-maroon-800 file:text-white hover:file:bg-maroon-900 cursor-pointer">
           
           <div id="coverPreviewContainer" class="mt-3 hidden items-center gap-3">
-            <img id="imagePreview" src="" alt="Pratinjau" class="w-14 h-16 object-cover rounded-lg border border-crimson-500/50">
-            <span id="imageName" class="text-xs text-slate-300 truncate"></span>
+            <img id="imagePreview" src="" alt="Pratinjau" class="w-14 h-16 object-cover rounded-lg border border-maroon-300 shadow-sm">
+            <span id="imageName" class="text-xs text-slate-600 truncate"></span>
           </div>
         </div>
 
         <div>
-          <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">Deskripsi Singkat / Petunjuk</label>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Deskripsi Singkat / Catatan</label>
           <textarea id="inputDescription" rows="3" placeholder="Ringkasan materi, capaian pembelajaran, atau petunjuk penggunaan..." 
-            class="w-full px-3.5 py-2 bg-darkbg border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:border-crimson-500"></textarea>
+            class="w-full px-3.5 py-2 bg-slate-50 border border-maroon-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-maroon-600"></textarea>
         </div>
 
         <div class="pt-2 flex justify-end gap-2.5">
-          <button type="button" onclick="closeModal('adminPanelModal')" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 hover:text-white text-xs sm:text-sm">Batal</button>
-          <button type="submit" id="btnSubmitForm" class="flex items-center gap-2 px-5 py-2 rounded-xl bg-crimson-500 hover:bg-crimson-600 font-semibold text-white text-xs sm:text-sm shadow-neon">
+          <button type="button" onclick="closeModal('adminPanelModal')" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-100 text-xs sm:text-sm font-semibold">Batal</button>
+          <button type="submit" id="btnSubmitForm" class="btn-neon-maroon flex items-center gap-2 px-5 py-2 rounded-xl text-xs sm:text-sm font-bold">
             <i data-lucide="save" class="w-4 h-4"></i> Simpan Data
           </button>
         </div>
@@ -299,7 +356,6 @@
   </div>
 
   <script>
-    // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
     const API_URL = "https://script.google.com/macros/s/AKfycbwvDyhT9NzcZ8FhssJ17w2HcKAHW2esGOtnX7DXeIM4Jn3XCgOxosNWnUMm9GVEDpJi/exec";
 
     let materialsData = [];
@@ -323,7 +379,6 @@
       }
     }
 
-    // Membaca data materi dari sheet 'Sumber_Materi'
     async function fetchMaterials() {
       const loader = document.getElementById('loadingIndicator');
       const grid = document.getElementById('cardGrid');
@@ -343,7 +398,6 @@
           materialsData = getSampleData();
         }
       } catch (err) {
-        console.warn("Menggunakan data fallback/demo karena koneksi belum aktif:", err);
         materialsData = getSampleData();
       }
 
@@ -354,12 +408,11 @@
     function setCategory(cat) {
       activeCategory = cat;
       document.querySelectorAll('.cat-pill').forEach(btn => {
-        if (btn.innerText.toLowerCase().includes(cat.toLowerCase()) || (cat === 'ALL' && btn.innerText === 'Semua')) {
-          btn.classList.add('border-crimson-500', 'bg-crimson-500', 'text-white');
-          btn.classList.remove('bg-darkpanel', 'border-slate-800', 'text-slate-300');
+        const isMatch = btn.innerText.toLowerCase().includes(cat.toLowerCase()) || (cat === 'ALL' && btn.innerText === 'Semua');
+        if (isMatch) {
+          btn.className = "cat-pill active btn-neon-maroon px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap";
         } else {
-          btn.classList.remove('border-crimson-500', 'bg-crimson-500', 'text-white');
-          btn.classList.add('bg-darkpanel', 'border-slate-800', 'text-slate-300');
+          btn.className = "cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap";
         }
       });
       applyFilters();
@@ -397,36 +450,36 @@
       grid.classList.remove('hidden');
 
       grid.innerHTML = list.map(item => `
-        <div class="glass-card rounded-2xl overflow-hidden flex flex-col group transition-all duration-300">
-          <div class="relative h-44 w-full bg-slate-900 overflow-hidden">
+        <div class="clean-card rounded-2xl overflow-hidden flex flex-col group">
+          <div class="relative h-44 w-full bg-slate-100 overflow-hidden">
             <img src="${item.cover_url || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'}" 
                  alt="${item.title}" 
                  loading="lazy"
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-darkpanel via-transparent to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             
-            <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-black/75 backdrop-blur-md text-crimson-400 border border-crimson-500/40">
+            <span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider btn-neon-maroon">
               ${item.format}
             </span>
 
-            <span class="absolute bottom-2 left-2.5 text-[11px] font-medium text-slate-300 bg-darkpanel/80 px-2 py-0.5 rounded border border-slate-700">
+            <span class="absolute bottom-2 left-2.5 text-[11px] font-bold text-maroon-900 bg-white/95 backdrop-blur-md px-2.5 py-0.5 rounded-md shadow-sm border border-maroon-100">
               ${item.grade}
             </span>
           </div>
 
           <div class="p-4 flex flex-col flex-1">
-            <div class="text-[10px] font-semibold uppercase text-crimson-400 mb-1">${item.category}</div>
-            <h4 class="font-bold text-white text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-crimson-400 transition mb-2">
+            <div class="text-[10px] font-extrabold uppercase tracking-wider text-maroon-700 mb-1">${item.category}</div>
+            <h4 class="font-bold text-slate-900 text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-maroon-700 transition mb-2">
               ${item.title}
             </h4>
-            <p class="text-xs text-slate-400 line-clamp-3 mb-4 flex-1">
+            <p class="text-xs text-slate-500 line-clamp-3 mb-4 flex-1">
               ${item.description || 'Tidak ada deskripsi tambahan.'}
             </p>
 
             <a href="${item.resource_url}" target="_blank" rel="noopener noreferrer" 
-               class="w-full py-2 px-3 rounded-xl bg-crimson-500/20 hover:bg-crimson-500 border border-crimson-500/40 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition group-hover:shadow-neon">
+               class="btn-neon-maroon w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
               <span>Buka Materi</span>
-              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              <i data-lucide="external-link" class="w-3.5 h-3.5 text-rose-200"></i>
             </a>
           </div>
         </div>
@@ -460,6 +513,14 @@
       openAdminModal();
     }
 
+    function logoutAdmin() {
+      localStorage.removeItem('edu_repo_sub_admin_pwd');
+      currentAdminPassword = '';
+      updateAdminButtonState();
+      closeModal('adminPanelModal');
+      alert("Sesi admin telah ditutup dan dikunci kembali.");
+    }
+
     function handleImageSelection(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -484,7 +545,6 @@
       reader.readAsDataURL(file);
     }
 
-    // Mengirim data ke doPost Apps Script
     async function handleFormSubmit(event) {
       event.preventDefault();
       const btn = document.getElementById('btnSubmitForm');
@@ -534,7 +594,7 @@
           }
         }
       } catch (err) {
-        alert("Kesalahan koneksi atau URL Apps Script belum tepat: " + err.toString());
+        alert("Terjadi kendala koneksi ke Apps Script: " + err.toString());
       } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
