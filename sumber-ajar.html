@@ -207,7 +207,7 @@ function toast(msg,type='ok'){
 }
 function busy(b,on,txt){
   if(on){b.dataset.h=b.innerHTML;b.innerHTML=`<span class="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>${txt}`;b.disabled=true}
-  else{b.innerHTML=b.dataset.h;b.disabled=false;lucide.createIcons()}
+  else{b.innerHTML=b.dataset.h;b.disabled=false;if(b.id==='btnSave')setMode();lucide.createIcons()}
 }
 function openM(id){const m=$(id);m.classList.remove('hidden');m.classList.add('flex');const f=m.querySelector('input:not([type=file]),button');setTimeout(()=>f&&f.focus(),50)}
 function closeM(id){const m=$(id);m.classList.add('hidden');m.classList.remove('flex')}
@@ -276,7 +276,7 @@ function syncAdmin(){
   $('adminNote').classList.toggle('hidden',!pwd||canEdit);
 }
 function openAdmin(){if(!pwd)return openM('mLogin');resetForm();openM('mAdmin')}
-function setMode(){$('aTitle').textContent=editing?'Edit bahan ajar':'Tambah bahan ajar';$('saveLbl').textContent=editing?'Simpan perubahan':'Simpan materi'}
+function setMode(){$('aTitle').textContent=editing?'Edit bahan ajar':'Tambah bahan ajar';const l=$('saveLbl');if(l)l.textContent=editing?'Simpan perubahan':'Simpan materi'}
 function resetForm(){
   editing=null;cover=null;$('form').reset();formErr('');setMode();
   $('fName').textContent='Klik atau seret gambar ke sini';
