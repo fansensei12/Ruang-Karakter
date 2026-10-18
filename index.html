@@ -178,6 +178,12 @@ img,svg{max-width:100%}
 @media (max-width:900px){.hero .wrap{padding-top:36px;padding-bottom:40px}.sapa{margin-top:24px}}
 .exp{grid-template-columns:minmax(0,46rem);justify-content:center;text-align:center}
 .exp .bar{margin-left:auto;margin-right:auto}
+
+/* sidebar: bisa digulir dengan kursor/roda mouse, halaman belakang tidak ikut bergerak */
+.side{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.side>*{flex-shrink:0}
+.side .note{padding-top:16px}
+html.lock,html.lock body{overflow:hidden}
 </style>
 </head>
 <body>
@@ -273,7 +279,7 @@ var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
 addEventListener("scroll",function(){spy()},{passive:true});
 
 var side=document.getElementById("side"),scrim=document.getElementById("scrim"),mb=document.getElementById("menuBtn"),cb=document.getElementById("closeBtn");
-function tg(o,f){side.classList.toggle("open",o);scrim.classList.toggle("show",o);mb.setAttribute("aria-expanded",o);if(o)cb.focus();else if(f)mb.focus()}
+function tg(o,f){document.documentElement.classList.toggle("lock",o);side.classList.toggle("open",o);scrim.classList.toggle("show",o);mb.setAttribute("aria-expanded",o);if(o)cb.focus();else if(f)mb.focus()}
 mb.onclick=function(){tg(!side.classList.contains("open"),true)};
 cb.onclick=function(){tg(false,true)};scrim.onclick=function(){tg(false,true)};
 side.querySelectorAll("nav a").forEach(function(a){a.onclick=function(e){var t=document.querySelector(a.getAttribute("href"));tg(false,false);if(t){e.preventDefault();setTimeout(function(){t.scrollIntoView({behavior:rm?"auto":"smooth",block:"start"})},80)}}});
