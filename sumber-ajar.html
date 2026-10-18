@@ -1,651 +1,363 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sumber Bahan Ajar & Media Pembelajaran</title>
-  <link rel="icon" type="image/png" href="logo1.png">
-  
-  <!-- Tailwind CSS & Lucide Icons via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            maroon: {
-              50: '#fff1f2',
-              100: '#ffe4e6',
-              200: '#fecdd3',
-              300: '#fda4af',
-              400: '#fb7185',
-              500: '#e11d48',
-              600: '#be123c',
-              700: '#9f1239',
-              800: '#881337', // Merah Tua Utama
-              900: '#4c0519', // Merah Tua Pekat
-              950: '#2b000d'
-            }
-          },
-          boxShadow: {
-            maroonNeon: '0 0 14px rgba(159, 18, 57, 0.75)',
-            maroonGlow: '0 0 22px rgba(136, 19, 55, 0.9)'
-          }
-        }
-      }
-    }
-  </script>
-
-  <style>
-    /* Latar Belakang Kotak-Kotak Transparan Bergerak */
-    .animated-grid-bg {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      background-size: 38px 38px;
-      background-image: 
-        linear-gradient(to right, rgba(136, 19, 55, 0.08) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(136, 19, 55, 0.08) 1px, transparent 1px);
-      animation: gridMove 25s linear infinite;
-      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0.3) 100%);
-      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0.3) 100%);
-    }
-
-    @keyframes gridMove {
-      0% {
-        background-position: 0 0;
-      }
-      100% {
-        background-position: 76px 76px;
-      }
-    }
-
-    /* Pendar Ambient */
-    @keyframes orbFloat {
-      0%, 100% { transform: translateY(0px) scale(1); opacity: 0.45; }
-      50% { transform: translateY(-30px) scale(1.1); opacity: 0.75; }
-    }
-    .ambient-glow {
-      animation: orbFloat 8s ease-in-out infinite;
-    }
-
-    /* Tombol Aksen Neon Merah Tua */
-    .btn-neon-maroon {
-      background: linear-gradient(135deg, #881337 0%, #4c0519 100%);
-      border: 1px solid #be123c;
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(190, 18, 60, 0.5);
-      transition: all 0.25s ease-in-out;
-    }
-    .btn-neon-maroon:hover {
-      background: linear-gradient(135deg, #9f1239 0%, #881337 100%);
-      border-color: #fda4af;
-      box-shadow: 0 0 20px rgba(225, 29, 72, 0.8);
-      transform: translateY(-1px);
-    }
-
-    /* Efek Kartu Putih Bersih Transparan */
-    .clean-card {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(10px);
-      border: 1px solid #ffe4e6;
-      box-shadow: 0 4px 18px rgba(76, 5, 25, 0.05);
-      transition: all 0.3s ease;
-    }
-    .clean-card:hover {
-      border-color: #fda4af;
-      box-shadow: 0 10px 28px rgba(136, 19, 55, 0.14);
-    }
-
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sumber Ajar | Perpustakaan Digital Bahan Ajar</title>
+<link rel="icon" type="image/png" href="logo1.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script>
+tailwind.config={theme:{extend:{
+  fontFamily:{sans:['"Plus Jakarta Sans"','system-ui','sans-serif'],serif:['"Source Serif 4"','Georgia','serif']},
+  colors:{maroon:{50:'#fff1f2',100:'#ffe4e6',200:'#fecdd3',300:'#fda4af',600:'#be123c',700:'#9f1239',800:'#881337',900:'#4c0519',950:'#2b000d'}}
+}}}
+</script>
+<style type="text/tailwindcss">
+@layer components{
+  .fld{@apply w-full px-3.5 py-2.5 bg-white border border-stone-300 rounded-lg text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-maroon-700 focus:ring-2 focus:ring-maroon-700/20}
+  .lbl{@apply block text-xs font-semibold text-stone-700 mb-1.5}
+  .btn{@apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold bg-maroon-800 text-white hover:bg-maroon-900 transition disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-maroon-700}
+  .btn2{@apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold border border-stone-300 bg-white text-stone-700 hover:bg-stone-50 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-maroon-700}
+  .modal{@apply fixed inset-0 z-50 hidden items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm overflow-y-auto}
+}
+.cover{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:3px 8px 8px 3px;background:linear-gradient(150deg,#9f1239,#2b000d);box-shadow:0 8px 18px -8px rgba(43,0,13,.55)}
+.cover::after{content:"";position:absolute;inset:0 auto 0 0;width:9px;background:linear-gradient(90deg,rgba(0,0,0,.3),rgba(255,255,255,.14) 60%,transparent);pointer-events:none}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.pop{animation:pop .2s ease-out}
+.sk{background:linear-gradient(90deg,#f1ebe8 25%,#f8f4f2 50%,#f1ebe8 75%);background-size:200% 100%;animation:sh 1.4s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.no-sb::-webkit-scrollbar{display:none}.no-sb{scrollbar-width:none}
+@media (prefers-reduced-motion:reduce){.pop,.sk{animation:none}}
+</style>
 </head>
-<body class="bg-[#faf5f6] text-slate-800 min-h-screen flex flex-col font-sans antialiased relative selection:bg-maroon-800 selection:text-white">
+<body class="bg-[#fbf8f6] text-stone-800 font-sans antialiased min-h-screen flex flex-col">
 
-  <!-- Lapisan Kotak Animasi Gerak & Ambient Orb -->
-  <div class="animated-grid-bg"></div>
-  <div class="fixed -top-24 -left-24 w-96 h-96 bg-maroon-300/30 rounded-full blur-[130px] pointer-events-none ambient-glow z-0"></div>
-  <div class="fixed -bottom-24 -right-24 w-96 h-96 bg-maroon-400/25 rounded-full blur-[140px] pointer-events-none ambient-glow z-0" style="animation-delay: -4s;"></div>
-
-  <!-- Wrapper Konten Utama -->
-  <div class="relative z-10 flex flex-col min-h-screen">
-
-    <!-- Header / Navbar -->
-    <header class="border-b-2 border-maroon-800 bg-white/90 backdrop-blur-md sticky top-0 z-40 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        
-        <div class="flex items-center space-x-3 sm:space-x-4">
-          <!-- Tombol Navigasi Relatif ke Portal Utama -->
-          <a href="./index.html" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/90 border border-maroon-200 hover:border-maroon-600 text-maroon-900 text-xs font-semibold shadow-sm transition" title="Kembali ke Portal Beranda">
-            <i data-lucide="arrow-left" class="w-4 h-4 text-maroon-700"></i>
-            <span class="hidden sm:inline">Kembali ke Portal</span>
-          </a>
-
-          <div class="h-6 w-[1px] bg-maroon-200"></div>
-
-          <div class="flex items-center space-x-2.5">
-            <div class="w-10 h-10 rounded-xl btn-neon-maroon flex items-center justify-center">
-              <i data-lucide="layers" class="w-5 h-5 text-white"></i>
-            </div>
-            <div>
-              <h1 class="text-lg sm:text-xl font-extrabold tracking-wide text-maroon-900">
-                SUMBER <span class="text-maroon-600">AJAR</span>
-              </h1>
-              <p class="text-[11px] text-slate-500 font-medium hidden sm:block">Pustaka Modul, PPT, Canva, & Media Digital</p>
-            </div>
-          </div>
+<header class="bg-white border-b border-stone-200 sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-3 min-w-0">
+      <a href="./index.html" class="btn2 !px-3 !py-2" title="Kembali ke portal"><i data-lucide="arrow-left" class="w-4 h-4"></i><span class="hidden sm:inline">Portal</span></a>
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 rounded-lg bg-maroon-800 text-white grid place-items-center shrink-0"><i data-lucide="library" class="w-5 h-5"></i></div>
+        <div class="min-w-0">
+          <h1 class="font-serif font-semibold text-lg leading-none text-maroon-950">Sumber Ajar</h1>
+          <p class="text-[11px] text-stone-500 mt-1 hidden sm:block">Perpustakaan digital bahan ajar</p>
         </div>
-
-        <!-- Tombol Aksi Panel & Refresh -->
-        <div class="flex items-center space-x-2.5">
-          <button onclick="fetchMaterials()" class="p-2.5 rounded-xl border border-maroon-200 bg-white/90 hover:border-maroon-600 text-maroon-800 transition shadow-sm" title="Segarkan Data">
-            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-          </button>
-          
-          <button id="adminBtn" onclick="openAdminModal()" class="btn-neon-maroon flex items-center space-x-2 px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm">
-            <i data-lucide="shield-check" class="w-4 h-4 text-rose-200"></i>
-            <span id="adminBtnLabel">Panel Guru / Admin</span>
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- Filter & Pencarian -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 w-full">
-      <div class="clean-card rounded-2xl p-5 sm:p-6 mb-6">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-maroon-50 text-maroon-800 border border-maroon-200 mb-2">
-              <i data-lucide="grid" class="w-3.5 h-3.5 mr-1 text-maroon-600"></i> Grid Repositori Interaktif
-            </span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-maroon-950">Pustaka Pembelajaran</h2>
-            <p class="text-xs sm:text-sm text-slate-600 mt-1">Koleksi bahan tayang, modul ajar, template Canva, dan media interaktif.</p>
-          </div>
-          <div class="flex items-center gap-2 text-xs text-maroon-900 bg-maroon-50/90 px-3 py-2 rounded-xl border border-maroon-100 font-medium shadow-sm">
-            <i data-lucide="cloud" class="w-4 h-4 text-maroon-700"></i>
-            <span>Sinkronisasi Google Cloud</span>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 mt-6 pt-5 border-t border-maroon-100">
-          <div class="relative md:col-span-6">
-            <i data-lucide="search" class="absolute left-3.5 top-3 w-4 h-4 text-maroon-400"></i>
-            <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Cari judul materi, topik, atau kata kunci..." 
-              class="w-full pl-10 pr-4 py-2.5 bg-white/80 border border-maroon-200 rounded-xl focus:outline-none focus:border-maroon-600 focus:ring-1 focus:ring-maroon-600 text-xs sm:text-sm text-slate-800 placeholder-slate-400">
-          </div>
-          
-          <div class="md:col-span-3">
-            <select id="filterGrade" onchange="applyFilters()" class="w-full bg-white/80 border border-maroon-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-700 focus:outline-none focus:border-maroon-600 font-medium">
-              <option value="ALL">Semua Jenjang / Fase</option>
-              <option value="Fase D (SMP)">Fase D (SMP)</option>
-              <option value="Fase E (SMA)">Fase E (SMA)</option>
-              <option value="Fase F (SMA)">Fase F (SMA)</option>
-              <option value="SD">Fase A/B/C (SD)</option>
-              <option value="Umum">Umum / Guru</option>
-            </select>
-          </div>
-
-          <div class="md:col-span-3">
-            <select id="filterFormat" onchange="applyFilters()" class="w-full bg-white/80 border border-maroon-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-700 focus:outline-none focus:border-maroon-600 font-medium">
-              <option value="ALL">Semua Format</option>
-              <option value="PDF">PDF / Dokumen</option>
-              <option value="PowerPoint">PowerPoint (.pptx)</option>
-              <option value="Canva">Template Canva</option>
-              <option value="MPI">MPI Interaktif</option>
-              <option value="Artikel">Artikel Web</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2 overflow-x-auto pt-4 mt-3 no-scrollbar text-xs">
-          <button onclick="setCategory('ALL')" class="cat-pill active btn-neon-maroon px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap">Semua</button>
-          <button onclick="setCategory('Modul Ajar')" class="cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap">Modul Ajar</button>
-          <button onclick="setCategory('PowerPoint')" class="cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap">PowerPoint</button>
-          <button onclick="setCategory('Canva')" class="cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap">Canva</button>
-          <button onclick="setCategory('MPI')" class="cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap">MPI Interaktif</button>
-          <button onclick="setCategory('Artikel')" class="cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap">Artikel</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Kartu Bahan Ajar -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 flex-1 w-full">
-      <div id="loadingIndicator" class="text-center py-20">
-        <div class="inline-block w-8 h-8 border-2 border-maroon-800 border-t-transparent rounded-full animate-spin"></div>
-        <p class="mt-3 text-xs text-slate-500 font-medium">Memuat data bahan ajar...</p>
-      </div>
-
-      <div id="cardGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden">
-        <!-- Render data oleh JavaScript -->
-      </div>
-
-      <div id="emptyState" class="text-center py-16 hidden">
-        <i data-lucide="book-open" class="w-12 h-12 text-slate-300 mx-auto mb-3"></i>
-        <h3 class="text-base font-bold text-maroon-950">Materi Tidak Ditemukan</h3>
-        <p class="text-xs text-slate-500 mt-1">Ubah kata kunci pencarian atau ganti filter kategori.</p>
-      </div>
-    </main>
-  </div>
-
-  <!-- MODAL LOGIN ADMIN -->
-  <div id="loginModal" class="fixed inset-0 z-50 bg-maroon-950/60 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="bg-white max-w-sm w-full p-6 rounded-2xl border border-maroon-200 shadow-2xl">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-base font-bold text-maroon-950 flex items-center gap-2">
-          <i data-lucide="lock" class="w-4 h-4 text-maroon-700"></i> Autentikasi Admin
-        </h3>
-        <button onclick="closeModal('loginModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <p class="text-xs text-slate-600 mb-4">Masukkan sandi guru/admin untuk mengakses formulir unggah.</p>
-      <div class="space-y-3">
-        <input type="password" id="adminPassword" placeholder="Kata sandi..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-maroon-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-maroon-600">
-        <button onclick="submitAdminLogin()" class="w-full py-2.5 rounded-xl btn-neon-maroon font-bold text-xs sm:text-sm">
-          Buka Panel Admin
-        </button>
       </div>
     </div>
-  </div>
-
-  <!-- MODAL FORM INPUT ADMIN -->
-  <div id="adminPanelModal" class="fixed inset-0 z-50 bg-maroon-950/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white max-w-2xl w-full p-6 sm:p-7 rounded-2xl border border-maroon-200 shadow-2xl my-8">
-      
-      <!-- Header Modal dengan Tombol Kunci / Logout -->
-      <div class="flex justify-between items-center pb-4 border-b border-maroon-100 mb-5">
-        <div>
-          <h3 class="text-lg font-extrabold text-maroon-950 flex items-center gap-2">
-            <i data-lucide="upload-cloud" class="w-5 h-5 text-maroon-700"></i> Tambah Bahan Ajar Baru
-          </h3>
-          <p class="text-xs text-slate-500 mt-0.5">Cover otomatis tersimpan di Google Drive & data masuk ke Google Sheets</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button type="button" onclick="logoutAdmin()" class="px-3 py-1.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-maroon-800 text-xs font-semibold flex items-center gap-1.5 transition" title="Kunci Kembali / Logout">
-            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-            <span>Kunci</span>
-          </button>
-          <button onclick="closeModal('adminPanelModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-        </div>
-      </div>
-
-      <form id="materialForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
-        <div>
-          <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Judul Materi / Modul / Buku</label>
-          <input type="text" id="inputTitle" required placeholder="Contoh: Modul Ajar Pancasila - Norma dan UUD NRI 1945" 
-            class="w-full px-3.5 py-2.5 bg-slate-50 border border-maroon-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-maroon-600">
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Kategori</label>
-            <select id="inputCategory" class="w-full px-3 py-2 bg-slate-50 border border-maroon-200 rounded-xl text-slate-700 text-xs sm:text-sm focus:outline-none focus:border-maroon-600 font-medium">
-              <option value="Modul Ajar">Modul Ajar</option>
-              <option value="PowerPoint">PowerPoint</option>
-              <option value="Canva">Canva</option>
-              <option value="MPI">MPI Interaktif</option>
-              <option value="Artikel">Artikel Pedagogik</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Jenjang / Fase</label>
-            <select id="inputGrade" class="w-full px-3 py-2 bg-slate-50 border border-maroon-200 rounded-xl text-slate-700 text-xs sm:text-sm focus:outline-none focus:border-maroon-600 font-medium">
-              <option value="Fase D (SMP)">Fase D (SMP)</option>
-              <option value="Fase E (SMA)">Fase E (SMA)</option>
-              <option value="Fase F (SMA)">Fase F (SMA)</option>
-              <option value="SD">Fase A/B/C (SD)</option>
-              <option value="Umum">Umum / Guru</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Format Tautan</label>
-            <select id="inputFormat" class="w-full px-3 py-2 bg-slate-50 border border-maroon-200 rounded-xl text-slate-700 text-xs sm:text-sm focus:outline-none focus:border-maroon-600 font-medium">
-              <option value="PDF">PDF</option>
-              <option value="PowerPoint">PPTX</option>
-              <option value="Canva">Canva</option>
-              <option value="MPI">MPI / Web</option>
-              <option value="Artikel">Artikel</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Link Bahan Ajar (Google Drive / Canva / Web)</label>
-          <input type="url" id="inputResourceUrl" required placeholder="https://drive.google.com/... atau https://canva.com/..." 
-            class="w-full px-3.5 py-2.5 bg-slate-50 border border-maroon-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-maroon-600">
-        </div>
-
-        <!-- Unggah Sampul Buku -->
-        <div class="border border-dashed border-maroon-300 rounded-xl p-3.5 bg-maroon-50/50">
-          <label class="block text-xs font-bold text-maroon-900 mb-1 flex items-center gap-1.5">
-            <i data-lucide="image" class="w-4 h-4 text-maroon-700"></i> Gambar Sampul Buku (Auto Masuk Google Drive)
-          </label>
-          <p class="text-[11px] text-slate-500 mb-2.5">Pilih file foto cover (JPG/PNG). Berkas akan otomatis disimpan ke folder Google Drive Anda.</p>
-          <input type="file" id="inputCoverFile" accept="image/*" onchange="handleImageSelection(event)" 
-            class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-maroon-800 file:text-white hover:file:bg-maroon-900 cursor-pointer">
-          
-          <div id="coverPreviewContainer" class="mt-3 hidden items-center gap-3">
-            <img id="imagePreview" src="" alt="Pratinjau" class="w-14 h-16 object-cover rounded-lg border border-maroon-300 shadow-sm">
-            <span id="imageName" class="text-xs text-slate-600 truncate"></span>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-bold uppercase tracking-wider text-maroon-900 mb-1">Deskripsi Singkat / Catatan</label>
-          <textarea id="inputDescription" rows="3" placeholder="Ringkasan materi, capaian pembelajaran, atau petunjuk penggunaan..." 
-            class="w-full px-3.5 py-2 bg-slate-50 border border-maroon-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-maroon-600"></textarea>
-        </div>
-
-        <div class="pt-2 flex justify-end gap-2.5">
-          <button type="button" onclick="closeModal('adminPanelModal')" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-100 text-xs sm:text-sm font-semibold">Batal</button>
-          <button type="submit" id="btnSubmitForm" class="btn-neon-maroon flex items-center gap-2 px-5 py-2 rounded-xl text-xs sm:text-sm font-bold">
-            <i data-lucide="save" class="w-4 h-4"></i> Simpan Data
-          </button>
-        </div>
-      </form>
+    <div class="flex items-center gap-2">
+      <button onclick="load()" class="btn2 !px-3" title="Segarkan data" aria-label="Segarkan data"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
+      <button id="adminBtn" onclick="openAdmin()" class="btn"><i data-lucide="user-round-cog" class="w-4 h-4"></i><span id="adminLbl">Login guru</span></button>
     </div>
   </div>
+</header>
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbwvDyhT9NzcZ8FhssJ17w2HcKAHW2esGOtnX7DXeIM4Jn3XCgOxosNWnUMm9GVEDpJi/exec";
+<div id="adminBar" class="hidden bg-emerald-700 text-white text-xs sm:text-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between gap-3">
+    <p class="flex items-center gap-2 font-medium"><i data-lucide="shield-check" class="w-4 h-4 shrink-0"></i>Mode guru aktif. Anda dapat menambah bahan ajar baru.<span id="adminNote" class="hidden font-normal opacity-90">Edit belum aktif: skrip Apps Script belum diperbarui.</span></p>
+    <button onclick="logout()" class="underline underline-offset-2 hover:no-underline whitespace-nowrap">Keluar dari mode guru</button>
+  </div>
+</div>
 
-    let materialsData = [];
-    let activeCategory = 'ALL';
-    let currentAdminPassword = localStorage.getItem('edu_repo_sub_admin_pwd') || '';
-    let selectedCoverBase64 = null;
-    let selectedCoverMeta = null;
+<section class="bg-maroon-950 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+    <h2 class="font-serif font-semibold text-3xl sm:text-4xl leading-tight max-w-2xl">Temukan modul, presentasi, dan media belajar untuk kelas Anda.</h2>
+    <p class="mt-3 text-sm sm:text-base text-maroon-100/80 max-w-xl">Koleksi bahan ajar yang dikurasi guru, siap dibuka dan dipakai langsung.</p>
+    <div class="relative mt-7 max-w-2xl">
+      <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400"></i>
+      <input id="q" oninput="apply()" type="search" placeholder="Cari judul, topik, atau kata kunci" aria-label="Cari materi" class="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white text-stone-800 placeholder-stone-400 text-sm sm:text-base focus:outline-none focus:ring-4 focus:ring-maroon-300/40">
+    </div>
+    <p id="stat" class="mt-4 text-xs text-maroon-200/80 h-4"></p>
+  </div>
+</section>
 
-    document.addEventListener("DOMContentLoaded", () => {
-      lucide.createIcons();
-      fetchMaterials();
-      updateAdminButtonState();
-    });
+<div class="bg-white border-b border-stone-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col lg:flex-row lg:items-center gap-3">
+    <div id="chips" class="flex gap-2 overflow-x-auto no-sb flex-1" role="tablist"></div>
+    <div class="flex gap-2">
+      <select id="fg" onchange="apply()" class="fld !w-auto !py-2" aria-label="Jenjang"></select>
+      <select id="fs" onchange="apply()" class="fld !w-auto !py-2" aria-label="Urutkan">
+        <option value="new">Terbaru</option><option value="az">Judul A–Z</option>
+      </select>
+    </div>
+  </div>
+</div>
 
-    function updateAdminButtonState() {
-      const label = document.getElementById('adminBtnLabel');
-      if (currentAdminPassword) {
-        label.innerText = "+ Tambah Materi";
-      } else {
-        label.innerText = "Panel Guru / Admin";
-      }
-    }
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full flex-1">
+  <div id="demo" class="hidden mb-6 flex items-start gap-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+    <i data-lucide="triangle-alert" class="w-4 h-4 mt-0.5 shrink-0"></i>
+    <p>Server tidak dapat dihubungi, jadi yang tampil hanya contoh materi. Periksa koneksi internet atau deployment Apps Script, lalu tekan tombol segarkan.</p>
+  </div>
+  <div id="grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"></div>
+  <div id="empty" class="hidden text-center py-20">
+    <i data-lucide="book-x" class="w-10 h-10 mx-auto text-stone-300"></i>
+    <h3 class="font-serif font-semibold text-lg mt-3 text-maroon-950">Belum ada materi yang cocok</h3>
+    <p class="text-sm text-stone-500 mt-1">Coba kata kunci lain atau pilih kategori Semua.</p>
+  </div>
+</main>
 
-    async function fetchMaterials() {
-      const loader = document.getElementById('loadingIndicator');
-      const grid = document.getElementById('cardGrid');
-      const empty = document.getElementById('emptyState');
-      
-      loader.classList.remove('hidden');
-      grid.classList.add('hidden');
-      empty.classList.add('hidden');
+<footer class="border-t border-stone-200 bg-white py-5 text-center text-xs text-stone-500">Sumber Ajar. Data tersinkron dengan Google Sheets dan Google Drive.</footer>
 
-      try {
-        const response = await fetch(`${API_URL}?action=getMateri`);
-        const result = await response.json();
-        
-        if (result.status === "success" && result.data && result.data.length > 0) {
-          materialsData = result.data;
-        } else {
-          materialsData = getSampleData();
-        }
-      } catch (err) {
-        materialsData = getSampleData();
-      }
+<!-- Detail materi -->
+<div id="mDetail" class="modal" onclick="if(event.target===this)closeM('mDetail')">
+  <div class="pop bg-white w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden relative" role="dialog" aria-modal="true" aria-labelledby="dTitle">
+    <button onclick="closeM('mDetail')" class="absolute top-3 right-3 p-2 rounded-lg text-stone-500 hover:bg-stone-100" aria-label="Tutup"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <div id="dBody" class="p-6 sm:p-8 flex flex-col sm:flex-row gap-6 sm:gap-8"></div>
+  </div>
+</div>
 
-      loader.classList.add('hidden');
-      renderCards(materialsData);
-    }
+<!-- Login guru -->
+<div id="mLogin" class="modal" onclick="if(event.target===this)closeM('mLogin')">
+  <form onsubmit="doLogin(event)" class="pop bg-white w-full max-w-sm rounded-2xl shadow-2xl p-6" role="dialog" aria-modal="true" aria-labelledby="lTitle">
+    <div class="w-11 h-11 rounded-xl bg-maroon-50 text-maroon-800 grid place-items-center"><i data-lucide="lock-keyhole" class="w-5 h-5"></i></div>
+    <h3 id="lTitle" class="font-serif font-semibold text-xl mt-4 text-maroon-950">Masuk sebagai guru</h3>
+    <p class="text-sm text-stone-500 mt-1">Khusus guru pengelola untuk menambah bahan ajar. Pengunjung biasa tidak perlu login untuk membuka materi.</p>
+    <label class="lbl mt-5" for="pw">Sandi</label>
+    <div class="relative">
+      <input id="pw" type="password" autocomplete="current-password" class="fld pr-11" placeholder="Masukkan sandi">
+      <button type="button" onclick="const p=$('pw');p.type=p.type==='password'?'text':'password'" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-stone-400 hover:text-stone-700" aria-label="Tampilkan sandi"><i data-lucide="eye" class="w-4 h-4"></i></button>
+    </div>
+    <p id="loginErr" role="alert" class="hidden mt-2 text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2"></p>
+    <div class="flex gap-2 mt-5">
+      <button type="button" onclick="closeM('mLogin')" class="btn2 flex-1">Batal</button>
+      <button id="btnLogin" type="submit" class="btn flex-1">Masuk</button>
+    </div>
+  </form>
+</div>
 
-    function setCategory(cat) {
-      activeCategory = cat;
-      document.querySelectorAll('.cat-pill').forEach(btn => {
-        const isMatch = btn.innerText.toLowerCase().includes(cat.toLowerCase()) || (cat === 'ALL' && btn.innerText === 'Semua');
-        if (isMatch) {
-          btn.className = "cat-pill active btn-neon-maroon px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap";
-        } else {
-          btn.className = "cat-pill px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-maroon-200 text-maroon-900 hover:border-maroon-600 transition whitespace-nowrap";
-        }
-      });
-      applyFilters();
-    }
+<!-- Form tambah materi -->
+<div id="mAdmin" class="modal" onclick="if(event.target===this)closeM('mAdmin')">
+  <div class="pop bg-white w-full max-w-2xl rounded-2xl shadow-2xl my-6" role="dialog" aria-modal="true" aria-labelledby="aTitle">
+    <div class="flex items-start justify-between gap-3 px-6 pt-6 pb-4 border-b border-stone-200">
+      <div>
+        <h3 id="aTitle" class="font-serif font-semibold text-xl text-maroon-950">Tambah bahan ajar</h3>
+        <p class="text-xs text-stone-500 mt-1">Sampul disimpan di Google Drive, data masuk ke Google Sheets.</p>
+      </div>
+      <div class="flex items-center gap-1">
+        <button type="button" onclick="logout()" class="btn2 !py-1.5 !px-3 text-xs"><i data-lucide="log-out" class="w-3.5 h-3.5"></i>Keluar</button>
+        <button onclick="closeM('mAdmin')" class="p-2 rounded-lg text-stone-500 hover:bg-stone-100" aria-label="Tutup"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+    </div>
+    <form id="form" onsubmit="submitForm(event)" class="p-6 space-y-4">
+      <div><label class="lbl" for="fTitle">Judul materi</label><input id="fTitle" required class="fld" placeholder="Contoh: Modul Ajar Pancasila, Norma dan UUD NRI 1945"></div>
+      <div class="grid sm:grid-cols-3 gap-3">
+        <div><label class="lbl" for="fCat">Kategori</label><select id="fCat" class="fld"></select></div>
+        <div><label class="lbl" for="fGrade">Jenjang</label><select id="fGrade" class="fld"></select></div>
+        <div><label class="lbl" for="fFmt">Format</label><select id="fFmt" class="fld"></select></div>
+      </div>
+      <div><label class="lbl" for="fUrl">Tautan materi</label><input id="fUrl" type="url" required class="fld" placeholder="https://drive.google.com/..."></div>
+      <div>
+        <span class="lbl">Sampul buku (opsional)</span>
+        <label id="drop" for="fFile" class="flex items-center gap-4 border-2 border-dashed border-stone-300 hover:border-maroon-600 rounded-xl p-4 cursor-pointer transition">
+          <div id="prevBox" class="w-14 h-[74px] rounded bg-stone-100 grid place-items-center shrink-0 overflow-hidden"><i data-lucide="image-plus" class="w-6 h-6 text-stone-400"></i></div>
+          <div class="min-w-0 text-sm"><p id="fName" class="font-medium text-stone-700 truncate">Klik atau seret gambar ke sini</p><p class="text-xs text-stone-500 mt-0.5">JPG atau PNG. Otomatis dikecilkan agar unggahan cepat.</p></div>
+        </label>
+        <input id="fFile" type="file" accept="image/*" class="sr-only" onchange="pickFile(this.files[0])">
+      </div>
+      <div><label class="lbl" for="fDesc">Deskripsi singkat</label><textarea id="fDesc" rows="3" class="fld" placeholder="Ringkasan materi, capaian pembelajaran, atau petunjuk pemakaian"></textarea></div>
+      <p id="formErr" role="alert" class="hidden text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2"></p>
+      <div class="flex justify-end gap-2 pt-1">
+        <button type="button" onclick="closeM('mAdmin')" class="btn2">Batal</button>
+        <button id="btnSave" type="submit" class="btn"><i data-lucide="save" class="w-4 h-4"></i><span id="saveLbl">Simpan materi</span></button>
+      </div>
+    </form>
+  </div>
+</div>
 
-    function applyFilters() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const grade = document.getElementById('filterGrade').value;
-      const format = document.getElementById('filterFormat').value;
+<div id="toasts" class="fixed bottom-4 right-4 left-4 sm:left-auto z-[60] flex flex-col gap-2 items-end pointer-events-none"></div>
 
-      const filtered = materialsData.filter(item => {
-        const matchQuery = (item.title && item.title.toLowerCase().includes(query)) ||
-                           (item.description && item.description.toLowerCase().includes(query));
-        const matchCat = (activeCategory === 'ALL') || (item.category === activeCategory);
-        const matchGrade = (grade === 'ALL') || (item.grade === grade);
-        const matchFormat = (format === 'ALL') || (item.format === format);
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbwvDyhT9NzcZ8FhssJ17w2HcKAHW2esGOtnX7DXeIM4Jn3XCgOxosNWnUMm9GVEDpJi/exec";
+const CATS=[['Modul Ajar','Modul Ajar'],['PowerPoint','PowerPoint'],['Canva','Canva'],['MPI','MPI Interaktif'],['Artikel','Artikel']];
+const GRADES=[['Fase D (SMP)','Fase D (SMP)'],['Fase E (SMA)','Fase E (SMA)'],['Fase F (SMA)','Fase F (SMA)'],['SD','Fase A/B/C (SD)'],['Umum','Umum / Guru']];
+const FORMATS=['PDF','PowerPoint','Canva','MPI','Artikel'];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const opts=a=>a.map(x=>Array.isArray(x)?`<option value="${esc(x[0])}">${esc(x[1])}</option>`:`<option>${esc(x)}</option>`).join('');
 
-        return matchQuery && matchCat && matchGrade && matchFormat;
-      });
+localStorage.removeItem('edu_repo_sub_admin_pwd'); // hapus sandi lama yang mungkin basi
+let data=[],view=[],cat='ALL',pwd=sessionStorage.getItem('sa_pwd')||'',cover=null,canEdit=false,demo=false,editing=null;
+const can=()=>pwd&&canEdit&&!demo;
 
-      renderCards(filtered);
-    }
+document.addEventListener('DOMContentLoaded',()=>{
+  $('fg').innerHTML='<option value="ALL">Semua jenjang</option>'+opts(GRADES);
+  $('fCat').innerHTML=opts(CATS);$('fGrade').innerHTML=opts(GRADES);$('fFmt').innerHTML=opts(FORMATS);
+  const d=$('drop');
+  ['dragover','dragleave','drop'].forEach(ev=>d.addEventListener(ev,e=>{e.preventDefault();d.classList.toggle('border-maroon-600',ev==='dragover');if(ev==='drop')pickFile(e.dataTransfer.files[0])}));
+  syncAdmin();load();
+  if(pwd)verify(pwd).then(r=>{if(r==='bad'){sessionStorage.removeItem('sa_pwd');pwd=''}else canEdit=r==='ok';syncAdmin();if(data.length)apply()});
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.flex').forEach(m=>closeM(m.id))});
 
-    function renderCards(list) {
-      const grid = document.getElementById('cardGrid');
-      const empty = document.getElementById('emptyState');
+/* ---------- Gambar & utilitas ---------- */
+function img(u){const m=String(u||'').match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=)([\w-]+)/);return m?`https://drive.google.com/thumbnail?id=${m[1]}&sz=w600`:u||''}
+function coverHTML(it){
+  const u=img(it.cover_url);
+  return `<div class="cover"><div class="absolute inset-0 flex flex-col justify-between p-4 pl-5 text-white"><i data-lucide="book-open" class="w-5 h-5 opacity-70"></i><div class="font-serif font-semibold leading-snug line-clamp-5">${esc(it.title)}</div></div>${u?`<img src="${esc(u)}" alt="Sampul ${esc(it.title)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()" class="absolute inset-0 w-full h-full object-cover">`:''}</div>`;
+}
+function toast(msg,type='ok'){
+  const c={ok:'bg-emerald-700',err:'bg-red-700',info:'bg-stone-800'}[type];
+  const t=document.createElement('div');
+  t.className=`pop pointer-events-auto ${c} text-white text-sm px-4 py-3 rounded-lg shadow-lg max-w-sm`;
+  t.textContent=msg;$('toasts').append(t);setTimeout(()=>t.remove(),4500);
+}
+function busy(b,on,txt){
+  if(on){b.dataset.h=b.innerHTML;b.innerHTML=`<span class="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>${txt}`;b.disabled=true}
+  else{b.innerHTML=b.dataset.h;b.disabled=false;lucide.createIcons()}
+}
+function openM(id){const m=$(id);m.classList.remove('hidden');m.classList.add('flex');const f=m.querySelector('input:not([type=file]),button');setTimeout(()=>f&&f.focus(),50)}
+function closeM(id){const m=$(id);m.classList.add('hidden');m.classList.remove('flex')}
 
-      if (!list || list.length === 0) {
-        grid.classList.add('hidden');
-        empty.classList.remove('hidden');
-        return;
-      }
+/* ---------- Data ---------- */
+async function load(){
+  $('grid').innerHTML=Array(10).fill('<div><div class="sk rounded-lg" style="aspect-ratio:3/4"></div><div class="sk h-4 rounded mt-3 w-4/5"></div><div class="sk h-3 rounded mt-2 w-1/2"></div></div>').join('');
+  $('empty').classList.add('hidden');
+  demo=false;
+  try{
+    const r=await fetch(`${API_URL}?action=getMateri`);const j=await r.json();
+    if(j.status==='success'&&Array.isArray(j.data)){data=j.data}else throw 0;
+  }catch(e){data=sample();demo=true}
+  $('demo').classList.toggle('hidden',!demo);$('demo').classList.toggle('flex',demo);
+  $('stat').textContent=demo?'':`${data.length} materi tersedia`;
+  chips();apply();
+}
+function chips(){
+  const n=c=>c==='ALL'?data.length:data.filter(i=>i.category===c).length;
+  $('chips').innerHTML=[['ALL','Semua'],...CATS].map(([v,l])=>`<button role="tab" aria-selected="${v===cat}" onclick="cat='${v}';chips();apply()" class="whitespace-nowrap px-3.5 py-1.5 rounded-full text-sm font-medium border transition ${v===cat?'bg-maroon-800 border-maroon-800 text-white':'bg-white border-stone-300 text-stone-700 hover:border-maroon-600'}">${l} <span class="${v===cat?'text-maroon-200':'text-stone-400'} text-xs ml-0.5">${n(v)}</span></button>`).join('');
+}
+function apply(){
+  const q=$('q').value.trim().toLowerCase(),g=$('fg').value;
+  view=data.filter(i=>(cat==='ALL'||i.category===cat)&&(g==='ALL'||i.grade===g)&&(!q||[i.title,i.description,i.category,i.grade].join(' ').toLowerCase().includes(q)));
+  if($('fs').value==='az')view.sort((a,b)=>String(a.title).localeCompare(String(b.title),'id'));
+  const none=!view.length;
+  $('empty').classList.toggle('hidden',!none);
+  $('grid').innerHTML=view.map((it,i)=>`
+    <article tabindex="0" role="button" onclick="detail(${i})" onkeydown="if(event.key==='Enter')detail(${i})" class="group flex flex-col bg-white border border-stone-200 rounded-xl p-3 sm:p-4 cursor-pointer hover:border-maroon-300 hover:shadow-lg transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-maroon-700">
+      <div class="relative">${coverHTML(it)}<span class="absolute top-2 right-2 bg-white/95 text-maroon-900 text-[11px] font-semibold px-2 py-0.5 rounded">${esc(it.format)}</span>${can()?`<button onclick="event.stopPropagation();editItem(${i})" class="absolute bottom-2 right-2 inline-flex items-center gap-1 bg-maroon-800 text-white text-[11px] font-semibold px-2.5 py-1.5 rounded-md shadow hover:bg-maroon-900" aria-label="Edit materi"><i data-lucide="pencil" class="w-3 h-3"></i>Edit</button>`:''}</div>
+      <div class="pt-3 flex-1">
+        <p class="text-xs font-semibold text-maroon-700">${esc(it.category)}</p>
+        <h3 class="font-serif font-semibold text-[15px] leading-snug text-stone-900 line-clamp-2 mt-1 group-hover:text-maroon-800">${esc(it.title)}</h3>
+        <p class="text-xs text-stone-500 mt-1.5">${esc(it.grade)}</p>
+      </div>
+    </article>`).join('');
+  lucide.createIcons();
+}
+function detail(i){
+  const it=view[i];if(!it)return;
+  const url=esc(it.resource_url||'#');
+  $('dBody').innerHTML=`
+    <div class="w-36 sm:w-52 shrink-0 mx-auto sm:mx-0">${coverHTML(it)}</div>
+    <div class="flex-1 min-w-0 pr-6">
+      <div class="flex flex-wrap gap-2 text-xs font-semibold">
+        <span class="px-2.5 py-1 rounded-full bg-maroon-50 text-maroon-800">${esc(it.category)}</span>
+        <span class="px-2.5 py-1 rounded-full bg-stone-100 text-stone-700">${esc(it.grade)}</span>
+        <span class="px-2.5 py-1 rounded-full bg-stone-100 text-stone-700">${esc(it.format)}</span>
+      </div>
+      <h2 id="dTitle" class="font-serif font-semibold text-2xl leading-snug text-maroon-950 mt-3">${esc(it.title)}</h2>
+      <p class="text-sm leading-relaxed text-stone-600 mt-3 max-h-48 overflow-y-auto">${esc(it.description)||'Belum ada deskripsi untuk materi ini.'}</p>
+      <div class="flex flex-wrap gap-2 mt-6">
+        <a href="${url}" target="_blank" rel="noopener noreferrer" class="btn"><i data-lucide="external-link" class="w-4 h-4"></i>Buka materi</a>
+        <button class="btn2" onclick="navigator.clipboard.writeText('${url}').then(()=>toast('Tautan disalin','info'))"><i data-lucide="link" class="w-4 h-4"></i>Salin tautan</button>
+        ${can()?`<button class="btn2" onclick="editItem(${i})"><i data-lucide="pencil" class="w-4 h-4"></i>Edit materi</button>`:''}
+      </div>
+    </div>`;
+  openM('mDetail');lucide.createIcons();
+}
 
-      empty.classList.add('hidden');
-      grid.classList.remove('hidden');
+/* ---------- Autentikasi guru ---------- */
+function syncAdmin(){
+  $('adminLbl').textContent=pwd?'Tambah materi':'Login guru';
+  $('adminBtn').title=pwd?'Tambah bahan ajar baru':'Khusus guru pengelola. Pengunjung tidak perlu login.';
+  $('adminBar').classList.toggle('hidden',!pwd);
+  $('adminNote').classList.toggle('hidden',!pwd||canEdit);
+}
+function openAdmin(){if(!pwd)return openM('mLogin');resetForm();openM('mAdmin')}
+function setMode(){$('aTitle').textContent=editing?'Edit bahan ajar':'Tambah bahan ajar';$('saveLbl').textContent=editing?'Simpan perubahan':'Simpan materi'}
+function resetForm(){
+  editing=null;cover=null;$('form').reset();formErr('');setMode();
+  $('fName').textContent='Klik atau seret gambar ke sini';
+  $('prevBox').innerHTML='<i data-lucide="image-plus" class="w-6 h-6 text-stone-400"></i>';lucide.createIcons();
+}
+function editItem(i){
+  const it=view[i];if(!it||!can())return;
+  resetForm();editing=it;setMode();
+  $('fTitle').value=it.title||'';$('fCat').value=it.category;$('fGrade').value=it.grade;$('fFmt').value=it.format;
+  $('fUrl').value=it.resource_url||'';$('fDesc').value=it.description==='-'?'':(it.description||'');
+  const u=img(it.cover_url);
+  if(u)$('prevBox').innerHTML=`<img src="${esc(u)}" alt="" class="w-full h-full object-cover">`;
+  $('fName').textContent='Sampul saat ini. Klik untuk mengganti gambar.';
+  closeM('mDetail');openM('mAdmin');
+}
+function loginErr(m){const e=$('loginErr');e.textContent=m;e.classList.remove('hidden')}
+// 'ok' = sandi benar, 'bad' = salah, 'unknown' = server lama tanpa fitur cek, 'net' = gagal konek
+async function verify(p){
+  try{
+    const r=await fetch(`${API_URL}?action=verifyAdmin&password=${encodeURIComponent(p)}`);
+    const j=await r.json();
+    return j.verified===true?'ok':j.verified===false?'bad':'unknown';
+  }catch(e){return 'net'}
+}
+async function doLogin(e){
+  e.preventDefault();
+  const v=$('pw').value.trim();if(!v)return loginErr('Sandi belum diisi.');
+  $('loginErr').classList.add('hidden');
+  const b=$('btnLogin');busy(b,true,'Memeriksa');
+  const r=await verify(v);busy(b,false);
+  if(r==='bad')return loginErr('Sandi salah. Periksa huruf besar dan kecil, lalu coba lagi.');
+  if(r==='net')return loginErr('Tidak dapat terhubung ke server. Periksa internet atau deployment Apps Script.');
+  pwd=v;canEdit=r==='ok';sessionStorage.setItem('sa_pwd',v);$('pw').value='';
+  closeM('mLogin');syncAdmin();apply();resetForm();openM('mAdmin');
+  toast(r==='ok'?'Berhasil masuk':'Masuk. Sandi diperiksa saat menyimpan.',r==='ok'?'ok':'info');
+}
+function logout(){sessionStorage.removeItem('sa_pwd');pwd='';canEdit=false;syncAdmin();apply();closeM('mAdmin');toast('Sesi guru ditutup','info')}
 
-      grid.innerHTML = list.map(item => `
-        <div class="clean-card rounded-2xl overflow-hidden flex flex-col group">
-          <div class="relative h-44 w-full bg-slate-100 overflow-hidden">
-            <img src="${item.cover_url || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'}" 
-                 alt="${item.title}" 
-                 loading="lazy"
-                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-            
-            <span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider btn-neon-maroon">
-              ${item.format}
-            </span>
+/* ---------- Unggah ---------- */
+function compress(file){
+  return new Promise((ok,no)=>{
+    const im=new Image();
+    im.onload=()=>{const s=Math.min(1,900/im.width),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(im.src);ok(c.toDataURL('image/jpeg',.82))};
+    im.onerror=no;im.src=URL.createObjectURL(file);
+  });
+}
+async function pickFile(f){
+  if(!f)return;
+  if(!f.type.startsWith('image/'))return toast('File harus berupa gambar','err');
+  try{
+    const d=await compress(f);
+    cover={base64:d.split(',')[1],name:f.name.replace(/\.\w+$/,'')+'.jpg',type:'image/jpeg'};
+    $('prevBox').innerHTML=`<img src="${d}" alt="Pratinjau" class="w-full h-full object-cover">`;
+    $('fName').textContent=f.name;
+  }catch(e){toast('Gambar tidak dapat dibaca','err')}
+}
+function formErr(m){const e=$('formErr');e.textContent=m;e.classList.toggle('hidden',!m)}
+async function submitForm(e){
+  e.preventDefault();formErr('');
+  const b=$('btnSave');busy(b,true,'Menyimpan');
+  const payload={type:editing?'edit_material':'add_material',id:editing?editing.id:undefined,password:pwd,title:$('fTitle').value.trim(),category:$('fCat').value,grade:$('fGrade').value,format:$('fFmt').value,resource_url:$('fUrl').value.trim(),description:$('fDesc').value.trim(),cover_file:cover};
+  try{
+    const res=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+    const txt=await res.text();let j;
+    try{j=JSON.parse(txt)}catch(_){throw new Error('Server mengirim balasan tak terduga. Pastikan Apps Script di-deploy sebagai Web app dengan akses "Anyone" dan sudah memakai versi terbaru.')}
+    if(j.status==='success'){
+      toast(editing?'Perubahan berhasil disimpan':'Materi berhasil disimpan');
+      resetForm();closeM('mAdmin');load();
+    }else if(j.code==='AUTH'||/sandi|password|ditolak|unauthor|salah/i.test(j.message||'')){
+      sessionStorage.removeItem('sa_pwd');pwd='';syncAdmin();closeM('mAdmin');
+      loginErr('Sandi ditolak server. Masukkan sandi yang benar.');openM('mLogin');
+    }else formErr(j.message||'Penyimpanan gagal. Coba lagi.');
+  }catch(err){formErr(err.message&&!/fetch/i.test(err.message)?err.message:'Tidak dapat terhubung ke server. Periksa internet Anda.')}
+  finally{busy(b,false)}
+}
 
-            <span class="absolute bottom-2 left-2.5 text-[11px] font-bold text-maroon-900 bg-white/95 backdrop-blur-md px-2.5 py-0.5 rounded-md shadow-sm border border-maroon-100">
-              ${item.grade}
-            </span>
-          </div>
-
-          <div class="p-4 flex flex-col flex-1">
-            <div class="text-[10px] font-extrabold uppercase tracking-wider text-maroon-700 mb-1">${item.category}</div>
-            <h4 class="font-bold text-slate-900 text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-maroon-700 transition mb-2">
-              ${item.title}
-            </h4>
-            <p class="text-xs text-slate-500 line-clamp-3 mb-4 flex-1">
-              ${item.description || 'Tidak ada deskripsi tambahan.'}
-            </p>
-
-            <a href="${item.resource_url}" target="_blank" rel="noopener noreferrer" 
-               class="btn-neon-maroon w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
-              <span>Buka Materi</span>
-              <i data-lucide="external-link" class="w-3.5 h-3.5 text-rose-200"></i>
-            </a>
-          </div>
-        </div>
-      `).join('');
-
-      lucide.createIcons();
-    }
-
-    function openAdminModal() {
-      if (currentAdminPassword) {
-        document.getElementById('adminPanelModal').classList.remove('hidden');
-        document.getElementById('adminPanelModal').classList.add('flex');
-      } else {
-        document.getElementById('loginModal').classList.remove('hidden');
-        document.getElementById('loginModal').classList.add('flex');
-      }
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-      document.getElementById(id).classList.remove('flex');
-    }
-
-    function submitAdminLogin() {
-      const pwd = document.getElementById('adminPassword').value;
-      if (!pwd) return;
-      currentAdminPassword = pwd;
-      localStorage.setItem('edu_repo_sub_admin_pwd', pwd);
-      closeModal('loginModal');
-      updateAdminButtonState();
-      openAdminModal();
-    }
-
-    function logoutAdmin() {
-      localStorage.removeItem('edu_repo_sub_admin_pwd');
-      currentAdminPassword = '';
-      updateAdminButtonState();
-      closeModal('adminPanelModal');
-      alert("Sesi admin telah ditutup dan dikunci kembali.");
-    }
-
-    function handleImageSelection(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const preview = document.getElementById('imagePreview');
-        const container = document.getElementById('coverPreviewContainer');
-        const nameText = document.getElementById('imageName');
-
-        preview.src = e.target.result;
-        nameText.innerText = file.name;
-        container.classList.remove('hidden');
-        container.classList.add('flex');
-
-        selectedCoverBase64 = e.target.result.split(',')[1];
-        selectedCoverMeta = {
-          name: file.name,
-          type: file.type
-        };
-      };
-      reader.readAsDataURL(file);
-    }
-
-    async function handleFormSubmit(event) {
-      event.preventDefault();
-      const btn = document.getElementById('btnSubmitForm');
-      const originalText = btn.innerHTML;
-      btn.innerHTML = `<span class="inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span> Mengunggah...`;
-      btn.disabled = true;
-
-      const payload = {
-        type: "add_material",
-        password: currentAdminPassword,
-        title: document.getElementById('inputTitle').value,
-        category: document.getElementById('inputCategory').value,
-        grade: document.getElementById('inputGrade').value,
-        format: document.getElementById('inputFormat').value,
-        resource_url: document.getElementById('inputResourceUrl').value,
-        description: document.getElementById('inputDescription').value,
-        cover_file: selectedCoverBase64 ? {
-          base64: selectedCoverBase64,
-          name: selectedCoverMeta.name,
-          type: selectedCoverMeta.type
-        } : null
-      };
-
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify(payload)
-        });
-        const result = await res.json();
-
-        if (result.status === "success") {
-          alert("Materi dan foto sampul berhasil diunggah ke Google Drive & tersimpan di Sheet!");
-          document.getElementById('materialForm').reset();
-          document.getElementById('coverPreviewContainer').classList.add('hidden');
-          selectedCoverBase64 = null;
-          closeModal('adminPanelModal');
-          fetchMaterials();
-        } else {
-          alert("Gagal: " + result.message);
-          if (result.message.includes("ditolak")) {
-            localStorage.removeItem('edu_repo_sub_admin_pwd');
-            currentAdminPassword = '';
-            updateAdminButtonState();
-          }
-        }
-      } catch (err) {
-        alert("Terjadi kendala koneksi ke Apps Script: " + err.toString());
-      } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-      }
-    }
-
-    function getSampleData() {
-      return [
-        {
-          id: "SMP-01",
-          title: "Modul Ajar: Norma dan UUD NRI Tahun 1945",
-          category: "Modul Ajar",
-          grade: "Fase D (SMP)",
-          format: "PDF",
-          description: "Perangkat ajar lengkap memuat ATP, LKPD interaktif, rubrik asesmen, dan skenario pembelajaran berdiferensiasi.",
-          resource_url: "https://drive.google.com",
-          cover_url: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-          id: "PPT-02",
-          title: "Presentasi Interaktif: Hak & Kewajiban Warga Negara",
-          category: "PowerPoint",
-          grade: "Fase D (SMP)",
-          format: "PowerPoint",
-          description: "Slide presentasi interaktif kontekstual dilengkapi studi kasus pemantik diskusi kelas.",
-          resource_url: "https://drive.google.com",
-          cover_url: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-          id: "CNV-03",
-          title: "Template Desain: Infografis Karakter Pancasila",
-          category: "Canva",
-          grade: "Fase D (SMP)",
-          format: "Canva",
-          description: "Template siap gandakan untuk proyek visual siswa berbasis Profil Pelajar Pancasila.",
-          resource_url: "https://canva.com",
-          cover_url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-          id: "MPI-04",
-          title: "Media Interaktif: Ekspedisi Konstitusi Nusantara",
-          category: "MPI",
-          grade: "Fase D (SMP)",
-          format: "MPI",
-          description: "Simulasi game edukatif berbasis web HTML5 yang dapat langsung dijalankan oleh siswa tanpa instalasi.",
-          resource_url: "https://github.com",
-          cover_url: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80"
-        }
-      ];
-    }
-  </script>
+function sample(){return [
+  {title:'Modul Ajar: Norma dan UUD NRI Tahun 1945',category:'Modul Ajar',grade:'Fase D (SMP)',format:'PDF',description:'Perangkat ajar lengkap memuat ATP, LKPD, rubrik asesmen, dan skenario pembelajaran berdiferensiasi.',resource_url:'https://drive.google.com'},
+  {title:'Presentasi: Hak dan Kewajiban Warga Negara',category:'PowerPoint',grade:'Fase D (SMP)',format:'PowerPoint',description:'Slide kontekstual dengan studi kasus pemantik diskusi kelas.',resource_url:'https://drive.google.com'},
+  {title:'Template Infografis Karakter Pancasila',category:'Canva',grade:'Fase E (SMA)',format:'Canva',description:'Template siap gandakan untuk proyek visual siswa.',resource_url:'https://canva.com'},
+  {title:'Ekspedisi Konstitusi Nusantara',category:'MPI',grade:'Fase D (SMP)',format:'MPI',description:'Simulasi edukatif berbasis web yang dapat langsung dijalankan siswa tanpa instalasi.',resource_url:'https://github.com'}
+]}
+</script>
 </body>
 </html>
