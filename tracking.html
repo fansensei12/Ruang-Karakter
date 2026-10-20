@@ -4,93 +4,93 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ruang Tracking dan Asesmen</title>
+  <script>
+    // Terapkan tema tersimpan (default: gelap) sebelum halaman tampil
+    (function () {
+      var t = 'dark';
+      try { t = localStorage.getItem('tema-tracking') || 'dark'; } catch (e) {}
+      if (t === 'light') document.documentElement.classList.add('light');
+    })();
+  </script>
   <link rel="icon" type="image/png" href="logo1.png">
   
   <!-- Tailwind CSS & Font Awesome -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tema kalem: semua class warna Tailwind yang dulu neon dipetakan ke warna lembut
+    tailwind.config = { theme: { extend: { colors: {
+      cyan:    { 200:'#cfe0ee', 300:'#a9c7e0', 400:'#82aed2', 500:'#5f93bf', 600:'#4a79a3', 700:'#3b6082', 800:'#2d4a65', 900:'#233a4f', 950:'#172635' },
+      pink:    { 300:'#bcc4ea', 400:'#9aa6dc', 500:'#7d8bcc', 600:'#6370b4', 700:'#4f5a94', 900:'#2b3158', 950:'#1c2040' },
+      purple:  { 300:'#c3bde0', 400:'#a8a1d0', 500:'#8e88bd', 600:'#7570a5', 700:'#5e5a88', 900:'#2f2d4a', 950:'#201f35' },
+      emerald: { 300:'#9ad3b5', 400:'#6fbf98', 500:'#4da57d', 600:'#3b8664', 900:'#163b2c', 950:'#10261d' },
+      teal:    { 300:'#8fd0c8', 400:'#62b9ae', 500:'#46a094', 600:'#378077' },
+      red:     { 300:'#f0b0aa', 400:'#e48b84', 500:'#d46a63', 600:'#b9524c', 950:'#2a1413' },
+      rose:    { 300:'#efb3bf', 400:'#e28a9b', 500:'#cf6a7f', 600:'#b5546a', 950:'#2a131a' },
+      amber:   { 200:'#f8e7a6', 300:'#f2d56b', 400:'#e6bf3a', 500:'#d4a417', 600:'#b8860b', 900:'#5a4508', 950:'#33280a' },
+      yellow:  { 950:'#33280a' },
+    } } } };
+  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
-  <!-- Google Fonts: Orbitron, Rajdhani & Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
-  <!-- Orbitron hanya untuk angka (0-9); huruf otomatis memakai Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&text=0123456789&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --neon-cyan: #00f3ff;
-      --neon-pink: #ff007f;
-      --neon-purple: #9d4edd;
-      --neon-green: #00ff88;
-      --neon-amber: #ffbe0b;
-      --bg-dark: #050813;
+      --accent: #82aed2;
+      --accent-soft: #a9c7e0;
+      --bg-base: #0f1623;
+      --bg-card: #172033;
+      --line: #2b3a52;
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg-dark);
-      background-image: 
-        radial-gradient(circle at 10% 15%, rgba(0, 243, 255, 0.12) 0%, transparent 35%),
-        radial-gradient(circle at 90% 15%, rgba(255, 0, 127, 0.12) 0%, transparent 35%),
-        radial-gradient(circle at 50% 85%, rgba(157, 78, 221, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(0, 255, 136, 0.08) 0%, transparent 30%);
-      color: #f1f5f9;
+      background-color: var(--bg-base);
+      background-image: linear-gradient(180deg, #131c2c 0%, #0f1623 55%, #0d1320 100%);
+      background-attachment: fixed;
+      color: #e8edf4;
       min-height: 100vh;
     }
 
-    .font-cyber { font-family: 'Orbitron', 'Inter', sans-serif; }
-    .font-tech { font-family: 'Rajdhani', sans-serif; }
+    @keyframes loadingSlide { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
+    .loading-bar-fill { animation: loadingSlide 1.4s ease-in-out infinite; }
+    .font-cyber, .font-tech { font-family: 'Inter', sans-serif; }
 
-    /* Animated Multi-Color Neon Border */
+    /* Bingkai kartu: garis tipis lembut (sebelumnya border pelangi menyala) */
     .rainbow-border-box {
       position: relative;
-      background: #090e1c;
+      background: var(--bg-card);
       border-radius: 1.5rem;
       z-index: 1;
     }
-
     .rainbow-border-box::before {
       content: '';
       position: absolute;
-      top: -2px; left: -2px; right: -2px; bottom: -2px;
-      background: linear-gradient(60deg, #00f3ff, #ff007f, #9d4edd, #ffbe0b, #00ff88, #00f3ff);
-      background-size: 300% 300%;
-      border-radius: calc(1.5rem + 2px);
+      inset: -1px;
+      background: linear-gradient(135deg, rgba(130,174,210,.45), rgba(43,58,82,.6) 50%, rgba(125,139,204,.35));
+      border-radius: calc(1.5rem + 1px);
       z-index: -1;
-      animation: rainbowGlow 6s ease infinite;
-      filter: blur(4px);
-      opacity: 0.85;
-    }
-
-    @keyframes rainbowGlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     @keyframes scaleUp {
       from { transform: scale(0.95); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
-
     .animate-scaleUp { animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-    /* Glow Utilities */
-    .glow-cyan { box-shadow: 0 0 16px rgba(0, 243, 255, 0.4); }
-    .glow-pink { box-shadow: 0 0 18px rgba(255, 0, 127, 0.45); }
-    .glow-amber { box-shadow: 0 0 18px rgba(255, 190, 11, 0.55); }
-    .glow-green { box-shadow: 0 0 15px rgba(0, 255, 136, 0.45); }
-    .glow-red { box-shadow: 0 0 15px rgba(255, 0, 85, 0.45); }
+    /* Efek glow diganti bayangan halus tanpa cahaya warna */
+    .glow-cyan, .glow-pink, .glow-amber, .glow-green, .glow-red { box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28); }
 
     .text-glow-rainbow {
-      background: linear-gradient(90deg, #00f3ff, #ff007f, #ffbe0b);
+      background: linear-gradient(90deg, #a9c7e0, #bcc4ea);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.5));
     }
 
     .glass-inner {
-      background: rgba(13, 20, 38, 0.88);
-      backdrop-filter: blur(14px);
+      background: rgba(23, 32, 51, 0.96);
+      backdrop-filter: blur(8px);
     }
 
     .option-card {
@@ -98,38 +98,116 @@
       cursor: pointer;
     }
     .option-card:hover {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+      border-color: var(--accent);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
       transform: translateY(-2px);
     }
     .option-card.selected {
-      border-color: var(--neon-cyan);
-      background: rgba(0, 243, 255, 0.15);
-      box-shadow: 0 0 20px rgba(0, 243, 255, 0.45);
+      border-color: var(--accent);
+      background: rgba(130, 174, 210, 0.14);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     }
 
-    optgroup { background-color: #0b1120; color: #38bdf8; font-weight: 700; }
-    option { background-color: #0f172a; color: #ffffff; font-weight: 400; }
+    optgroup { background-color: #131c2c; color: #a9c7e0; font-weight: 700; }
+    option { background-color: #172033; color: #e8edf4; font-weight: 400; }
 
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #090e1c; }
+    ::-webkit-scrollbar-track { background: #0f1623; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
   
     /* Lampu sirine merah untuk siswa yang belum mengerjakan */
     .sirine{position:relative;width:26px;height:26px;flex-shrink:0}
     .sirine .beam{position:absolute;left:50%;top:9px;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;pointer-events:none;
-      background:conic-gradient(from 0deg,rgba(255,40,70,.6),transparent 22%,transparent 50%,rgba(255,40,70,.6) 50%,transparent 72%);
+      background:conic-gradient(from 0deg,rgba(224,96,90,.35),transparent 22%,transparent 50%,rgba(224,96,90,.35) 50%,transparent 72%);
       filter:blur(2px);animation:sirineSpin 1.1s linear infinite}
     .sirine .dome{position:absolute;left:3px;top:0;width:20px;height:17px;border-radius:10px 10px 2px 2px;
-      background:radial-gradient(circle at 50% 75%,#ffb3bd,#ff2b4a 55%,#8a0014);animation:sirineBlink .7s ease-in-out infinite}
+      background:radial-gradient(circle at 50% 75%,#f6c4c0,#e0605a 55%,#8a2f2b);animation:sirineBlink .7s ease-in-out infinite}
     .sirine .base{position:absolute;left:0;bottom:1px;width:26px;height:8px;border-radius:2px;background:linear-gradient(#475569,#1e293b)}
     @keyframes sirineSpin{to{transform:rotate(360deg)}}
-    @keyframes sirineBlink{0%,100%{filter:brightness(.7);box-shadow:0 0 4px rgba(255,43,74,.4)}50%{filter:brightness(1.4);box-shadow:0 0 14px 4px rgba(255,43,74,.9)}}
+    @keyframes sirineBlink{0%,100%{filter:brightness(.8)}50%{filter:brightness(1.2)}}
     @media (prefers-reduced-motion:reduce){.sirine .beam,.sirine .dome{animation:none}}
+
+    /* ===================== MODE TERANG ===================== */
+    html { color-scheme: dark; }
+    html.light { color-scheme: light; }
+    body, .glass-inner, .rainbow-border-box { transition: background-color .25s ease, color .25s ease; }
+
+    html.light body { background-color: #f3f6fb; background-image: linear-gradient(180deg, #f8fafd 0%, #eef2f8 60%, #e8edf5 100%); color: #1e293b; }
+    html.light .glass-inner { background: rgba(255,255,255,.97); }
+    html.light .rainbow-border-box { background: #ffffff; }
+    html.light .rainbow-border-box::before { background: linear-gradient(135deg, rgba(95,147,191,.55), rgba(203,213,225,.9) 50%, rgba(125,139,204,.45)); }
+    html.light .glow-cyan, html.light .glow-pink, html.light .glow-amber, html.light .glow-green, html.light .glow-red { box-shadow: 0 4px 16px rgba(15,23,42,.10); }
+    html.light .text-glow-rainbow { background: linear-gradient(90deg, #3b6082, #5a6bb0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    html.light .option-card:hover { box-shadow: 0 4px 14px rgba(15,23,42,.14); }
+    html.light .option-card.selected { background: rgba(95,147,191,.14); box-shadow: 0 4px 16px rgba(15,23,42,.14); }
+    html.light optgroup { background-color: #f1f5f9; color: #3b6082; }
+    html.light option { background-color: #ffffff; color: #1e293b; }
+    html.light ::-webkit-scrollbar-track { background: #e8edf5; }
+    html.light ::-webkit-scrollbar-thumb { background: #b6c2d3; }
+
+    /* Teks netral */
+    html.light .text-white { color: #0f172a; }
+    html.light .hover\:text-white:hover { color: #0f172a; }
+    html.light .text-slate-100 { color: #1e293b; }
+    html.light .text-slate-200 { color: #334155; }
+    html.light .text-slate-300 { color: #475569; }
+    html.light .text-slate-400 { color: #5b6679; }
+    html.light .text-slate-500 { color: #6b7789; }
+    /* Tetap putih di atas tombol berwarna */
+    html.light [class*="bg-gradient"].text-white,
+    html.light .bg-emerald-600\/90.text-white { color: #ffffff; }
+    html.light [class*="bg-gradient"] .text-amber-300 { color: #f2d56b; }
+
+    /* Latar & garis netral */
+    html.light .bg-slate-950\/70 { background-color: rgba(241,245,249,.9); }
+    html.light .bg-slate-900, html.light .bg-slate-900\/90, html.light .bg-slate-900\/80, html.light .bg-slate-900\/60 { background-color: #f1f5f9; }
+    html.light .bg-slate-800 { background-color: #e2e8f0; }
+    html.light .bg-slate-700, html.light .hover\:bg-slate-700:hover { background-color: #cbd5e1; }
+    html.light .border-slate-800, html.light .border-slate-800\/80 { border-color: #dbe3ee; }
+    html.light .border-slate-700, html.light .border-slate-700\/60, html.light .border-slate-700\/80 { border-color: #cbd5e1; }
+    html.light .border-slate-600, html.light .hover\:border-slate-600:hover { border-color: #b6c2d3; }
+    html.light .bg-black\/80, html.light .bg-black\/70 { background-color: rgba(15,23,42,.45); }
+
+    /* Warna aksen: lebih tua agar terbaca di latar terang */
+    html.light .text-cyan-200, html.light .text-cyan-300 { color: #2f6f9f; }
+    html.light .text-cyan-400 { color: #3b7fb0; }
+    html.light .text-pink-400 { color: #5a69b0; }
+    html.light .text-purple-300, html.light .text-purple-400 { color: #6d68a0; }
+    html.light .text-emerald-300, html.light .text-emerald-400 { color: #2f7a5a; }
+    html.light .text-teal-300, html.light .text-teal-400 { color: #2f7f75; }
+    html.light .text-amber-200, html.light .text-amber-300, html.light .text-amber-400 { color: #9a6b00; }
+    html.light .text-rose-300, html.light .text-rose-400 { color: #b5546a; }
+    html.light .text-red-300, html.light .text-red-400 { color: #b9524c; }
+    /* Kembalikan warna asli di tombol emas */
+    html.light .from-amber-300.text-amber-950 { color: #33280a; }
+    html.light .from-amber-300 .text-amber-900 { color: #5a4508; }
+
+    /* Kartu status siswa & panel berwarna */
+    html.light .bg-emerald-950\/40, html.light .bg-emerald-950\/25 { background-color: rgba(77,165,125,.13); }
+    html.light .bg-red-950\/40, html.light .bg-red-950\/25 { background-color: rgba(212,106,99,.11); }
+    html.light .bg-rose-950\/20 { background-color: rgba(207,106,127,.10); }
+    html.light .bg-amber-950\/60, html.light .bg-amber-900\/40 { background-color: rgba(212,164,23,.15); }
+    html.light .bg-yellow-950\/60 { background-color: rgba(212,164,23,.12); }
+    html.light .border-emerald-500\/50 { border-color: rgba(59,134,100,.45); }
+    html.light .border-red-500\/50 { border-color: rgba(185,82,76,.45); }
+    html.light .sirine .base { background: linear-gradient(#94a3b8, #64748b); }
+
+    /* Tombol pengalih tema */
+    #themeToggle { position: fixed; right: 1rem; bottom: 1rem; z-index: 80; width: 46px; height: 46px; border-radius: 9999px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer;
+      background: #172033; color: #e6bf3a; border: 1px solid #2b3a52; box-shadow: 0 4px 16px rgba(0,0,0,.35); transition: transform .15s ease, background-color .25s ease; }
+    #themeToggle:hover { transform: scale(1.08); }
+    #themeToggle:active { transform: scale(.94); }
+    html.light #themeToggle { background: #ffffff; color: #3b6082; border-color: #cbd5e1; box-shadow: 0 4px 14px rgba(15,23,42,.18); }
 </style>
 </head>
 <body class="p-3 md:p-6 flex flex-col justify-between min-h-screen">
+
+  <!-- Tombol ganti tema gelap / terang -->
+  <button id="themeToggle" type="button" onclick="toggleTheme()" title="Ganti tema" aria-label="Ganti tema gelap/terang">
+    <i id="themeIcon" class="fa-solid fa-sun"></i>
+  </button>
 
   <!-- ======================== FLOATING BANNER SINKRONISASI (ATAS) ======================== -->
   <div id="syncStatusBanner" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 pointer-events-none transform -translate-y-12 opacity-0">
@@ -139,15 +217,18 @@
     </div>
   </div>
 
-  <!-- ======================== TOAST POPUP NOTIFIKASI (BAWAH) ======================== -->
-  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 hidden transition-all duration-300 transform translate-y-2">
-    <div id="toastBox" class="flex items-center gap-3.5 px-5 py-3.5 rounded-2xl glass-inner border border-cyan-400 glow-cyan shadow-2xl">
-      <div id="toastIcon" class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-300 text-base shrink-0">
+  <!-- ======================== POPUP LOADING / NOTIFIKASI (TENGAH LAYAR) ======================== -->
+  <div id="toastNotification" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+    <div id="toastBox" class="flex flex-col items-center text-center gap-5 w-full max-w-md px-8 py-10 rounded-3xl glass-inner border-2 border-cyan-400 glow-cyan shadow-2xl transform scale-95 transition-transform duration-300">
+      <div id="toastIcon" class="w-24 h-24 rounded-3xl bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center text-cyan-300 text-5xl shrink-0">
         <i class="fa-solid fa-arrows-rotate animate-spin"></i>
       </div>
       <div>
-        <div id="toastTitle" class="text-xs font-cyber font-bold text-white tracking-wide">Memuat Data...</div>
-        <div id="toastDesc" class="text-[11px] text-slate-300 font-tech">Menyiapkan data siswa...</div>
+        <div id="toastTitle" class="text-xl md:text-2xl font-cyber font-bold text-white tracking-wide">Memuat Data...</div>
+        <div id="toastDesc" class="text-sm md:text-base text-slate-300 font-tech mt-2">Menyiapkan data siswa...</div>
+      </div>
+      <div id="toastBar" class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+        <div class="loading-bar-fill h-full w-1/3 rounded-full bg-gradient-to-r from-cyan-400 via-pink-500 to-cyan-400"></div>
       </div>
     </div>
   </div>
@@ -175,9 +256,9 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-          <!-- Tombol LMS Pendidikan Pancasila (Neon Gold, Tab Sama) -->
-          <a href="https://fansensei12.github.io/LMSpendidikanpancasila/" target="_self" class="px-5 py-3.5 rounded-2xl border-2 border-amber-400/80 bg-gradient-to-r from-amber-950/60 via-amber-900/40 to-yellow-950/60 text-amber-300 hover:text-amber-200 hover:border-amber-300 hover:brightness-110 glow-amber text-xs font-tech font-bold flex items-center gap-2.5 transition-all duration-300 cursor-pointer shadow-lg shadow-amber-950/50">
-            <i class="fa-solid fa-graduation-cap text-base text-amber-400"></i> LMS PANCASILA
+          <!-- Tombol LMS Pendidikan Pancasila (Gold, Tab Sama) -->
+          <a href="https://fansensei12.github.io/LMSpendidikanpancasila/" target="_self" class="px-5 py-3.5 rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-300 via-amber-400 to-amber-500 text-amber-950 hover:brightness-110 hover:border-amber-200 text-xs font-tech font-bold flex items-center gap-2.5 transition-all duration-300 cursor-pointer shadow-lg shadow-amber-500/25">
+            <i class="fa-solid fa-graduation-cap text-base text-amber-900"></i> LMS PANCASILA
           </a>
 
           <!-- Tombol Refresh Data -->
@@ -213,6 +294,9 @@
           <select id="filterKelas" onchange="onFilterKelasChange()" class="w-full bg-slate-900/90 border border-cyan-500/40 rounded-2xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 focus:glow-cyan transition">
             <option value="" selected>-- Pilih Kelas --</option>
             <option value="SEMUA">-- Semua Kelas --</option>
+            <option value="TINGKAT-7">-- Semua Kelas 7 --</option>
+            <option value="TINGKAT-8">-- Semua Kelas 8 --</option>
+            <option value="TINGKAT-9">-- Semua Kelas 9 --</option>
           </select>
         </div>
       </div>
@@ -591,12 +675,30 @@
       }
     }
 
+    // 2b. TEMA GELAP / TERANG
+    function updateThemeIcon() {
+      const light = document.documentElement.classList.contains('light');
+      const icon = document.getElementById('themeIcon');
+      const btn = document.getElementById('themeToggle');
+      if (icon) icon.className = light ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+      if (btn) btn.title = light ? 'Ganti ke mode gelap' : 'Ganti ke mode terang';
+    }
+    function toggleTheme() {
+      const root = document.documentElement;
+      const light = root.classList.toggle('light');
+      try { localStorage.setItem('tema-tracking', light ? 'light' : 'dark'); } catch (e) {}
+      updateThemeIcon();
+      if (typeof playClickSound === 'function') { try { playClickSound(); } catch (e) {} }
+    }
+    document.addEventListener('DOMContentLoaded', updateThemeIcon);
+
     // 3. TOAST NOTIFIKASI
     let toastTimeout = null;
     function showToast(title, desc, type = 'loading', duration = 0) {
       const toast = document.getElementById('toastNotification');
       const box = document.getElementById('toastBox');
       const icon = document.getElementById('toastIcon');
+      const bar = document.getElementById('toastBar');
       const titleEl = document.getElementById('toastTitle');
       const descEl = document.getElementById('toastDesc');
 
@@ -604,25 +706,28 @@
       titleEl.textContent = title;
       descEl.textContent = desc;
 
+      const boxBase = 'flex flex-col items-center text-center gap-5 w-full max-w-md px-8 py-10 rounded-3xl glass-inner border-2 shadow-2xl transform transition-transform duration-300 scale-100 ';
+      const iconBase = 'w-24 h-24 rounded-3xl border-2 flex items-center justify-center text-5xl shrink-0 ';
+
       if (type === 'loading') {
-        box.className = 'flex items-center gap-3.5 px-5 py-3.5 rounded-2xl glass-inner border border-cyan-400 glow-cyan shadow-2xl';
-        icon.className = 'w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-300 text-base shrink-0';
+        box.className = boxBase + 'border-cyan-400 glow-cyan';
+        icon.className = iconBase + 'bg-cyan-500/20 border-cyan-400 text-cyan-300';
         icon.innerHTML = '<i class="fa-solid fa-arrows-rotate animate-spin"></i>';
+        bar.classList.remove('hidden');
       } else if (type === 'success') {
-        box.className = 'flex items-center gap-3.5 px-5 py-3.5 rounded-2xl glass-inner border border-emerald-400 glow-green shadow-2xl';
-        icon.className = 'w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-300 text-base shrink-0';
+        box.className = boxBase + 'border-emerald-400 glow-green';
+        icon.className = iconBase + 'bg-emerald-500/20 border-emerald-400 text-emerald-300';
         icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        bar.classList.add('hidden');
       } else if (type === 'warning') {
-        box.className = 'flex items-center gap-3.5 px-5 py-3.5 rounded-2xl glass-inner border border-amber-400 glow-amber shadow-2xl';
-        icon.className = 'w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-base shrink-0';
+        box.className = boxBase + 'border-amber-400 glow-amber';
+        icon.className = iconBase + 'bg-amber-500/20 border-amber-400 text-amber-300';
         icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+        bar.classList.add('hidden');
       }
 
       toast.classList.remove('hidden');
-      setTimeout(() => {
-        toast.classList.remove('translate-y-2');
-        toast.classList.add('translate-y-0');
-      }, 10);
+      setTimeout(() => { toast.classList.remove('opacity-0'); toast.classList.add('opacity-100'); }, 10);
 
       if (duration > 0) {
         toastTimeout = setTimeout(() => { hideToast(); }, duration);
@@ -631,8 +736,10 @@
 
     function hideToast() {
       const toast = document.getElementById('toastNotification');
-      toast.classList.add('translate-y-2');
-      setTimeout(() => { toast.classList.add('hidden'); }, 300);
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toast.classList.remove('opacity-100');
+      toast.classList.add('opacity-0');
+      toastTimeout = setTimeout(() => { toast.classList.add('hidden'); }, 300);
     }
 
     // 4. STATE MANAGEMENT
@@ -660,6 +767,23 @@
         }
       }, 25000);
     });
+
+    // Pilihan tingkat: nilai dropdown "TINGKAT-7" = semua rombel kelas 7 (7A, 7B, ...)
+    const TINGKAT_FILTER = ['7', '8', '9'];
+    function cocokKelas(siswa, kls) {
+      if (!kls || kls === 'SEMUA') return true;
+      const k = String(siswa.kelas || '').trim().toUpperCase();
+      if (kls.indexOf('TINGKAT-') === 0) {
+        const t = kls.replace('TINGKAT-', '');
+        return new RegExp('^' + t + '(?!\\d)').test(k);
+      }
+      return k === kls.toUpperCase();
+    }
+    function labelFilterKelas(kls) {
+      if (kls === 'SEMUA') return 'Semua Kelas';
+      if (kls.indexOf('TINGKAT-') === 0) return 'Semua Kelas ' + kls.replace('TINGKAT-', '');
+      return 'Kelas ' + kls;
+    }
 
     // Urutan alami: 7A, 7B, 8A, ... 10A
     function urutKelas(a, b) {
@@ -691,6 +815,7 @@
       const prev = filterSel.value, prevModal = modalSel.value;
 
       let filterHtml = '<option value="">-- Pilih Kelas --</option><option value="SEMUA">-- Semua Kelas --</option>';
+      TINGKAT_FILTER.forEach(t => { filterHtml += `<option value="TINGKAT-${t}">-- Semua Kelas ${t} --</option>`; });
       let modalHtml = '<option value="">-- Pilih Kelas --</option>';
       daftarKelasAktif().forEach(kls => {
         filterHtml += `<option value="${kls}">Kelas ${kls}</option>`;
@@ -748,6 +873,7 @@
     async function loadInitialData(selectedTaskId = null) {
       isTaskLoading = true;
       setSyncStatus('loading', 'Sinkronisasi data sedang berlangsung... Harap tunggu');
+      showToast('Memuat Data...', 'Mengambil data dari Spreadsheet, mohon tunggu sebentar.', 'loading');
 
       try {
         let endpoint = `${SCRIPT_URL}?action=getInitialData`;
@@ -785,10 +911,14 @@
 
         isTaskLoading = false;
         setSyncStatus('ready', '✓ Data sudah siap digunakan!');
+        if (!document.getElementById('filterKelas').value) {
+          showToast('Data Siap', 'Silakan pilih kelas untuk melihat status siswa.', 'success', 1500);
+        }
       } catch (err) {
         isTaskLoading = false;
         console.error("Gagal load API:", err);
         setSyncStatus('error', 'Koneksi Spreadsheet terputus');
+        showToast('Gagal Memuat Data', 'Koneksi ke Spreadsheet terputus.', 'warning', 3000);
         renderErrorFallback(err.message);
       }
     }
@@ -914,18 +1044,13 @@
         return;
       }
 
-      const labelKelas = kls === 'SEMUA' ? 'Semua Kelas' : 'Kelas ' + kls;
+      const labelKelas = labelFilterKelas(kls);
 
       setSyncStatus('loading', `Memuat data ${labelKelas}...`);
       showToast(`Memuat ${labelKelas}`, "Menyiapkan daftar peserta...", "loading");
 
       setTimeout(() => {
-        let filtered = [];
-        if (kls === 'SEMUA') {
-          filtered = appState.siswaList;
-        } else {
-          filtered = appState.siswaList.filter(s => String(s.kelas).trim().toUpperCase() === kls.toUpperCase());
-        }
+        const filtered = appState.siswaList.filter(s => cocokKelas(s, kls));
 
         renderTrackingBoard(filtered);
 
@@ -998,14 +1123,13 @@
       if (!isSilent) setSyncStatus('loading', 'Menyinkronkan data terbaru...');
 
       try {
-        const res = await fetch(`${SCRIPT_URL}?action=getTrackingData&taskId=${encodeURIComponent(taskId)}&kelas=${encodeURIComponent(kls || 'SEMUA')}`);
+        const res = await fetch(`${SCRIPT_URL}?action=getTrackingData&taskId=${encodeURIComponent(taskId)}&kelas=${encodeURIComponent((kls && kls.indexOf('TINGKAT-') !== 0) ? kls : 'SEMUA')}`);
         const text = await res.text();
         const data = JSON.parse(text);
         if (Array.isArray(data)) {
           appState.siswaList = data;
           if (kls) {
-            let filtered = (kls === 'SEMUA') ? data : data.filter(s => String(s.kelas).trim().toUpperCase() === kls.toUpperCase());
-            renderTrackingBoard(filtered);
+            renderTrackingBoard(data.filter(s => cocokKelas(s, kls)));
           }
         }
         if (!isSilent) setSyncStatus('ready', '✓ Data berhasil diperbarui!');
