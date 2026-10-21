@@ -218,10 +218,14 @@
   </div>
 
   <!-- ======================== POPUP LOADING / NOTIFIKASI (TENGAH LAYAR) ======================== -->
-  <div id="toastNotification" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-300">
-    <div id="toastBox" class="flex flex-col items-center text-center gap-5 w-full max-w-md px-8 py-10 rounded-3xl glass-inner border-2 border-cyan-400 glow-cyan shadow-2xl transform scale-95 transition-transform duration-300">
-      <div id="toastIcon" class="w-24 h-24 rounded-3xl bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center text-cyan-300 text-5xl shrink-0">
-        <i class="fa-solid fa-arrows-rotate animate-spin"></i>
+  <div id="toastNotification" onclick="if(event.target === this) cancelLoading()" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+    <div id="toastBox" class="relative flex flex-col items-center text-center gap-5 w-full max-w-md px-8 py-10 rounded-3xl glass-inner border-2 border-cyan-400 glow-cyan shadow-2xl">
+      <button id="toastClose" type="button" onclick="cancelLoading()" title="Tutup" aria-label="Tutup"
+        class="absolute top-3 right-3 w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 hover:text-white flex items-center justify-center transition">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
+      <div id="toastIcon" class="w-24 h-24 rounded-3xl bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center text-cyan-300 shrink-0">
+        <svg class="animate-spin" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.2-8.55" /></svg>
       </div>
       <div>
         <div id="toastTitle" class="text-xl md:text-2xl font-cyber font-bold text-white tracking-wide">Memuat Data...</div>
@@ -229,6 +233,10 @@
       </div>
       <div id="toastBar" class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
         <div class="loading-bar-fill h-full w-1/3 rounded-full bg-gradient-to-r from-cyan-400 via-pink-500 to-cyan-400"></div>
+      </div>
+      <div id="toastCancelWrap" class="w-full flex flex-col items-center gap-2">
+        <button id="toastCancel" type="button" onclick="cancelLoading()" class="px-6 py-2.5 rounded-xl border border-slate-600 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-tech font-bold transition">Batalkan dan Tutup</button>
+        <span class="text-[11px] text-slate-400 font-tech">Terlalu lama? Tekan X atau tombol di atas untuk keluar.</span>
       </div>
     </div>
   </div>
@@ -262,7 +270,7 @@
           </a>
 
           <!-- Tombol Refresh Data -->
-          <button onclick="fetchTrackingData()" class="px-4 py-3.5 rounded-2xl border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 text-xs font-tech flex items-center gap-2 transition cursor-pointer">
+          <button onclick="fetchTrackingData(false, true)" class="px-4 py-3.5 rounded-2xl border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 text-xs font-tech flex items-center gap-2 transition cursor-pointer">
             <i class="fa-solid fa-arrows-rotate text-sm"></i> REFRESH DATA
           </button>
 
@@ -694,36 +702,49 @@
 
     // 3. TOAST NOTIFIKASI
     let toastTimeout = null;
+    let toastType = null;
+    let slowTimer = null;
+    let popupController = null; // permintaan yang sedang ditunggu popup (bisa dibatalkan dengan X)
+
     function showToast(title, desc, type = 'loading', duration = 0) {
       const toast = document.getElementById('toastNotification');
       const box = document.getElementById('toastBox');
       const icon = document.getElementById('toastIcon');
       const bar = document.getElementById('toastBar');
+      const cancelWrap = document.getElementById('toastCancelWrap');
       const titleEl = document.getElementById('toastTitle');
       const descEl = document.getElementById('toastDesc');
 
       if (toastTimeout) clearTimeout(toastTimeout);
+      if (slowTimer) clearTimeout(slowTimer);
+      toastType = type;
       titleEl.textContent = title;
       descEl.textContent = desc;
 
-      const boxBase = 'flex flex-col items-center text-center gap-5 w-full max-w-md px-8 py-10 rounded-3xl glass-inner border-2 shadow-2xl transform transition-transform duration-300 scale-100 ';
-      const iconBase = 'w-24 h-24 rounded-3xl border-2 flex items-center justify-center text-5xl shrink-0 ';
+      const boxBase = 'relative flex flex-col items-center text-center gap-5 w-full max-w-md px-8 py-10 rounded-3xl glass-inner border-2 shadow-2xl ';
+      const iconBase = 'w-24 h-24 rounded-3xl border-2 flex items-center justify-center shrink-0 ';
 
       if (type === 'loading') {
         box.className = boxBase + 'border-cyan-400 glow-cyan';
         icon.className = iconBase + 'bg-cyan-500/20 border-cyan-400 text-cyan-300';
-        icon.innerHTML = '<i class="fa-solid fa-arrows-rotate animate-spin"></i>';
+        icon.innerHTML = '<svg class="animate-spin" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.2-8.55" /></svg>';
         bar.classList.remove('hidden');
+        cancelWrap.classList.remove('hidden');
+        slowTimer = setTimeout(() => {
+          if (toastType === 'loading') descEl.textContent = 'Jaringan terasa lambat. Anda bisa menutup popup ini lalu mencoba lagi.';
+        }, 8000);
       } else if (type === 'success') {
         box.className = boxBase + 'border-emerald-400 glow-green';
         icon.className = iconBase + 'bg-emerald-500/20 border-emerald-400 text-emerald-300';
-        icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        icon.innerHTML = '<svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M7.5 12.5l3 3 6-6.5"/></svg>';
         bar.classList.add('hidden');
+        cancelWrap.classList.add('hidden');
       } else if (type === 'warning') {
         box.className = boxBase + 'border-amber-400 glow-amber';
         icon.className = iconBase + 'bg-amber-500/20 border-amber-400 text-amber-300';
-        icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+        icon.innerHTML = '<svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5M12 17.2v.1"/></svg>';
         bar.classList.add('hidden');
+        cancelWrap.classList.add('hidden');
       }
 
       toast.classList.remove('hidden');
@@ -737,9 +758,68 @@
     function hideToast() {
       const toast = document.getElementById('toastNotification');
       if (toastTimeout) clearTimeout(toastTimeout);
+      if (slowTimer) clearTimeout(slowTimer);
+      toastType = null;
       toast.classList.remove('opacity-100');
       toast.classList.add('opacity-0');
       toastTimeout = setTimeout(() => { toast.classList.add('hidden'); }, 300);
+    }
+
+    // Tombol X / Batalkan / klik latar / tombol Esc: hentikan permintaan yang sedang ditunggu lalu tutup popup
+    function cancelLoading() {
+      if (toastType === 'loading' && popupController) popupController.abort();
+      hideToast();
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toastType) cancelLoading();
+    });
+
+    // Ambil JSON dengan batas waktu. Error: err.cancelled = dibatalkan pengguna, selain itu waktu habis / jaringan
+    async function fetchJSON(url, { timeout = 25000, controller = null } = {}) {
+      const ctrl = controller || new AbortController();
+      let timedOut = false;
+      const timer = setTimeout(() => { timedOut = true; ctrl.abort(); }, timeout);
+      try {
+        const res = await fetch(url, { signal: ctrl.signal });
+        const text = await res.text();
+        try {
+          return JSON.parse(text);
+        } catch (jsonErr) {
+          throw new Error("Respon bukan JSON. Pastikan Web App Apps Script disetel ke 'Anyone'.");
+        }
+      } catch (e) {
+        if (e.name === 'AbortError') {
+          const err = new Error(timedOut ? 'Waktu tunggu habis. Jaringan lambat atau terganggu.' : 'Dibatalkan');
+          err.cancelled = !timedOut;
+          throw err;
+        }
+        throw e;
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    // Cache lokal: data terakhir langsung tampil, lalu diperbarui diam-diam dari DataBase
+    const CACHE_KEY = 'tracking-initial-v2';
+    function readCacheStore() { try { return JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); } catch (e) { return {}; } }
+    function writeCacheStore(store) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(store)); } catch (e) {} }
+    function readInitialCache(taskId) { return readCacheStore()[taskId || '_default'] || null; }
+    function writeInitialCache(requestedId, data) {
+      const store = readCacheStore();
+      const entry = { t: Date.now(), data: data };
+      store[requestedId || '_default'] = entry;
+      if (data.activeTask && data.activeTask.id) store[data.activeTask.id] = entry;
+      Object.keys(store).sort((a, b) => (store[b].t || 0) - (store[a].t || 0)).slice(8).forEach(k => delete store[k]);
+      writeCacheStore(store);
+    }
+    function updateSiswaCache(taskId, siswa) {
+      const store = readCacheStore();
+      let changed = false;
+      Object.keys(store).forEach(k => {
+        const d = store[k] && store[k].data;
+        if (d && d.activeTask && d.activeTask.id === taskId) { d.siswa = siswa; store[k].t = Date.now(); changed = true; }
+      });
+      if (changed) writeCacheStore(store);
     }
 
     // 4. STATE MANAGEMENT
@@ -870,55 +950,90 @@
     }
 
     // 5. REST API CLIENT
+    function applyInitialData(data) {
+      if (data.tasks && Array.isArray(data.tasks)) {
+        appState.tasks = data.tasks;
+        appState.activeTask = data.activeTask || data.tasks[0];
+      } else {
+        appState.tasks = [{ id: 'TGS-01', judul: 'Penilaian Harian UUD 1945 (CBT)', tipe: 'CBT', sumber: 'Soal', link: '' }];
+        appState.activeTask = appState.tasks[0];
+      }
+      appState.soalList = Array.isArray(data.soal) ? data.soal : [];
+      appState.siswaList = Array.isArray(data.siswa) ? data.siswa : [];
+      updateKelasTersedia(appState.siswaList);
+      renderTaskSelector();
+      updateHeaderTaskBadge();
+      highlightKelasButtons();
+      renderCurrentFilter();
+    }
+
+    function renderCancelledPlaceholder() {
+      document.getElementById('trackingList').innerHTML = `
+        <div class="col-span-full py-16 text-center text-slate-400 font-tech">
+          <span class="text-base text-slate-200 block mb-1">Pemuatan dibatalkan</span>
+          <span class="text-xs text-slate-400 block mb-4">Data dari DataBase belum dimuat.</span>
+          <button onclick="loadInitialData(appState.activeTask ? appState.activeTask.id : null)" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-tech rounded-xl border border-slate-600 transition">Coba Lagi</button>
+        </div>`;
+    }
+
     async function loadInitialData(selectedTaskId = null) {
+      if (popupController) popupController.abort();
+      const ctrl = popupController = new AbortController();
       isTaskLoading = true;
-      setSyncStatus('loading', 'Sinkronisasi data sedang berlangsung... Harap tunggu');
-      showToast('Memuat Data...', 'Mengambil data dari Spreadsheet, mohon tunggu sebentar.', 'loading');
+
+      // Tampilkan data tersimpan lebih dulu (langsung terlihat), lalu perbarui di latar belakang
+      let usedCache = false;
+      const cached = readInitialCache(selectedTaskId);
+      if (cached && cached.data) {
+        try { applyInitialData(cached.data); usedCache = true; isTaskLoading = false; } catch (e) { usedCache = false; isTaskLoading = true; }
+      }
+
+      if (usedCache) {
+        setSyncStatus('loading', 'Menampilkan data tersimpan, memperbarui dari DataBase...');
+      } else {
+        setSyncStatus('loading', 'Sinkronisasi data sedang berlangsung... Harap tunggu');
+        showToast('Memuat Data...', 'Mengambil data dari DataBase, mohon tunggu sebentar.', 'loading');
+      }
 
       try {
         let endpoint = `${SCRIPT_URL}?action=getInitialData`;
         if (selectedTaskId) endpoint += `&taskId=${encodeURIComponent(selectedTaskId)}`;
 
-        const res = await fetch(endpoint);
-        const text = await res.text();
+        const data = await fetchJSON(endpoint, { controller: ctrl, timeout: 30000 });
+        if (data.error) throw new Error("Pesan dari DataBase: " + data.error);
+        if (ctrl !== popupController) return; // sudah digantikan permintaan yang lebih baru
 
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (jsonErr) {
-          throw new Error("Respon bukan JSON. Pastikan Web App Apps Script disetel ke 'Anyone'.");
-        }
-
-        if (data.error) {
-          throw new Error("Pesan dari Spreadsheet: " + data.error);
-        }
-
-        if (data.tasks && Array.isArray(data.tasks)) {
-          appState.tasks = data.tasks;
-          appState.activeTask = data.activeTask || data.tasks[0];
-        } else {
-          appState.tasks = [{ id: 'TGS-01', judul: 'Penilaian Harian UUD 1945 (CBT)', tipe: 'CBT', sumber: 'Soal', link: '' }];
-          appState.activeTask = appState.tasks[0];
-        }
-
-        appState.soalList = Array.isArray(data.soal) ? data.soal : [];
-        appState.siswaList = Array.isArray(data.siswa) ? data.siswa : [];
-        updateKelasTersedia(appState.siswaList);
-
-        renderTaskSelector();
-        updateHeaderTaskBadge();
-        onFilterKelasChange();
-
+        writeInitialCache(selectedTaskId, data);
+        applyInitialData(data);
+        lastTrackingFetch = Date.now();
         isTaskLoading = false;
         setSyncStatus('ready', '✓ Data sudah siap digunakan!');
-        if (!document.getElementById('filterKelas').value) {
-          showToast('Data Siap', 'Silakan pilih kelas untuk melihat status siswa.', 'success', 1500);
+        if (!usedCache) {
+          if (!document.getElementById('filterKelas').value) {
+            showToast('Data Siap', 'Silakan pilih kelas untuk melihat status siswa.', 'success', 1500);
+          } else {
+            hideToast();
+          }
         }
       } catch (err) {
+        if (ctrl !== popupController) return;
         isTaskLoading = false;
+
+        if (err.cancelled) {
+          if (usedCache) { setSyncStatus('ready', 'Menampilkan data tersimpan (pembaruan dibatalkan)'); return; }
+          setSyncStatus('error', 'Pemuatan dibatalkan');
+          renderCancelledPlaceholder();
+          return;
+        }
+
         console.error("Gagal load API:", err);
-        setSyncStatus('error', 'Koneksi Spreadsheet terputus');
-        showToast('Gagal Memuat Data', 'Koneksi ke Spreadsheet terputus.', 'warning', 3000);
+        if (usedCache) {
+          setSyncStatus('error', 'Gagal memperbarui, menampilkan data tersimpan');
+          hideToast();
+          return;
+        }
+        setSyncStatus('error', 'Koneksi DataBase terputus');
+        showToast('Gagal Memuat Data', err.message || 'Koneksi ke DataBase terputus.', 'warning', 3500);
         renderErrorFallback(err.message);
       }
     }
@@ -972,12 +1087,12 @@
 
     function renderErrorFallback(msg) {
       document.getElementById('connectionBadge').className = 'w-2 h-2 rounded-full bg-rose-500 animate-ping';
-      document.getElementById('connectionText').textContent = 'Koneksi Spreadsheet Perlu Penyesuaian';
+      document.getElementById('connectionText').textContent = 'Koneksi DataBase Perlu Penyesuaian';
 
       document.getElementById('trackingList').innerHTML = `
         <div class="col-span-full py-10 px-6 text-center bg-rose-950/20 border border-rose-500/40 rounded-2xl glow-red">
           <i class="fa-solid fa-triangle-exclamation text-3xl text-rose-400 mb-3"></i>
-          <h3 class="font-cyber font-bold text-white text-base mb-1">Gagal Sinkronisasi dengan Google Sheet</h3>
+          <h3 class="font-cyber font-bold text-white text-base mb-1">Gagal Sinkronisasi dengan DataBase</h3>
           <p class="text-xs text-rose-300 font-mono mb-4 max-w-lg mx-auto">${msg}</p>
           <div class="flex flex-wrap justify-center gap-3">
             <button onclick="loadInitialData()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-tech rounded-xl border border-slate-600 transition">
@@ -1026,13 +1141,14 @@
     }
 
     // 6. LOGIKA FILTER KELAS (POPUP & SINGLE-BATCH RENDERING CEPAT)
-    function onFilterKelasChange() {
-      const kls = document.getElementById('filterKelas').value;
-      highlightKelasButtons();
+    let lastTrackingFetch = 0;
+    let trackingFetching = false;
 
+    // Tampilkan daftar sesuai pilihan kelas dari data yang sudah ada di halaman (tanpa menunggu server)
+    function renderCurrentFilter() {
+      const kls = document.getElementById('filterKelas').value;
       if (!kls) {
-        const container = document.getElementById('trackingList');
-        container.innerHTML = `
+        document.getElementById('trackingList').innerHTML = `
           <div class="col-span-full py-16 text-center text-slate-400 font-tech">
             <i class="fa-solid fa-hand-pointer text-3xl text-cyan-400 block mb-3 animate-bounce"></i>
             <span class="text-base text-slate-200 block mb-1">Silakan Pilih Kelas Terlebih Dahulu</span>
@@ -1041,24 +1157,36 @@
         `;
         document.getElementById('countBelum').textContent = '0 Siswa';
         document.getElementById('countSudah').textContent = '0 Siswa';
-        return;
+        return null;
       }
+      const filtered = (appState.siswaList || []).filter(s => cocokKelas(s, kls));
+      renderTrackingBoard(filtered);
+      return filtered.length;
+    }
+
+    function onFilterKelasChange() {
+      highlightKelasButtons();
+      const kls = document.getElementById('filterKelas').value;
+      if (!kls) { renderCurrentFilter(); return; }
 
       const labelKelas = labelFilterKelas(kls);
 
-      setSyncStatus('loading', `Memuat data ${labelKelas}...`);
-      showToast(`Memuat ${labelKelas}`, "Menyiapkan daftar peserta...", "loading");
+      // Data awal belum sampai: popup pemuatan awal masih tampil (ada tombol X)
+      if (isTaskLoading && !(appState.siswaList || []).length) {
+        document.getElementById('trackingList').innerHTML = `
+          <div class="col-span-full py-16 text-center text-slate-400 font-tech">
+            <span class="text-base text-slate-200 block mb-1">Menunggu data ${labelKelas}...</span>
+            <span class="text-xs text-slate-400">Data akan tampil otomatis setelah diterima dari DataBase.</span>
+          </div>`;
+        return;
+      }
 
-      setTimeout(() => {
-        const filtered = appState.siswaList.filter(s => cocokKelas(s, kls));
+      // Data sudah ada: tampil seketika tanpa popup
+      const n = renderCurrentFilter();
+      setSyncStatus('ready', `✓ Data ${labelKelas} siap! (${n} siswa)`);
 
-        renderTrackingBoard(filtered);
-
-        setSyncStatus('ready', `✓ Data ${labelKelas} siap!`);
-        showToast(`Data ${labelKelas} Siap`, `${filtered.length} siswa berhasil ditampilkan.`, "success", 2000);
-
-        fetchTrackingData(true);
-      }, 30);
+      // Perbarui diam-diam di latar belakang bila data sudah lebih dari 10 detik
+      if (Date.now() - lastTrackingFetch > 10000) fetchTrackingData(true);
     }
 
     function renderTrackingBoard(list) {
@@ -1115,26 +1243,50 @@
       document.getElementById('countSudah').textContent = `${countSudah} Siswa`;
     }
 
-    async function fetchTrackingData(isSilent = false) {
-      if (!appState.activeTask) return;
+    async function fetchTrackingData(isSilent = false, withPopup = false) {
+      if (!appState.activeTask) return null;
+      if (trackingFetching && isSilent) return null;
+      trackingFetching = true;
       const taskId = appState.activeTask.id;
-      const kls = document.getElementById('filterKelas').value;
 
+      let ctrl = null;
+      if (withPopup) {
+        if (popupController) popupController.abort();
+        ctrl = popupController = new AbortController();
+        showToast('Menyegarkan Data...', 'Mengambil data terbaru dari DataBase, mohon tunggu.', 'loading');
+      }
       if (!isSilent) setSyncStatus('loading', 'Menyinkronkan data terbaru...');
 
       try {
-        const res = await fetch(`${SCRIPT_URL}?action=getTrackingData&taskId=${encodeURIComponent(taskId)}&kelas=${encodeURIComponent((kls && kls.indexOf('TINGKAT-') !== 0) ? kls : 'SEMUA')}`);
-        const text = await res.text();
-        const data = JSON.parse(text);
-        if (Array.isArray(data)) {
-          appState.siswaList = data;
-          if (kls) {
-            renderTrackingBoard(data.filter(s => cocokKelas(s, kls)));
-          }
-        }
+        // Selalu minta semua kelas sekali; penyaringan kelas dilakukan di halaman
+        const data = await fetchJSON(
+          `${SCRIPT_URL}?action=getTrackingData&taskId=${encodeURIComponent(taskId)}&kelas=SEMUA`,
+          { controller: ctrl, timeout: isSilent ? 20000 : 30000 }
+        );
+        if (!Array.isArray(data)) throw new Error('Format data tidak valid');
+        if (!appState.activeTask || appState.activeTask.id !== taskId) return null; // tugas sudah diganti
+
+        appState.siswaList = data;
+        lastTrackingFetch = Date.now();
+        updateSiswaCache(taskId, data);
+        const n = renderCurrentFilter();
+
         if (!isSilent) setSyncStatus('ready', '✓ Data berhasil diperbarui!');
+        if (withPopup && ctrl === popupController) {
+          showToast('Data Diperbarui', `${n === null ? data.length : n} siswa berhasil ditampilkan.`, 'success', 1500);
+        }
+        return n;
       } catch (e) {
+        if (withPopup && ctrl !== popupController) return null;
+        if (e.cancelled) {
+          if (!isSilent) setSyncStatus('ready', 'Penyegaran dibatalkan, menampilkan data sebelumnya');
+          return null;
+        }
         if (!isSilent) setSyncStatus('error', 'Gagal menyinkronkan data');
+        if (withPopup) showToast('Gagal Memuat Data', e.message || 'Koneksi ke DataBase bermasalah.', 'warning', 3500);
+        return null;
+      } finally {
+        trackingFetching = false;
       }
     }
 
