@@ -26,9 +26,20 @@
     .animate-badge-2 { animation: floatBadge2 6s ease-in-out infinite; }
     .animate-modal-spring { animation: modalSpring 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     .glass-nav { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+
+    .no-save { -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+    .no-save img, .no-save canvas { -webkit-user-drag:none; user-drag:none; }
+    .thumb-wrap::after { content:""; position:absolute; inset:0; z-index:2; } /* lapisan transparan: klik kanan/seret tidak kena gambar */
+    #lbCanvas { transition: transform .25s ease; touch-action:none; cursor:zoom-in; }
+    #lbCanvas.zoomed { cursor:zoom-out; transition:none; }
+    .shield #lbStage, .shield .thumb-wrap img { visibility:hidden; }
+    #shieldMsg { display:none; }
+    .shield #shieldMsg { display:flex; }
+    @media print { body { display:none !important; } }
+    @media (prefers-reduced-motion: reduce) { #lbCanvas, .animate-modal-spring { animation:none; transition:none; } }
   </style>
 </head>
-<body class="bg-[#fafcff] text-slate-800 min-h-screen flex flex-col antialiased selection:bg-teal-500 selection:text-white relative overflow-x-hidden">
+<body oncontextmenu="return false" class="no-save bg-[#fafcff] text-slate-800 min-h-screen flex flex-col antialiased selection:bg-teal-500 selection:text-white relative overflow-x-hidden">
 
   <!-- Aksen Cahaya Latar -->
   <div class="fixed top-8 left-6 w-80 h-80 bg-teal-100/40 rounded-full blur-3xl -z-10 pointer-events-none"></div>
@@ -379,6 +390,43 @@
     </div>
   </footer>
 
+  <!-- ================= LIGHTBOX KARYA (dilindungi) ================= -->
+  <div id="lightbox" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950/95 backdrop-blur-sm no-save" role="dialog" aria-modal="true" aria-label="Tampilan karya">
+    <div class="flex items-center justify-between gap-3 px-3 sm:px-5 h-14 text-white shrink-0">
+      <span id="lbCounter" class="text-xs font-bold bg-white/10 px-2.5 py-1 rounded-lg">1 / 1</span>
+      <div class="flex items-center gap-2">
+        <button id="lbZoomBtn" onclick="lbToggleZoom()" aria-label="Perbesar" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-plus text-sm"></i></button>
+        <button onclick="closeLightbox()" aria-label="Tutup" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+
+    <div id="lbStage" class="relative flex-1 min-h-0 flex items-center justify-center overflow-hidden px-2 sm:px-16">
+      <button onclick="lbNav(-1)" aria-label="Sebelumnya" class="absolute left-2 sm:left-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center"><i class="fa-solid fa-chevron-left"></i></button>
+      <div id="lbSpinner" class="absolute inline-block animate-spin rounded-full h-8 w-8 border-4 border-white/70 border-t-transparent"></div>
+      <canvas id="lbCanvas" class="max-w-full max-h-full rounded-lg shadow-2xl"></canvas>
+      <button onclick="lbNav(1)" aria-label="Berikutnya" class="absolute right-2 sm:right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <div class="shrink-0 px-4 sm:px-8 py-3 sm:py-4 text-white bg-gradient-to-t from-black/60 to-transparent">
+      <div class="max-w-3xl mx-auto">
+        <div class="flex flex-wrap items-center gap-1.5 mb-1">
+          <span id="lbKategori" class="text-[10px] font-bold bg-white/15 px-2 py-0.5 rounded-lg"></span>
+          <span id="lbKarakter" class="text-[10px] font-bold bg-teal-500/30 text-teal-100 px-2 py-0.5 rounded-lg"></span>
+        </div>
+        <h4 id="lbJudul" class="font-extrabold text-sm sm:text-base leading-snug"></h4>
+        <p id="lbNama" class="text-[11px] text-slate-300 font-semibold mt-0.5"></p>
+        <p id="lbDeskripsi" class="text-xs text-slate-300 mt-1.5 leading-relaxed max-h-20 overflow-y-auto"></p>
+        <p class="text-[10px] text-slate-500 mt-2 flex items-center gap-1"><i class="fa-solid fa-lock"></i> Karya ini dilindungi. Dilarang mengunduh atau menyebarkan tanpa izin pemilik.</p>
+      </div>
+    </div>
+
+    <div id="shieldMsg" class="absolute inset-0 z-20 bg-slate-950 text-white items-center justify-center flex-col gap-2 text-center p-6">
+      <i class="fa-solid fa-eye-slash text-3xl text-teal-400"></i>
+      <p class="text-sm font-bold">Tampilan disembunyikan</p>
+      <p class="text-xs text-slate-400">Kembali ke halaman ini untuk melihat karya.</p>
+    </div>
+  </div>
+
   <!-- ================= MODAL UPLOAD RESPONSIVE ================= -->
   <div id="modalUpload" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative my-auto animate-modal-spring border border-slate-100 max-h-[92vh] overflow-y-auto">
@@ -550,49 +598,54 @@
       }
     }
 
+    function esc(v) {
+      return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    const FALLBACK_IMG = "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80";
+    let tampilKarya = [];
+
     function renderKarya(items) {
       const grid = document.getElementById('gridKarya');
       const empty = document.getElementById('emptyKarya');
       grid.innerHTML = "";
+      tampilKarya = items || [];
 
-      if (!items || items.length === 0) {
-        empty.classList.remove('hidden');
-        return;
-      }
+      if (tampilKarya.length === 0) { empty.classList.remove('hidden'); return; }
       empty.classList.add('hidden');
 
-      items.forEach(k => {
-        const cover = k.urlGambar || "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80";
-        const card = document.createElement('div');
-        card.className = "bg-white rounded-2xl overflow-hidden hover:shadow-md transition-all flex flex-col border border-slate-200/90";
+      tampilKarya.forEach((k, i) => {
+        const cover = k.urlGambar || FALLBACK_IMG;
+        const card = document.createElement('article');
+        card.className = "group bg-white rounded-2xl overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all flex flex-col border border-slate-200/90 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500";
+        card.tabIndex = 0;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', 'Buka karya ' + (k.judul || ''));
         card.innerHTML = `
-          <div class="h-40 sm:h-44 bg-slate-100 overflow-hidden relative">
-            <img src="${cover}" alt="${k.judul}" class="w-full h-full object-cover">
-            <span class="absolute top-2.5 left-2.5 bg-white/95 text-[10px] font-bold px-2 py-0.5 rounded-lg text-slate-800 shadow-xs">
-              ${k.kategori}
-            </span>
+          <div class="thumb-wrap h-44 sm:h-48 bg-slate-100 overflow-hidden relative">
+            <img src="${esc(cover)}" alt="${esc(k.judul)}" loading="lazy" draggable="false" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
+            <span class="absolute top-2.5 left-2.5 z-[3] bg-white/95 text-[10px] font-bold px-2 py-0.5 rounded-lg text-slate-800 shadow-xs">${esc(k.kategori)}</span>
+            <div class="absolute inset-0 z-[3] bg-slate-900/0 group-hover:bg-slate-900/35 transition-colors flex items-center justify-center">
+              <span class="opacity-0 group-hover:opacity-100 transition-opacity bg-white text-slate-900 text-[11px] font-bold px-3 py-1.5 rounded-full shadow flex items-center gap-1.5">
+                <i class="fa-solid fa-expand"></i> Lihat karya
+              </span>
+            </div>
           </div>
           <div class="p-3.5 sm:p-4 flex-1 flex flex-col justify-between">
             <div>
               <div class="flex items-center gap-1.5 mb-1.5">
-                <span class="text-[9px] font-extrabold bg-teal-50 text-teal-700 px-2 py-0.5 rounded border border-teal-100">
-                  <i class="fa-solid fa-heart mr-1 text-rose-500"></i>${k.karakter}
-                </span>
-                <span class="text-[9px] font-bold text-slate-400">• Kelas ${k.kelas}</span>
+                <span class="text-[9px] font-extrabold bg-teal-50 text-teal-700 px-2 py-0.5 rounded border border-teal-100"><i class="fa-solid fa-heart mr-1 text-rose-500"></i>${esc(k.karakter)}</span>
+                <span class="text-[9px] font-bold text-slate-400">• Kelas ${esc(k.kelas)}</span>
               </div>
-              <h4 class="font-extrabold text-slate-900 text-xs sm:text-sm leading-snug">${k.judul}</h4>
-              <p class="text-xs text-slate-600 mt-1 line-clamp-2">${k.deskripsi}</p>
+              <h4 class="font-extrabold text-slate-900 text-xs sm:text-sm leading-snug">${esc(k.judul)}</h4>
+              <p class="text-xs text-slate-600 mt-1 line-clamp-2">${esc(k.deskripsi)}</p>
             </div>
-            <div class="mt-2.5 pt-2 border-t border-slate-100 text-[10px] sm:text-[11px] text-slate-500 font-semibold flex items-center justify-between">
-              <span class="flex items-center gap-1 text-slate-700">
-                <div class="w-5 h-5 rounded-full bg-teal-600 text-white flex items-center justify-center text-[9px]">
-                  <i class="fa-solid fa-user"></i>
-                </div>
-                ${k.nama}
-              </span>
+            <div class="mt-2.5 pt-2 border-t border-slate-100 text-[10px] sm:text-[11px] text-slate-500 font-semibold flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-teal-600 text-white flex items-center justify-center text-[9px]"><i class="fa-solid fa-user"></i></span>
+              <span class="text-slate-700">${esc(k.nama)}</span>
             </div>
-          </div>
-        `;
+          </div>`;
+        card.addEventListener('click', () => openLightbox(i));
+        card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(i); } });
         grid.appendChild(card);
       });
     }
@@ -765,6 +818,148 @@
         btn.innerHTML = `<span>Kirim Jawaban & Periksa Nilai</span> <i class="fa-solid fa-paper-plane text-xs"></i>`;
       }
     }
+
+    // ================= LIGHTBOX + PROTEKSI =================
+    let lbIndex = 0, lbZoom = false, lbToken = 0;
+    const lbEl = () => document.getElementById('lightbox');
+    const lbCanvas = () => document.getElementById('lbCanvas');
+
+    function openLightbox(i) {
+      lbIndex = i;
+      lbEl().classList.remove('hidden');
+      lbEl().classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      lbShow();
+    }
+
+    function closeLightbox() {
+      lbEl().classList.add('hidden');
+      lbEl().classList.remove('flex');
+      document.body.style.overflow = '';
+      lbSetZoom(false);
+      const c = lbCanvas(); c.width = c.height = 1; // kosongkan kanvas
+    }
+
+    function lbNav(d) {
+      if (!tampilKarya.length) return;
+      lbIndex = (lbIndex + d + tampilKarya.length) % tampilKarya.length;
+      lbSetZoom(false);
+      lbShow();
+    }
+
+    function lbShow() {
+      const k = tampilKarya[lbIndex]; if (!k) return;
+      document.getElementById('lbCounter').textContent = `${lbIndex + 1} / ${tampilKarya.length}`;
+      document.getElementById('lbJudul').textContent = k.judul || '';
+      document.getElementById('lbNama').textContent = `${k.nama || ''} • Kelas ${k.kelas || '-'}`;
+      document.getElementById('lbKategori').textContent = k.kategori || '';
+      document.getElementById('lbKarakter').textContent = k.karakter || '';
+      document.getElementById('lbDeskripsi').textContent = k.deskripsi || '';
+
+      const token = ++lbToken, spin = document.getElementById('lbSpinner');
+      spin.classList.remove('hidden');
+      const c = lbCanvas(); c.style.opacity = 0;
+
+      const img = new Image();
+      img.referrerPolicy = 'no-referrer';
+      img.onload = () => { if (token === lbToken) { lbDraw(img, k); spin.classList.add('hidden'); c.style.opacity = 1; } };
+      img.onerror = () => {
+        if (token !== lbToken) return;
+        if (img.src !== FALLBACK_IMG) { img.src = FALLBACK_IMG; return; }
+        spin.classList.add('hidden');
+      };
+      img.src = k.urlGambar || FALLBACK_IMG;
+    }
+
+    // Gambar digambar ke <canvas> + watermark (tidak ada elemen <img> yang bisa "Simpan gambar sebagai")
+    function lbDraw(img, k) {
+      const c = lbCanvas(), max = 1800;
+      const r = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+      const w = c.width = Math.round(img.naturalWidth * r);
+      const h = c.height = Math.round(img.naturalHeight * r);
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+
+      const text = `Ruang Karakter • ${k.nama || ''}`;
+      const fs = Math.max(16, Math.round(w / 26));
+      ctx.save();
+      ctx.translate(w / 2, h / 2); ctx.rotate(-Math.PI / 6);
+      ctx.font = `800 ${fs}px "Plus Jakarta Sans", sans-serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      const stepX = ctx.measureText(text).width + fs * 2, stepY = fs * 3.4, span = Math.hypot(w, h);
+      for (let y = -span, row = 0; y < span; y += stepY, row++) {
+        for (let x = -span + (row % 2 ? stepX / 2 : 0); x < span; x += stepX) {
+          ctx.fillStyle = 'rgba(0,0,0,.14)'; ctx.fillText(text, x + 1.5, y + 1.5);
+          ctx.fillStyle = 'rgba(255,255,255,.26)'; ctx.fillText(text, x, y);
+        }
+      }
+      ctx.restore();
+    }
+
+    function lbSetZoom(on, e) {
+      lbZoom = on;
+      const c = lbCanvas();
+      c.classList.toggle('zoomed', on);
+      if (on) { c.style.transform = 'scale(2.2)'; lbPan(e); } else { c.style.transform = ''; c.style.transformOrigin = '50% 50%'; }
+      document.getElementById('lbZoomBtn').innerHTML = `<i class="fa-solid fa-magnifying-glass-${on ? 'minus' : 'plus'} text-sm"></i>`;
+    }
+    function lbToggleZoom(e) { lbSetZoom(!lbZoom, e); }
+    function lbPan(e) {
+      if (!e) return;
+      const r = lbCanvas().getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
+      const ox = Math.min(100, Math.max(0, ((t.clientX - r.left) / r.width) * 100));
+      const oy = Math.min(100, Math.max(0, ((t.clientY - r.top) / r.height) * 100));
+      lbCanvas().style.transformOrigin = `${ox}% ${oy}%`;
+    }
+
+    (function initLightbox() {
+      const stage = document.getElementById('lbStage'), c = lbCanvas();
+      c.addEventListener('click', e => lbToggleZoom(e));
+      c.addEventListener('mousemove', e => { if (lbZoom) lbPan(e); });
+      stage.addEventListener('click', e => { if (e.target === stage) closeLightbox(); });
+
+      let sx = 0, sy = 0;
+      stage.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; if (lbZoom) lbPan(e); }, { passive: true });
+      stage.addEventListener('touchmove', e => { if (lbZoom) lbPan(e); }, { passive: true });
+      stage.addEventListener('touchend', e => {
+        if (lbZoom) return;
+        const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) lbNav(dx < 0 ? 1 : -1);
+      }, { passive: true });
+    })();
+
+    const lbOpen = () => !lbEl().classList.contains('hidden');
+    function shieldOn(all) { document.body.classList.add('shield'); if (!all) return; }
+    function shieldOff() { document.body.classList.remove('shield'); }
+
+    document.addEventListener('keydown', e => {
+      if (lbOpen()) {
+        if (e.key === 'Escape') closeLightbox();
+        else if (e.key === 'ArrowLeft') lbNav(-1);
+        else if (e.key === 'ArrowRight') lbNav(1);
+      }
+      const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
+      const tag = (e.target.tagName || '').toLowerCase(), typing = tag === 'input' || tag === 'textarea' || tag === 'select';
+      if (e.key === 'PrintScreen' || (mod && ['p', 's', 'u'].includes(k)) || (mod && e.shiftKey && k === 's') || (e.metaKey && e.shiftKey && ['3', '4', '5'].includes(k))) {
+        e.preventDefault(); shieldOn(true);
+        try { navigator.clipboard.writeText(' '); } catch (_) {}
+        setTimeout(shieldOff, 1500);
+      } else if (mod && k === 'c' && !typing) e.preventDefault();
+    });
+    document.addEventListener('keyup', e => { if (e.key === 'PrintScreen') { try { navigator.clipboard.writeText(' '); } catch (_) {} shieldOn(true); setTimeout(shieldOff, 1500); } });
+
+    // Sembunyikan karya saat jendela kehilangan fokus (alat tangkap layar / ganti tab)
+    window.addEventListener('blur', () => { if (lbOpen()) shieldOn(); });
+    window.addEventListener('focus', shieldOff);
+    document.addEventListener('visibilitychange', () => { document.hidden ? (lbOpen() && shieldOn()) : shieldOff(); });
+
+    // Blokir klik kanan, seret, salin, dan tekan-lama pada gambar
+    ['contextmenu', 'dragstart', 'copy', 'cut'].forEach(ev => document.addEventListener(ev, e => {
+      const t = e.target, typing = t.matches && t.matches('input, textarea');
+      if (!typing) e.preventDefault();
+    }));
+    window.addEventListener('beforeprint', e => shieldOn(true));
+    window.addEventListener('afterprint', shieldOff);
 
     muatDataKarya();
   </script>
